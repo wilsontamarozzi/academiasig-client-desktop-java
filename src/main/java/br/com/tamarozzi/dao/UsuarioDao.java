@@ -13,7 +13,10 @@ import java.util.List;
  * @author Monde
  */
 public interface UsuarioDao {
+
     public boolean autenticacao(Usuario usuario);
+
     public Usuario getUsuario(int id);
+
     public List<Usuario> getAllUsuario();
 }

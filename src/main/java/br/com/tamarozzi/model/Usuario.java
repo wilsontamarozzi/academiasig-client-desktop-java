@@ -10,14 +10,15 @@ package br.com.tamarozzi.model;
  * @author Monde
  */
 public class Usuario {
-    
+
     private int id;
     private String nome;
     private String login;
     private String senha;
 
-    public Usuario() {}
-    
+    public Usuario() {
+    }
+
     public Usuario(int id, String nome, String login, String senha) {
         this.id = id;
         this.nome = nome;
@@ -55,5 +56,5 @@ public class Usuario {
 
     public void setSenha(String senha) {
         this.senha = senha;
-    }    
+    }
 }

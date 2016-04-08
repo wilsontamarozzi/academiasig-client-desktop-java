@@ -14,19 +14,19 @@ import br.com.tamarozzi.services.impl.UsuarioServiceImpl;
  * @author Monde
  */
 public class AcessoRestritoController {
-    
+
     private final UsuarioService usuarioService;
-    
+
     public AcessoRestritoController() {
         this.usuarioService = new UsuarioServiceImpl();
     }
-    
+
     public boolean autenticacao(String login, String senha) {
         Usuario user = new Usuario();
-        
+
         user.setLogin(login);
         user.setSenha(senha);
-        
+
         return this.usuarioService.autenticacao(user);
     }
 }

@@ -6,7 +6,9 @@
 package br.com.tamarozzi.dao.impl;
 
 import br.com.tamarozzi.dao.UsuarioDao;
+import br.com.tamarozzi.http.HttpClientAPI;
 import br.com.tamarozzi.model.Usuario;
+import br.com.tamarozzi.util.MD5EncodeUtil;
 import java.util.List;
 
 /**
@@ -17,11 +19,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 
     @Override
     public boolean autenticacao(Usuario usuario) {
-        if(usuario.getLogin().equals("wilson") && usuario.getSenha().equals("123")) {
-            return true;
-        }
-        
-        return false;
+        return HttpClientAPI.autenticacao(usuario.getLogin(), MD5EncodeUtil.encode(usuario.getSenha()));
     }
 
     @Override
@@ -33,5 +31,5 @@ public class UsuarioDaoImpl implements UsuarioDao {
     public List<Usuario> getAllUsuario() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

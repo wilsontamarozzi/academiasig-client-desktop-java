@@ -15,14 +15,14 @@ import javax.swing.JOptionPane;
  */
 public class FrmAcessoRestrito extends javax.swing.JFrame {
 
-    AcessoRestritoController acessoRestritoController;
-    
+    private final AcessoRestritoController acessoRestritoController;
+
     /**
      * Creates new form FrmPrincipal
      */
     public FrmAcessoRestrito() {
         this.acessoRestritoController = new AcessoRestritoController();
-        
+
         initComponents();
         this.setLocationRelativeTo(null);
     }
@@ -125,9 +125,10 @@ public class FrmAcessoRestrito extends javax.swing.JFrame {
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
         String usuario = this.txtUsuario.getText();
         String senha = new String(this.txtSenha.getPassword());
-        
-        if(this.acessoRestritoController.autenticacao(usuario, senha)) {
-            JOptionPane.showMessageDialog(null, "Logado");
+
+        if (this.acessoRestritoController.autenticacao(usuario, senha)) {
+            this.dispose();
+            new FrmPrincipal().setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Usuário ou Senha Inválidos");
         }
@@ -138,7 +139,7 @@ public class FrmAcessoRestrito extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtSenhaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSenhaKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             this.btnEntrar.doClick();
         }
     }//GEN-LAST:event_txtSenhaKeyPressed

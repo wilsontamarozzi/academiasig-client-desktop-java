@@ -15,14 +15,14 @@ import java.util.List;
  *
  * @author Monde
  */
-public class UsuarioServiceImpl implements UsuarioService{
+public class UsuarioServiceImpl implements UsuarioService {
 
     private final UsuarioDao usuarioDao;
 
     public UsuarioServiceImpl() {
         this.usuarioDao = new UsuarioDaoImpl();
     }
-    
+
     @Override
     public boolean autenticacao(Usuario usuario) {
         return usuarioDao.autenticacao(usuario);
@@ -37,5 +37,5 @@ public class UsuarioServiceImpl implements UsuarioService{
     public List<Usuario> getAllUsuario() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }
