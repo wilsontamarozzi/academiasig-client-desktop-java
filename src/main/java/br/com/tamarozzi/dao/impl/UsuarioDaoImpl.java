@@ -19,7 +19,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 
     @Override
     public boolean autenticacao(Usuario usuario) {
-        return HttpClientAPI.autenticacao(usuario.getLogin(), MD5EncodeUtil.encode(usuario.getSenha()));
+        return HttpClientAPI.autenticacao(usuario.getLogin(), usuario.getSenha());
     }
 
     @Override

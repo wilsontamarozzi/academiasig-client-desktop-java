@@ -7,6 +7,8 @@ package br.com.tamarozzi.ui;
 
 import br.com.tamarozzi.controller.PessoaController;
 import br.com.tamarozzi.ui.table.model.PessoaTableModel;
+import java.awt.Dimension;
+import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 
 /**
@@ -24,8 +26,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
     public FrmPrincipal() {
         this.pessoaController = new PessoaController();
         this.pessoaTableModel = new PessoaTableModel();
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
         initComponents();
+        setComponentes();        
+    }
+    
+    private void setComponentes() {
+        this.tabMenuGeral.removeAll();
+        /* Seta a primeira coluna com tamanho 20 */
+        this.tablePessoa.getColumnModel().getColumn(0).setMaxWidth(20);
+        /* Fazz com que a tela abra maximazada */
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     /**
@@ -174,6 +185,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         );
 
         tabMenuGeral.addTab("Pessoas", tabPessoa);
+        tabPessoa.getAccessibleContext().setAccessibleName("Pessoas");
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -229,10 +241,20 @@ public class FrmPrincipal extends javax.swing.JFrame {
         menuCadastro.setText("Cadastro");
 
         itemBancoCadastro.setText("Bancos");
+        itemBancoCadastro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemBancoCadastroActionPerformed(evt);
+            }
+        });
         menuCadastro.add(itemBancoCadastro);
 
         itemPessoaCadastro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/pessoa-icon.png"))); // NOI18N
         itemPessoaCadastro.setText("Pessoas");
+        itemPessoaCadastro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemPessoaCadastroActionPerformed(evt);
+            }
+        });
         menuCadastro.add(itemPessoaCadastro);
 
         menuBar.add(menuCadastro);
@@ -263,6 +285,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
         this.pessoaTableModel.reload(this.pessoaController.getAllPessoa());
     }//GEN-LAST:event_btnPesquisarActionPerformed
+
+    private void itemPessoaCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemPessoaCadastroActionPerformed
+        this.tabMenuGeral.add("Pessoas", this.tabPessoa);
+    }//GEN-LAST:event_itemPessoaCadastroActionPerformed
+
+    private void itemBancoCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemBancoCadastroActionPerformed
+        this.tabMenuGeral.add("Bancos", this.tabBanco);
+    }//GEN-LAST:event_itemBancoCadastroActionPerformed
 
     /**
      * @param args the command line arguments
