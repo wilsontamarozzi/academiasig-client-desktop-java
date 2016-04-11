@@ -129,8 +129,6 @@ public class FrmAcessoRestrito extends javax.swing.JFrame {
         if (this.acessoRestritoController.autenticacao(usuario, senha)) {
             this.dispose();
             new FrmPrincipal().setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "Usuário ou Senha Inválidos");
         }
     }//GEN-LAST:event_btnEntrarActionPerformed
 
@@ -173,10 +171,8 @@ public class FrmAcessoRestrito extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrmAcessoRestrito().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new FrmAcessoRestrito().setVisible(true);
         });
     }
 

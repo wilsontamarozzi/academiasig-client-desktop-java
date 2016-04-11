@@ -14,5 +14,5 @@ public interface PessoaDao {
 
     public Pessoa getPessoa(int pessoaId);
 
-    public List<Pessoa> getAllPessoa();
+    public List<Pessoa> getAllPessoa(String valor, String campo, String tipoPessoa);
 }

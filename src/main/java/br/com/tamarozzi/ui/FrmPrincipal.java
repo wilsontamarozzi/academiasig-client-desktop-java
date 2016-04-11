@@ -6,10 +6,13 @@
 package br.com.tamarozzi.ui;
 
 import br.com.tamarozzi.controller.PessoaController;
+import br.com.tamarozzi.model.UsuarioLogado;
 import br.com.tamarozzi.ui.table.model.PessoaTableModel;
-import java.awt.Dimension;
-import java.awt.event.MouseEvent;
+import br.com.tamarozzi.util.ButtonTabComponent;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  *
@@ -19,11 +22,16 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private final PessoaController pessoaController;
     private final PessoaTableModel pessoaTableModel;
+    
+    private final List<String> listCampoFiltro;
+    private final List<String> listTipoPessoaFiltro;
 
     /**
      * Creates new form FrmPrincipal
      */
     public FrmPrincipal() {
+        this.listCampoFiltro = Arrays.asList("todos", "nome", "email");
+        this.listTipoPessoaFiltro = Arrays.asList("todos", "F", "J");
         this.pessoaController = new PessoaController();
         this.pessoaTableModel = new PessoaTableModel();
         
@@ -32,11 +40,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
     
     private void setComponentes() {
+        /* Inicializa a tabmenu sem nada aberto */
         this.tabMenuGeral.removeAll();
         /* Seta a primeira coluna com tamanho 20 */
         this.tablePessoa.getColumnModel().getColumn(0).setMaxWidth(20);
-        /* Fazz com que a tela abra maximazada */
+        /* Faz com que a tela abra maximazada */
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.setBothTool();
+    }
+    
+    private void setBothTool() {
+        this.lblUsuario.setText(UsuarioLogado.getInstance().getNome());
     }
 
     /**
@@ -64,13 +78,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnPesquisar = new javax.swing.JButton();
         spTablePessoa = new javax.swing.JScrollPane();
         tablePessoa = new javax.swing.JTable();
-        bothBar = new javax.swing.JSplitPane();
-        lblVersao = new javax.swing.JLabel();
-        lblUsuario = new javax.swing.JLabel();
+        lblPor = new javax.swing.JLabel();
+        cbxPor = new javax.swing.JComboBox<>();
+        lblTipoPessoa = new javax.swing.JLabel();
+        cbxTipoPessoa = new javax.swing.JComboBox<>();
         tabBanco = new javax.swing.JPanel();
         pnlBanco = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
+        bothBar = new javax.swing.JSplitPane();
+        lblVersao = new javax.swing.JLabel();
+        lblUsuario = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         menuCadastro = new javax.swing.JMenu();
         itemBancoCadastro = new javax.swing.JMenuItem();
@@ -79,6 +97,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("AcademiaSIG - Principal");
+
+        tabPessoa.setName("Pessoas"); // NOI18N
 
         lblPesquisa.setText("Pesquisa:");
 
@@ -130,33 +150,37 @@ public class FrmPrincipal extends javax.swing.JFrame {
         tablePessoa.setModel(pessoaTableModel);
         spTablePessoa.setViewportView(tablePessoa);
 
-        bothBar.setDividerSize(3);
-        bothBar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lblPor.setText("Por:");
 
-        lblVersao.setText("Versão: 1.0.0");
-        lblVersao.setPreferredSize(new java.awt.Dimension(150, 14));
-        bothBar.setLeftComponent(lblVersao);
-        lblVersao.getAccessibleContext().setAccessibleParent(bothBar);
+        cbxPor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "[Todos]", "Nome", "E-mail" }));
 
-        lblUsuario.setText("Wilson Tamarozzi Junior");
-        bothBar.setRightComponent(lblUsuario);
+        lblTipoPessoa.setText("Tipo:");
+
+        cbxTipoPessoa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "[Todos]", "Pessoa Física", "Pessoa Juridica" }));
 
         javax.swing.GroupLayout pnlPessoaLayout = new javax.swing.GroupLayout(pnlPessoa);
         pnlPessoa.setLayout(pnlPessoaLayout);
         pnlPessoaLayout.setHorizontalGroup(
             pnlPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(spTablePessoa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1082, Short.MAX_VALUE)
+            .addComponent(spTablePessoa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1089, Short.MAX_VALUE)
             .addGroup(pnlPessoaLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(toolBarPessoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(pnlPessoaLayout.createSequentialGroup()
                         .addComponent(lblPesquisa)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblPor)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbxPor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblTipoPessoa)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbxTipoPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addComponent(bothBar)
         );
         pnlPessoaLayout.setVerticalGroup(
             pnlPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -164,13 +188,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPesquisa)
-                    .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTipoPessoa)
+                    .addComponent(cbxTipoPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblPor)
+                    .addComponent(cbxPor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(toolBarPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
-                .addComponent(spTablePessoa, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bothBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(spTablePessoa, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout tabPessoaLayout = new javax.swing.GroupLayout(tabPessoa);
@@ -186,6 +212,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         tabMenuGeral.addTab("Pessoas", tabPessoa);
         tabPessoa.getAccessibleContext().setAccessibleName("Pessoas");
+
+        tabBanco.setName("Bancos"); // NOI18N
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -210,7 +238,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlBancoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBancoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jScrollPane2)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
                 .addGap(24, 24, 24))
         );
 
@@ -227,15 +255,30 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         tabMenuGeral.addTab("Bancos", tabBanco);
 
+        bothBar.setDividerSize(3);
+        bothBar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        lblVersao.setText("Versão: 1.0.0");
+        lblVersao.setPreferredSize(new java.awt.Dimension(150, 14));
+        bothBar.setLeftComponent(lblVersao);
+        lblVersao.getAccessibleContext().setAccessibleParent(bothBar);
+
+        bothBar.setRightComponent(lblUsuario);
+
         javax.swing.GroupLayout pnlGeralLayout = new javax.swing.GroupLayout(pnlGeral);
         pnlGeral.setLayout(pnlGeralLayout);
         pnlGeralLayout.setHorizontalGroup(
             pnlGeralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(tabMenuGeral)
+            .addComponent(bothBar)
         );
         pnlGeralLayout.setVerticalGroup(
             pnlGeralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabMenuGeral)
+            .addGroup(pnlGeralLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(tabMenuGeral)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bothBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         menuCadastro.setText("Cadastro");
@@ -283,17 +326,36 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPesquisaActionPerformed
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
-        this.pessoaTableModel.reload(this.pessoaController.getAllPessoa());
+        this.pessoaTableModel.reload(
+            this.pessoaController.getAllPessoa(
+                this.txtPesquisa.getText(), 
+                this.listCampoFiltro.get(this.cbxPor.getSelectedIndex()), 
+                this.listTipoPessoaFiltro.get(this.cbxTipoPessoa.getSelectedIndex())
+            )
+        );
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
-    private void itemPessoaCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemPessoaCadastroActionPerformed
-        this.tabMenuGeral.add("Pessoas", this.tabPessoa);
-    }//GEN-LAST:event_itemPessoaCadastroActionPerformed
-
     private void itemBancoCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemBancoCadastroActionPerformed
-        this.tabMenuGeral.add("Bancos", this.tabBanco);
+        this.addTabMenuGeral(this.tabBanco);
     }//GEN-LAST:event_itemBancoCadastroActionPerformed
 
+    private void itemPessoaCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemPessoaCadastroActionPerformed
+        this.addTabMenuGeral(this.tabPessoa);
+    }//GEN-LAST:event_itemPessoaCadastroActionPerformed
+
+    public void addTabMenuGeral(JPanel p) {
+        int index = this.tabMenuGeral.indexOfComponent(p);
+
+        if(index == -1) {
+                this.tabMenuGeral.addTab(p.getName(), p);
+                this.tabMenuGeral.setTabComponentAt(
+                                this.tabMenuGeral.indexOfComponent(p),
+                                new ButtonTabComponent(this.tabMenuGeral));
+        }
+
+        this.tabMenuGeral.setSelectedComponent(p);
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -322,10 +384,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrmPrincipal().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new FrmPrincipal().setVisible(true);
         });
     }
 
@@ -335,6 +395,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnPesquisar;
+    private javax.swing.JComboBox<String> cbxPor;
+    private javax.swing.JComboBox<String> cbxTipoPessoa;
     private javax.swing.JMenuItem itemBancoCadastro;
     private javax.swing.JMenuItem itemPessoaCadastro;
     private javax.swing.JScrollPane jScrollPane2;
@@ -343,6 +405,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JTable jTable2;
     private javax.swing.JLabel lblPesquisa;
+    private javax.swing.JLabel lblPor;
+    private javax.swing.JLabel lblTipoPessoa;
     private javax.swing.JLabel lblUsuario;
     private javax.swing.JLabel lblVersao;
     private javax.swing.JMenuBar menuBar;

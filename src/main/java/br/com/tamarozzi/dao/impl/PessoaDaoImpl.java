@@ -6,8 +6,12 @@ import br.com.tamarozzi.model.Pessoa;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.http.client.utils.URIBuilder;
 
 /**
  *
@@ -33,12 +37,24 @@ public class PessoaDaoImpl implements PessoaDao {
     }
 
     @Override
-    public List<Pessoa> getAllPessoa() {
-        String response = HttpClientAPI.sendGet("/v1/pessoas/lista.json");
+    public List<Pessoa> getAllPessoa(String valor, String campo, String tipoPessoa) {
 
-        Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).setPrettyPrinting().create();
-        List<Pessoa> pessoas = Arrays.asList(gson.fromJson(response, Pessoa[].class));
-
+        List<Pessoa> pessoas = null;
+        
+        try {
+            URIBuilder builder = new URIBuilder("v1/pessoas/lista.json");
+            
+            if(!campo.equalsIgnoreCase("todos"))        { builder.addParameter(campo, valor);               }
+            if(!tipoPessoa.equalsIgnoreCase("todos"))   { builder.addParameter("tipo_pessoa", tipoPessoa);  }
+            
+            String response = HttpClientAPI.sendGet(builder.toString());
+            
+            Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).setPrettyPrinting().create();
+            pessoas = Arrays.asList(gson.fromJson(response, Pessoa[].class));
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(PessoaDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         return pessoas;
     }
 }

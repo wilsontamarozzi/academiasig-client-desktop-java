@@ -29,8 +29,6 @@ public final class MD5EncodeUtil {
             Logger.getLogger(MD5EncodeUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        System.out.println(response);
-
         return response;
     }
 }
