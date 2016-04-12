@@ -35,7 +35,7 @@ public class PessoaServiceImpl implements PessoaService {
     }
 
     @Override
-    public List<Pessoa> getAllPessoa(String valor, String campo, String tipoPessoa) {
-        return this.pessoaDao.getAllPessoa(valor, campo, tipoPessoa);
+    public List<Pessoa> getAllPessoa(String campo, String valor, String tipoPessoa, String situacao) {
+        return this.pessoaDao.getAllPessoa(campo, valor, tipoPessoa, situacao);
     }
 }

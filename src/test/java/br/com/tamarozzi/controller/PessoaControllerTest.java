@@ -47,7 +47,7 @@ public class PessoaControllerTest {
     public void testGetAllPessoa() {
         System.out.println("getAllPessoa");
         PessoaController instance = new PessoaController();
-        List<Pessoa> result = instance.getAllPessoa("wilson", "nome", "F");
+        List<Pessoa> result = instance.getAllPessoa("wilson", "nome", "F", "1");
         assertNotNull(this.getClass() + " - Lista de pessoas vázias", result);
     }
 
