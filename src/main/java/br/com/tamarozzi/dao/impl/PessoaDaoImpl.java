@@ -37,7 +37,7 @@ public class PessoaDaoImpl implements PessoaDao {
     }
 
     @Override
-    public List<Pessoa> getAllPessoa(String valor, String campo, String tipoPessoa) {
+    public List<Pessoa> getAllPessoa(String campo, String valor, String tipoPessoa, String situacao) {
 
         List<Pessoa> pessoas = null;
         
@@ -46,6 +46,7 @@ public class PessoaDaoImpl implements PessoaDao {
             
             if(!campo.equalsIgnoreCase("todos"))        { builder.addParameter(campo, valor);               }
             if(!tipoPessoa.equalsIgnoreCase("todos"))   { builder.addParameter("tipo_pessoa", tipoPessoa);  }
+            if(!situacao.equalsIgnoreCase("todos"))     { builder.addParameter("ativo", situacao);          }
             
             String response = HttpClientAPI.sendGet(builder.toString());
             

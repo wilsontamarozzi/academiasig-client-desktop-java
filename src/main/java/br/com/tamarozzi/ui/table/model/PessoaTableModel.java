@@ -5,6 +5,7 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 import br.com.tamarozzi.model.Pessoa;
+import java.util.ArrayList;
 
 public class PessoaTableModel extends AbstractTableModel {
 
@@ -12,9 +13,9 @@ public class PessoaTableModel extends AbstractTableModel {
 
     private List<Pessoa> pessoas;
 
-    private final String[] colNomes = {"#", "Nome", "E-mail", "Fone Residencial",};
+    private final String[] colNomes = {"#", "Nome", "E-mail", "Fone Comercial", "Fone Residencial", "Fone Celular", "Inativo"};
 
-    private final Class<?>[] colTipo = {String.class, String.class, String.class, String.class};
+    private final Class<?>[] colTipo = {String.class, String.class, String.class, String.class, String.class, String.class, Boolean.class};
 
     public PessoaTableModel() {
     }
@@ -62,7 +63,13 @@ public class PessoaTableModel extends AbstractTableModel {
             case 2:
                 return p.getEmail();
             case 3:
+                return "";
+            case 4:
                 return tipo.equalsIgnoreCase("F") ? p.getPessoaFisica().getTelefoneResidencial() : "";
+            case 5:
+                return tipo.equalsIgnoreCase("F") ? p.getPessoaFisica().getTelefoneCelular() : "";
+            case 6:
+                return p.isAtivo();
             default:
                 return null;
         }
@@ -73,7 +80,29 @@ public class PessoaTableModel extends AbstractTableModel {
         return false;
     }
 
-    public Pessoa getPessoaAt(int index) {
+    private Pessoa getPessoaAt(int index) {
         return this.pessoas.get(index);
+    }
+
+    public Pessoa getPessoaSelected(int getSelectedRow) {
+        if (getSelectedRow < 0) {
+            return null;
+        }
+
+        return this.getPessoaAt(getSelectedRow);
+    }
+
+    public List<Pessoa> getPessoasSelected(int[] getSelectedRows) {
+        if (getSelectedRows.length <= 0) {
+            return null;
+        }
+
+        List<Pessoa> selectedPessoas = new ArrayList<>(0);
+
+        for (int i : getSelectedRows) {
+            selectedPessoas.add(this.getPessoaAt(i));
+        }
+
+        return selectedPessoas;
     }
 }

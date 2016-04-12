@@ -22,7 +22,7 @@ public class PessoaController {
         this.pessoaService = new PessoaServiceImpl();
     }
 
-    public List<Pessoa> getAllPessoa(String valor, String campo, String tipoPessoa) {
-        return this.pessoaService.getAllPessoa(valor, campo, tipoPessoa);
+    public List<Pessoa> getAllPessoa(String campo, String valor, String tipoPessoa, String situacao) {
+        return this.pessoaService.getAllPessoa(campo, valor, tipoPessoa, situacao);
     }
 }
