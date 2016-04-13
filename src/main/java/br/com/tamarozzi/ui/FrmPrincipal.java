@@ -12,7 +12,6 @@ import br.com.tamarozzi.util.ButtonTabComponent;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -39,10 +38,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
         this.pessoaTableModel = new PessoaTableModel();
         
         initComponents();
-        setComponentes();        
+        setComponents();        
     }
     
-    private void setComponentes() {
+    private void setComponents() {
         /* Inicializa a tabmenu sem nada aberto */
         this.tabMenuGeral.removeAll();
         /* Seta a primeira coluna com tamanho 20 */
@@ -83,14 +82,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnExcluir = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JToolBar.Separator();
         btnPesquisar = new javax.swing.JButton();
-        spTablePessoa = new javax.swing.JScrollPane();
-        tablePessoa = new javax.swing.JTable();
         lblEm = new javax.swing.JLabel();
         cbxEm = new javax.swing.JComboBox<>();
         lblTipoPessoa = new javax.swing.JLabel();
         cbxTipoPessoa = new javax.swing.JComboBox<>();
         lblSituacao = new javax.swing.JLabel();
         cbxSituacao = new javax.swing.JComboBox<>();
+        spTablePessoa = new javax.swing.JScrollPane();
+        tablePessoa = new javax.swing.JTable();
         tabBanco = new javax.swing.JPanel();
         pnlBanco = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -134,12 +133,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         lblPesquisa.setText("Pesquisa:");
 
-        txtPesquisa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPesquisaActionPerformed(evt);
-            }
-        });
-
         toolBarPessoa.setFloatable(false);
         toolBarPessoa.setRollover(true);
 
@@ -153,14 +146,21 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/editar-icon.png"))); // NOI18N
         btnEditar.setText("Editar");
+        btnEditar.setEnabled(false);
         btnEditar.setFocusable(false);
         btnEditar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnEditar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
         toolBarPessoa.add(btnEditar);
         toolBarPessoa.add(jSeparator2);
 
         btnExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/excluir-icon.png"))); // NOI18N
         btnExcluir.setText("Excluir");
+        btnExcluir.setEnabled(false);
         btnExcluir.setFocusable(false);
         btnExcluir.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnExcluir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -179,6 +179,24 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         toolBarPessoa.add(btnPesquisar);
 
+        lblEm.setText("Em:");
+
+        cbxEm.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Nome", "E-mail" }));
+        cbxEm.setMinimumSize(new java.awt.Dimension(125, 20));
+        cbxEm.setPreferredSize(new java.awt.Dimension(125, 20));
+
+        lblTipoPessoa.setText("Tipo:");
+
+        cbxTipoPessoa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Pessoa Física", "Pessoa Juridica", "Empresa do Sistema", "Usuario do Sistema" }));
+        cbxTipoPessoa.setMinimumSize(new java.awt.Dimension(125, 20));
+        cbxTipoPessoa.setPreferredSize(new java.awt.Dimension(125, 20));
+
+        lblSituacao.setText("Situação:");
+
+        cbxSituacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Ativo", "Inativo" }));
+        cbxSituacao.setMinimumSize(new java.awt.Dimension(70, 20));
+        cbxSituacao.setPreferredSize(new java.awt.Dimension(70, 20));
+
         tablePessoa.setModel(pessoaTableModel);
         tablePessoa.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -187,29 +205,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         spTablePessoa.setViewportView(tablePessoa);
 
-        lblEm.setText("Em:");
-
-        cbxEm.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "[Todos]", "Nome", "E-mail" }));
-        cbxEm.setMinimumSize(new java.awt.Dimension(125, 20));
-        cbxEm.setPreferredSize(new java.awt.Dimension(125, 20));
-
-        lblTipoPessoa.setText("Tipo:");
-
-        cbxTipoPessoa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "[Todos]", "Pessoa Física", "Pessoa Juridica", "Empresa do Sistema", "Usuario do Sistema" }));
-        cbxTipoPessoa.setMinimumSize(new java.awt.Dimension(125, 20));
-        cbxTipoPessoa.setPreferredSize(new java.awt.Dimension(125, 20));
-
-        lblSituacao.setText("Situação:");
-
-        cbxSituacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "[Todos]", "Ativo", "Inativo" }));
-        cbxSituacao.setMinimumSize(new java.awt.Dimension(70, 20));
-        cbxSituacao.setPreferredSize(new java.awt.Dimension(70, 20));
-
         javax.swing.GroupLayout pnlPessoaLayout = new javax.swing.GroupLayout(pnlPessoa);
         pnlPessoa.setLayout(pnlPessoaLayout);
         pnlPessoaLayout.setHorizontalGroup(
             pnlPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(spTablePessoa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1089, Short.MAX_VALUE)
+            .addComponent(spTablePessoa, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(pnlPessoaLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -249,7 +249,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(toolBarPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
-                .addComponent(spTablePessoa, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE))
+                .addComponent(spTablePessoa))
         );
 
         javax.swing.GroupLayout tabPessoaLayout = new javax.swing.GroupLayout(tabPessoa);
@@ -285,13 +285,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
         pnlBanco.setLayout(pnlBancoLayout);
         pnlBancoLayout.setHorizontalGroup(
             pnlBancoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1089, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
         );
         pnlBancoLayout.setVerticalGroup(
             pnlBancoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBancoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)
+                .addComponent(jScrollPane2)
                 .addGap(24, 24, 24))
         );
 
@@ -376,10 +376,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPesquisaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPesquisaActionPerformed
-
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
         this.pessoaTableModel.reload(
             this.pessoaController.getAllPessoa(                 
@@ -404,12 +400,28 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPessoaActionPerformed
 
     private void tablePessoaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePessoaMouseClicked
+        if(!this.btnEditar.isEnabled()) {
+            this.btnEditar.setEnabled(true);
+            this.btnExcluir.setEnabled(true);
+        }
+        
         if(evt.getClickCount() == 2) {
-           new FrmCadastroPessoa(this.pessoaTableModel.getPessoaSelected(this.tablePessoa.getSelectedRow())).setVisible(true);
-           
+           this.editPessoa();
         }
     }//GEN-LAST:event_tablePessoaMouseClicked
 
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        this.editPessoa();
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void editPessoa() {
+        int index = this.tablePessoa.getSelectedRow();
+        
+        if(index >= 0) {
+            new FrmCadastroPessoa(this.pessoaTableModel.getPessoaSelected(index)).setVisible(true);
+        }
+    }
+    
     public void addTabMenuGeral(JPanel p) {
         int index = this.tabMenuGeral.indexOfComponent(p);
 

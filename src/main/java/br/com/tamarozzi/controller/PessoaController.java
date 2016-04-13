@@ -9,6 +9,7 @@ import br.com.tamarozzi.model.Pessoa;
 import br.com.tamarozzi.service.impl.PessoaServiceImpl;
 import br.com.tamarozzi.services.PessoaService;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -24,5 +25,9 @@ public class PessoaController {
 
     public List<Pessoa> getAllPessoa(String campo, String valor, String tipoPessoa, String situacao) {
         return this.pessoaService.getAllPessoa(campo, valor, tipoPessoa, situacao);
+    }
+    
+    public void editPessoa(Pessoa pessoa) {
+        JOptionPane.showMessageDialog(null, "Pessoa: " + pessoa.getNome());
     }
 }
