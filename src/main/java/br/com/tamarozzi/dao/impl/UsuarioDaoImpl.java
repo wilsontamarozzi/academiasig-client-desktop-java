@@ -8,7 +8,6 @@ package br.com.tamarozzi.dao.impl;
 import br.com.tamarozzi.dao.UsuarioDao;
 import br.com.tamarozzi.http.HttpClientAPI;
 import br.com.tamarozzi.model.Usuario;
-import br.com.tamarozzi.util.MD5EncodeUtil;
 import java.util.List;
 
 /**

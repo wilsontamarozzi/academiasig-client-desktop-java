@@ -75,9 +75,9 @@ public class PessoaTableModel extends AbstractTableModel {
             case 3:
                 return "";
             case 4:
-                return tipo.equalsIgnoreCase("F") ? p.getPessoaFisica().getTelefoneResidencial() : "";
+                return tipo.equalsIgnoreCase("F") ? p.getTelefoneResidencial() : "";
             case 5:
-                return tipo.equalsIgnoreCase("F") ? p.getPessoaFisica().getTelefoneCelular() : "";
+                return tipo.equalsIgnoreCase("F") ? p.getTelefoneCelular() : "";
             case 6:
                 return !p.isAtivo();
             default:

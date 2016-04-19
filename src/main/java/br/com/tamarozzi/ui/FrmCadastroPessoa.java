@@ -24,6 +24,7 @@ public class FrmCadastroPessoa extends javax.swing.JFrame {
         this.pessoaController = new PessoaController();
         
         initComponents();
+        setComponents("Cadastrar Pessoa");
     }
     
     public FrmCadastroPessoa(Pessoa pessoa) {
@@ -31,13 +32,14 @@ public class FrmCadastroPessoa extends javax.swing.JFrame {
         this.pessoaController = new PessoaController();
         
         initComponents();
-        setComponents();
+        setComponents("Alterar Pessoa");
         
         setView(pessoa);
     }
     
-    private void setComponents() {
+    private void setComponents(String title) {
         this.setLocationRelativeTo(null);
+        this.setTitle(title);
     }
     
     private void setView(Pessoa pessoa){
@@ -45,12 +47,11 @@ public class FrmCadastroPessoa extends javax.swing.JFrame {
         this.txaObservacao.setText(pessoa.getObservacao());
         
         if(pessoa.getTipoPessoa().equalsIgnoreCase("F")) {
-            this.txtRg.setText(pessoa.getPessoaFisica().getRg());
-            this.txtCpf.setText(pessoa.getPessoaFisica().getCpf());
-            this.txtEmail.setText(pessoa.getPessoaFisica().getEmail());
-            this.txtTelefoneCelular.setText(pessoa.getPessoaFisica().getTelefoneCelular());
-            this.txtTelefoneComercial.setText(pessoa.getPessoaFisica().getTelefoneComercial());
-            this.txtTelefoneResidencial.setText(pessoa.getPessoaFisica().getTelefoneResidencial());
+            this.txtRg.setText(pessoa.getRg());
+            this.txtCpf.setText(pessoa.getCpf());
+            this.txtTelefoneCelular.setText(pessoa.getTelefoneCelular());
+            this.txtTelefoneComercial.setText(pessoa.getTelefoneComercial());
+            this.txtTelefoneResidencial.setText(pessoa.getTelefoneResidencial());
         }
     }
 
@@ -376,6 +377,7 @@ public class FrmCadastroPessoa extends javax.swing.JFrame {
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         this.pessoaController.editPessoa(this.loadPessoa());
+        this.dispose();
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private Pessoa loadPessoa() {

@@ -11,8 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,43 +20,45 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.HttpHostConnectException;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
 
 public final class HttpClientAPI {
 
-    private static final String host = "http://academiasig-api.herokuapp.com/";
+    //http://academiasig-api.herokuapp.com/
+    private static final String host = "http://localhost:8080/";
 
     private static CredentialsProvider credentialsProvider;
 
     private static HttpClient instance;
 
-    public String teste;
-
-    public static boolean autenticacao(String user, String password) {
+    public static boolean autenticacao(String login, String password) {
 
         credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY,
-                new UsernamePasswordCredentials(user, MD5EncodeUtil.encode(password)));
-
-        List<NameValuePair> nvps = new ArrayList<>();
-        nvps.add(new BasicNameValuePair("login", user));
-        nvps.add(new BasicNameValuePair("senha", MD5EncodeUtil.encode(password)));
+                new UsernamePasswordCredentials(login, MD5EncodeUtil.encode(password)));
 
         instance = HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider).build();
-
-        String response = HttpClientAPI.sendPost("v1/usuarios/auth", nvps);
-
+        
         Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).setPrettyPrinting().create();
-        /*Seta usuário que se logou */
+        
+        Usuario usuario  = new Usuario();
+        usuario.setLogin(login);
+        usuario.setSenha(MD5EncodeUtil.encode(password));
+        
+        String response = HttpClientAPI.sendPost("api/v1/usuarios/auth", gson.toJson(usuario));
+
         UsuarioLogado.setInstance(gson.fromJson(response, Pessoa.class));
 
         return response != null;
@@ -72,60 +73,61 @@ public final class HttpClientAPI {
     }
 
     public static String sendGet(String urlString) {
-        
-        System.out.println(host + urlString);
-        
-        String data = null;
 
-        try {
-            HttpGet getRequest = new HttpGet(host + urlString);
-            getRequest.addHeader("accept", "application/json");
+        HttpGet getRequest = new HttpGet(host + urlString);
+        getRequest.addHeader(HTTP.CONTENT_TYPE, "application/json");
 
-            HttpResponse response = HttpClientAPI.getInstance().execute(getRequest);
-
-            int statusCode = response.getStatusLine().getStatusCode();
-
-            if (statusCode != 200) {
-                parsingStatusCode(statusCode);
-                return null;
-            }
-
-            BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent()), "UTF-8"));
-
-            String output;
-            StringBuilder responseBuffer = new StringBuilder();
-            while ((output = br.readLine()) != null) {
-                responseBuffer.append(output);
-            }
-
-            data = responseBuffer.toString();
-        } catch (ClientProtocolException ex) {
-            Logger.getLogger(HttpClientAPI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(HttpClientAPI.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return data;
+        return executeRequest(getRequest);
     }
 
     public static String sendPost(String urlString, List<NameValuePair> nvps) {
+
+        HttpPost postRequest = new HttpPost(host + urlString);
+        postRequest.addHeader(HTTP.CONTENT_TYPE, "application/json");
+        postRequest.setEntity(new UrlEncodedFormEntity(nvps, StandardCharsets.UTF_8));
         
+        return executeRequest(postRequest);
+    }
+
+    public static String sendPost(String urlString, String content) {
+
+        HttpPost postRequest = new HttpPost(host + urlString);
+        postRequest.addHeader(HTTP.CONTENT_TYPE, "application/json");
+        postRequest.setEntity(new StringEntity(content, StandardCharsets.UTF_8));
+
+        return executeRequest(postRequest);
+    }
+
+    public static String sendPut(String urlString, String content) {
+        
+        HttpPut putRequest = new HttpPut(host + urlString);
+        putRequest.addHeader(HTTP.CONTENT_TYPE, "application/json");
+        putRequest.setEntity(new StringEntity(content, StandardCharsets.UTF_8));
+
+        return executeRequest(putRequest);
+    }
+ 
+    public static String sendDelete(String urlString) {
+        return executeRequest(new HttpDelete(host + urlString));
+    }   
+
+    private static String executeRequest(HttpUriRequest request) {
+
+        System.out.println(request.getURI().toString());
+
         String data = null;
 
         try {
-            HttpPost postRequest = new HttpPost(host + urlString);
-            postRequest.setEntity(new UrlEncodedFormEntity(nvps));
+            HttpResponse response = HttpClientAPI.getInstance().execute(request);
 
-            HttpResponse response = HttpClientAPI.getInstance().execute(postRequest);
-            
             int statusCode = response.getStatusLine().getStatusCode();
 
-            if (statusCode != 200) {
+            if (statusCode != 200 && statusCode != 201) {
                 parsingStatusCode(statusCode);
                 return null;
             }
 
-            BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
+            BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent()), StandardCharsets.UTF_8));
 
             String output;
             StringBuilder responseBuffer = new StringBuilder();
@@ -145,9 +147,13 @@ public final class HttpClientAPI {
 
         return data;
     }
-    
+
     private static void parsingStatusCode(int statusCode) {
-        switch(statusCode) {
+        switch (statusCode) {
+            case 500:
+                generateLogStatusCode(statusCode);
+                JOptionPane.showMessageDialog(null, "Erro interno no servidor.");
+                break;
             case 503:
                 generateLogStatusCode(statusCode);
                 JOptionPane.showMessageDialog(null, "Erro ao se conectar ao servidor.");
@@ -160,9 +166,9 @@ public final class HttpClientAPI {
                 generateLogStatusCode(statusCode);
                 JOptionPane.showMessageDialog(null, "Usuário ou Senha Inválidos.");
                 break;
-        }        
+        }
     }
-    
+
     private static void generateLogStatusCode(int statusCode) {
         Logger.getLogger(HttpClientAPI.class.getName()).log(Level.SEVERE, "Failed : HTTP error code : {0}", statusCode);
     }

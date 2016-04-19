@@ -9,7 +9,7 @@ package br.com.tamarozzi.model;
  *
  * @author Monde
  */
-public class Usuario extends PessoaFisica {
+public class Usuario {
 
     private int id;
     private String nome;

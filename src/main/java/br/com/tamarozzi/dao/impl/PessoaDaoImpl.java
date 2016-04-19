@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import org.apache.http.client.utils.URIBuilder;
 
 /**
@@ -19,21 +20,51 @@ import org.apache.http.client.utils.URIBuilder;
  */
 public class PessoaDaoImpl implements PessoaDao {
 
+    private final Gson gson;
+    
+    public PessoaDaoImpl() {
+        this.gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).setPrettyPrinting().create();
+    }
+    
     @Override
     public void add(Pessoa pessoa) {
+        String pessoaJson = gson.toJson(pessoa);
+        String response = HttpClientAPI.sendPost("api/v1/pessoas", pessoaJson);
+        
+        if (response == null) {
+            JOptionPane.showMessageDialog(null, "Houve um erro ao cadastrar a pessoa");
+        }
     }
 
     @Override
     public void edit(Pessoa pessoa) {
+       
+        String pessoaJson = gson.toJson(pessoa);
+        String response = HttpClientAPI.sendPut("api/v1/pessoas/" + pessoa.getId(), pessoaJson);
+        
+        if (response == null) {
+            JOptionPane.showMessageDialog(null, "Houve um erro ao editar a pessoa");
+        }
     }
 
     @Override
     public void delete(int pessoaId) {
+        
+        String response = HttpClientAPI.sendDelete("api/v1/pessoas/" + pessoaId);
+        
+        if(response != null) {
+            JOptionPane.showMessageDialog(null, "Houve um erro ao excluir o(s) registro(s)");
+        }
     }
 
     @Override
     public Pessoa getPessoa(int pessoaId) {
-        return null;
+        
+        String response = HttpClientAPI.sendGet("api/v1/pessoas/" + pessoaId);
+        
+        Pessoa pessoa = this.gson.fromJson(response, Pessoa.class);
+        
+        return pessoa;
     }
 
     @Override
@@ -42,7 +73,7 @@ public class PessoaDaoImpl implements PessoaDao {
         List<Pessoa> pessoas = null;
         
         try {
-            URIBuilder builder = new URIBuilder("v1/pessoas/lista.json");
+            URIBuilder builder = new URIBuilder("api/v1/pessoas");
             
             if(!campo.equalsIgnoreCase("todos"))        { builder.addParameter(campo, valor);               }
             if(!tipoPessoa.equalsIgnoreCase("todos"))   { builder.addParameter("tipo_pessoa", tipoPessoa);  }
@@ -50,8 +81,7 @@ public class PessoaDaoImpl implements PessoaDao {
             
             String response = HttpClientAPI.sendGet(builder.toString());
             
-            Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).setPrettyPrinting().create();
-            pessoas = Arrays.asList(gson.fromJson(response, Pessoa[].class));
+            pessoas = Arrays.asList(this.gson.fromJson(response, Pessoa[].class));
         } catch (URISyntaxException ex) {
             Logger.getLogger(PessoaDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }

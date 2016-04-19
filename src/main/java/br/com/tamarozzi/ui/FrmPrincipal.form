@@ -2,6 +2,27 @@
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
+    <Container class="javax.swing.JPopupMenu" name="popMenuPessoa">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+        <Property name="useNullLayout" type="boolean" value="true"/>
+      </Layout>
+      <SubComponents>
+        <MenuItem class="javax.swing.JMenuItem" name="mnuItemPessoaFisica">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Pessoa F&#xed;sica"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuItemPessoaFisicaActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="mnuItemPessoaJuridica">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Pessoa Jur&#xed;dica"/>
+          </Properties>
+        </MenuItem>
+      </SubComponents>
+    </Container>
     <Menu class="javax.swing.JMenuBar" name="menuBar">
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="menuCadastro">
@@ -235,7 +256,7 @@
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
                       <SubComponents>
-                        <Component class="javax.swing.JButton" name="btnNovo">
+                        <Component class="javax.swing.JButton" name="btnPessoaNovo">
                           <Properties>
                             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                               <Image iconType="3" name="/imagens/novo-icon.png"/>
@@ -245,10 +266,13 @@
                             <Property name="horizontalTextPosition" type="int" value="4"/>
                             <Property name="verticalTextPosition" type="int" value="3"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnPessoaNovoMousePressed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JToolBar$Separator" name="jSeparator1">
                         </Component>
-                        <Component class="javax.swing.JButton" name="btnEditar">
+                        <Component class="javax.swing.JButton" name="btnPessoaEditar">
                           <Properties>
                             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                               <Image iconType="3" name="/imagens/editar-icon.png"/>
@@ -260,12 +284,12 @@
                             <Property name="verticalTextPosition" type="int" value="3"/>
                           </Properties>
                           <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEditarActionPerformed"/>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPessoaEditarActionPerformed"/>
                           </Events>
                         </Component>
                         <Component class="javax.swing.JToolBar$Separator" name="jSeparator2">
                         </Component>
-                        <Component class="javax.swing.JButton" name="btnExcluir">
+                        <Component class="javax.swing.JButton" name="btnPessoaExcluir">
                           <Properties>
                             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                               <Image iconType="3" name="/imagens/excluir-icon.png"/>
@@ -276,10 +300,13 @@
                             <Property name="horizontalTextPosition" type="int" value="4"/>
                             <Property name="verticalTextPosition" type="int" value="3"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPessoaExcluirActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JToolBar$Separator" name="jSeparator3">
                         </Component>
-                        <Component class="javax.swing.JButton" name="btnPesquisar">
+                        <Component class="javax.swing.JButton" name="btnPessoaPesquisar">
                           <Properties>
                             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                               <Image iconType="3" name="/imagens/pesquisar-icon.png"/>
@@ -290,7 +317,7 @@
                             <Property name="verticalTextPosition" type="int" value="3"/>
                           </Properties>
                           <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPesquisarActionPerformed"/>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPessoaPesquisarActionPerformed"/>
                           </Events>
                         </Component>
                       </SubComponents>

@@ -6,12 +6,14 @@
 package br.com.tamarozzi.ui;
 
 import br.com.tamarozzi.controller.PessoaController;
+import br.com.tamarozzi.model.Pessoa;
 import br.com.tamarozzi.model.UsuarioLogado;
 import br.com.tamarozzi.ui.table.model.PessoaTableModel;
 import br.com.tamarozzi.util.ButtonTabComponent;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -64,6 +66,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        popMenuPessoa = new javax.swing.JPopupMenu();
+        mnuItemPessoaFisica = new javax.swing.JMenuItem();
+        mnuItemPessoaJuridica = new javax.swing.JMenuItem();
         pnlGeral = new javax.swing.JPanel();
         toolBarGeral = new javax.swing.JToolBar();
         btnPessoa = new javax.swing.JButton();
@@ -75,13 +80,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
         lblPesquisa = new javax.swing.JLabel();
         txtPesquisa = new javax.swing.JTextField();
         toolBarPessoa = new javax.swing.JToolBar();
-        btnNovo = new javax.swing.JButton();
+        btnPessoaNovo = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
-        btnEditar = new javax.swing.JButton();
+        btnPessoaEditar = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JToolBar.Separator();
-        btnExcluir = new javax.swing.JButton();
+        btnPessoaExcluir = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JToolBar.Separator();
-        btnPesquisar = new javax.swing.JButton();
+        btnPessoaPesquisar = new javax.swing.JButton();
         lblEm = new javax.swing.JLabel();
         cbxEm = new javax.swing.JComboBox<>();
         lblTipoPessoa = new javax.swing.JLabel();
@@ -102,6 +107,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
         itemBancoCadastro = new javax.swing.JMenuItem();
         itemPessoaCadastro = new javax.swing.JMenuItem();
         menuFerramenta = new javax.swing.JMenu();
+
+        mnuItemPessoaFisica.setText("Pessoa Física");
+        mnuItemPessoaFisica.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItemPessoaFisicaActionPerformed(evt);
+            }
+        });
+        popMenuPessoa.add(mnuItemPessoaFisica);
+
+        mnuItemPessoaJuridica.setText("Pessoa Jurídica");
+        popMenuPessoa.add(mnuItemPessoaJuridica);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("AcademiaSIG - Principal");
@@ -136,48 +152,58 @@ public class FrmPrincipal extends javax.swing.JFrame {
         toolBarPessoa.setFloatable(false);
         toolBarPessoa.setRollover(true);
 
-        btnNovo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/novo-icon.png"))); // NOI18N
-        btnNovo.setText("Novo");
-        btnNovo.setFocusable(false);
-        btnNovo.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnNovo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        toolBarPessoa.add(btnNovo);
+        btnPessoaNovo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/novo-icon.png"))); // NOI18N
+        btnPessoaNovo.setText("Novo");
+        btnPessoaNovo.setFocusable(false);
+        btnPessoaNovo.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnPessoaNovo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnPessoaNovo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnPessoaNovoMousePressed(evt);
+            }
+        });
+        toolBarPessoa.add(btnPessoaNovo);
         toolBarPessoa.add(jSeparator1);
 
-        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/editar-icon.png"))); // NOI18N
-        btnEditar.setText("Editar");
-        btnEditar.setEnabled(false);
-        btnEditar.setFocusable(false);
-        btnEditar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnEditar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+        btnPessoaEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/editar-icon.png"))); // NOI18N
+        btnPessoaEditar.setText("Editar");
+        btnPessoaEditar.setEnabled(false);
+        btnPessoaEditar.setFocusable(false);
+        btnPessoaEditar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnPessoaEditar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnPessoaEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarActionPerformed(evt);
+                btnPessoaEditarActionPerformed(evt);
             }
         });
-        toolBarPessoa.add(btnEditar);
+        toolBarPessoa.add(btnPessoaEditar);
         toolBarPessoa.add(jSeparator2);
 
-        btnExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/excluir-icon.png"))); // NOI18N
-        btnExcluir.setText("Excluir");
-        btnExcluir.setEnabled(false);
-        btnExcluir.setFocusable(false);
-        btnExcluir.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnExcluir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        toolBarPessoa.add(btnExcluir);
-        toolBarPessoa.add(jSeparator3);
-
-        btnPesquisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/pesquisar-icon.png"))); // NOI18N
-        btnPesquisar.setText("Pesquisar");
-        btnPesquisar.setFocusable(false);
-        btnPesquisar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnPesquisar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnPesquisar.addActionListener(new java.awt.event.ActionListener() {
+        btnPessoaExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/excluir-icon.png"))); // NOI18N
+        btnPessoaExcluir.setText("Excluir");
+        btnPessoaExcluir.setEnabled(false);
+        btnPessoaExcluir.setFocusable(false);
+        btnPessoaExcluir.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnPessoaExcluir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnPessoaExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPesquisarActionPerformed(evt);
+                btnPessoaExcluirActionPerformed(evt);
             }
         });
-        toolBarPessoa.add(btnPesquisar);
+        toolBarPessoa.add(btnPessoaExcluir);
+        toolBarPessoa.add(jSeparator3);
+
+        btnPessoaPesquisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/pesquisar-icon.png"))); // NOI18N
+        btnPessoaPesquisar.setText("Pesquisar");
+        btnPessoaPesquisar.setFocusable(false);
+        btnPessoaPesquisar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnPessoaPesquisar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnPessoaPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPessoaPesquisarActionPerformed(evt);
+            }
+        });
+        toolBarPessoa.add(btnPessoaPesquisar);
 
         lblEm.setText("Em:");
 
@@ -376,7 +402,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
+    private void btnPessoaPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPessoaPesquisarActionPerformed
         this.pessoaTableModel.reload(
             this.pessoaController.getAllPessoa(                 
                 this.listCampoFiltro.get(this.cbxEm.getSelectedIndex()), 
@@ -385,7 +411,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 this.listSituacaoFiltro.get(this.cbxSituacao.getSelectedIndex())
             )
         );
-    }//GEN-LAST:event_btnPesquisarActionPerformed
+    }//GEN-LAST:event_btnPessoaPesquisarActionPerformed
 
     private void itemBancoCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemBancoCadastroActionPerformed
         this.addTabMenuGeral(this.tabBanco);
@@ -400,9 +426,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPessoaActionPerformed
 
     private void tablePessoaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePessoaMouseClicked
-        if(!this.btnEditar.isEnabled()) {
-            this.btnEditar.setEnabled(true);
-            this.btnExcluir.setEnabled(true);
+        if(!this.btnPessoaEditar.isEnabled()) {
+            this.btnPessoaEditar.setEnabled(true);
+            this.btnPessoaExcluir.setEnabled(true);
         }
         
         if(evt.getClickCount() == 2) {
@@ -410,10 +436,30 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tablePessoaMouseClicked
 
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+    private void btnPessoaEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPessoaEditarActionPerformed
         this.editPessoa();
-    }//GEN-LAST:event_btnEditarActionPerformed
+    }//GEN-LAST:event_btnPessoaEditarActionPerformed
 
+    private void btnPessoaNovoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPessoaNovoMousePressed
+        this.popMenuPessoa.show(this.btnPessoaNovo, evt.getX(), evt.getY());
+    }//GEN-LAST:event_btnPessoaNovoMousePressed
+
+    private void mnuItemPessoaFisicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItemPessoaFisicaActionPerformed
+        new FrmCadastroPessoa().setVisible(true);
+    }//GEN-LAST:event_mnuItemPessoaFisicaActionPerformed
+
+    private void btnPessoaExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPessoaExcluirActionPerformed
+        this.deletePessoa();
+    }//GEN-LAST:event_btnPessoaExcluirActionPerformed
+
+    private void deletePessoa() {
+        int[] index = this.tablePessoa.getSelectedRows();
+        
+        if(index.length > 0) {
+            this.pessoaController.deletePessoa(this.pessoaTableModel.getPessoasSelected(index));                     
+        }
+    }
+    
     private void editPessoa() {
         int index = this.tablePessoa.getSelectedRow();
         
@@ -466,12 +512,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSplitPane bothBar;
-    private javax.swing.JButton btnEditar;
-    private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnMensalidade;
-    private javax.swing.JButton btnNovo;
-    private javax.swing.JButton btnPesquisar;
     private javax.swing.JButton btnPessoa;
+    private javax.swing.JButton btnPessoaEditar;
+    private javax.swing.JButton btnPessoaExcluir;
+    private javax.swing.JButton btnPessoaNovo;
+    private javax.swing.JButton btnPessoaPesquisar;
     private javax.swing.JComboBox<String> cbxEm;
     private javax.swing.JComboBox<String> cbxSituacao;
     private javax.swing.JComboBox<String> cbxTipoPessoa;
@@ -492,9 +538,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu menuCadastro;
     private javax.swing.JMenu menuFerramenta;
+    private javax.swing.JMenuItem mnuItemPessoaFisica;
+    private javax.swing.JMenuItem mnuItemPessoaJuridica;
     private javax.swing.JPanel pnlBanco;
     private javax.swing.JPanel pnlGeral;
     private javax.swing.JPanel pnlPessoa;
+    private javax.swing.JPopupMenu popMenuPessoa;
     private javax.swing.JScrollPane spTablePessoa;
     private javax.swing.JPanel tabBanco;
     private javax.swing.JTabbedPane tabMenuGeral;
