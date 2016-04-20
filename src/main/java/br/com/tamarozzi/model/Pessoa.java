@@ -20,6 +20,13 @@ public class Pessoa {
     private String email;
     private boolean ativo = true;    
     
+    /* Atributos de Endereço */
+    private String bairro;
+    private String logradouro;
+    private String numero;
+    private String complemento;
+    private String cep;
+    
     /* Atributos Pessoa Física */
     private String cpf;
     private String rg;
@@ -39,18 +46,23 @@ public class Pessoa {
     private String inscricaoMunicipal;
     private String inscricaoEstadual;
     private boolean empresaSistema;
-
+    
     public Pessoa() {
         
     }
 
-    public Pessoa(int id, String nome, String tipoPessoa, String observacao, String suporte, String email, String cpf, String rg, String telefoneResidencial, String telefoneCelular, String telefoneComercial, boolean sexo, Usuario usuario, String telefoneEmpresa, String razaoSocial, String cnpj, String fax, String website, String inscricaoMunicipal, String inscricaoEstadual, boolean empresaSistema) {
+    public Pessoa(int id, String nome, String tipoPessoa, String observacao, String suporte, String email, String bairro, String logradouro, String numero, String complemento, String cep, String cpf, String rg, String telefoneResidencial, String telefoneCelular, String telefoneComercial, boolean sexo, Usuario usuario, String telefoneEmpresa, String razaoSocial, String cnpj, String fax, String website, String inscricaoMunicipal, String inscricaoEstadual, boolean empresaSistema) {
         this.id = id;
         this.nome = nome;
         this.tipoPessoa = tipoPessoa;
         this.observacao = observacao;
         this.suporte = suporte;
         this.email = email;
+        this.bairro = bairro;
+        this.logradouro = logradouro;
+        this.numero = numero;
+        this.complemento = complemento;
+        this.cep = cep;
         this.cpf = cpf;
         this.rg = rg;
         this.telefoneResidencial = telefoneResidencial;
@@ -125,7 +137,7 @@ public class Pessoa {
     }
 
     public String getCpf() {
-        return cpf;
+        return replace(cpf);
     }
 
     public void setCpf(String cpf) {
@@ -141,7 +153,7 @@ public class Pessoa {
     }
 
     public String getTelefoneResidencial() {
-        return telefoneResidencial;
+        return replace(telefoneResidencial);
     }
 
     public void setTelefoneResidencial(String telefoneResidencial) {
@@ -149,7 +161,7 @@ public class Pessoa {
     }
 
     public String getTelefoneCelular() {
-        return telefoneCelular;
+        return replace(telefoneCelular);
     }
 
     public void setTelefoneCelular(String telefoneCelular) {
@@ -157,7 +169,7 @@ public class Pessoa {
     }
 
     public String getTelefoneComercial() {
-        return telefoneComercial;
+        return replace(telefoneComercial);
     }
 
     public void setTelefoneComercial(String telefoneComercial) {
@@ -250,5 +262,55 @@ public class Pessoa {
 
     public void setEmpresaSistema(boolean empresaSistema) {
         this.empresaSistema = empresaSistema;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+
+    public String getLogradouro() {
+        return logradouro;
+    }
+
+    public void setLogradouro(String logradouro) {
+        this.logradouro = logradouro;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public String getComplemento() {
+        return complemento;
+    }
+
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
+    }
+
+    public String getCep() {
+        return replace(cep);
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
+    
+    private String replace(String text) {
+        String caracter[] = {"(", ")", "-", ".", " "};
+        
+        for(String c : caracter) {
+            text = text.replace(c, "");
+        }
+        
+        return text;
     }
 }

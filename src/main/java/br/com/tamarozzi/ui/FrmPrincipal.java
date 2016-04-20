@@ -108,6 +108,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         itemPessoaCadastro = new javax.swing.JMenuItem();
         menuFerramenta = new javax.swing.JMenu();
 
+        mnuItemPessoaFisica.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/novo-icon.png"))); // NOI18N
         mnuItemPessoaFisica.setText("Pessoa Física");
         mnuItemPessoaFisica.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -116,6 +117,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         popMenuPessoa.add(mnuItemPessoaFisica);
 
+        mnuItemPessoaJuridica.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/novo-icon.png"))); // NOI18N
         mnuItemPessoaJuridica.setText("Pessoa Jurídica");
         popMenuPessoa.add(mnuItemPessoaJuridica);
 
@@ -227,6 +229,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
         tablePessoa.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tablePessoaMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tablePessoaMousePressed(evt);
             }
         });
         spTablePessoa.setViewportView(tablePessoa);
@@ -426,11 +431,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPessoaActionPerformed
 
     private void tablePessoaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePessoaMouseClicked
-        if(!this.btnPessoaEditar.isEnabled()) {
-            this.btnPessoaEditar.setEnabled(true);
-            this.btnPessoaExcluir.setEnabled(true);
-        }
-        
         if(evt.getClickCount() == 2) {
            this.editPessoa();
         }
@@ -452,11 +452,18 @@ public class FrmPrincipal extends javax.swing.JFrame {
         this.deletePessoa();
     }//GEN-LAST:event_btnPessoaExcluirActionPerformed
 
+    private void tablePessoaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePessoaMousePressed
+        if(!this.btnPessoaEditar.isEnabled()) {
+            this.btnPessoaEditar.setEnabled(true);
+            this.btnPessoaExcluir.setEnabled(true);
+        }
+    }//GEN-LAST:event_tablePessoaMousePressed
+
     private void deletePessoa() {
-        int[] index = this.tablePessoa.getSelectedRows();
+        List<Pessoa> pessoas = this.pessoaTableModel.getPessoasSelected(this.tablePessoa.getSelectedRows());
         
-        if(index.length > 0) {
-            this.pessoaController.deletePessoa(this.pessoaTableModel.getPessoasSelected(index));                     
+        if(pessoas != null) {
+            this.pessoaController.deletePessoa(pessoas);
         }
     }
     
