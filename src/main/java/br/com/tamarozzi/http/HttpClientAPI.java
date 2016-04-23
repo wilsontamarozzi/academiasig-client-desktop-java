@@ -100,6 +100,8 @@ public final class HttpClientAPI {
 
     public static String sendPut(String urlString, String content) {
         
+        System.out.println(content);
+        
         HttpPut putRequest = new HttpPut(host + urlString);
         putRequest.addHeader(HTTP.CONTENT_TYPE, "application/json");
         putRequest.setEntity(new StringEntity(content, StandardCharsets.UTF_8));
@@ -124,7 +126,7 @@ public final class HttpClientAPI {
 
             if (statusCode != 200 && statusCode != 201) {
                 parsingStatusCode(statusCode);
-                return null;
+                //return null;
             }
 
             BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent()), StandardCharsets.UTF_8));

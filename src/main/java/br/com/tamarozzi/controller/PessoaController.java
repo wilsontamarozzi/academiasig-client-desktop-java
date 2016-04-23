@@ -5,11 +5,12 @@
  */
 package br.com.tamarozzi.controller;
 
+import br.com.tamarozzi.dao.PessoaDao;
+import br.com.tamarozzi.dao.impl.PessoaDaoImpl;
 import br.com.tamarozzi.model.Pessoa;
-import br.com.tamarozzi.service.impl.PessoaServiceImpl;
-import br.com.tamarozzi.services.PessoaService;
 import java.util.List;
 import javax.swing.JOptionPane;
+import org.json.JSONObject;
 
 /**
  *
@@ -17,21 +18,25 @@ import javax.swing.JOptionPane;
  */
 public class PessoaController {
 
-    private final PessoaService pessoaService;
+    private final PessoaDao pessoaDao;
 
     public PessoaController() {
-        this.pessoaService = new PessoaServiceImpl();
+        this.pessoaDao = new PessoaDaoImpl();
     }
 
     public List<Pessoa> getAllPessoa(String campo, String valor, String tipoPessoa, String situacao) {
-        return this.pessoaService.getAllPessoa(campo, valor, tipoPessoa, situacao);
+        return this.pessoaDao.getAllPessoa(campo, valor, tipoPessoa, situacao);
+    }
+    
+    public Pessoa getPessoa(Pessoa p) {
+        return this.pessoaDao.getPessoa(p);
     }
 
-    public void editPessoa(Pessoa p) {
+    public JSONObject editPessoa(Pessoa p) {
         if (p.getId() > 0) {
-            this.pessoaService.edit(p);
+            return this.pessoaDao.edit(p);
         } else {
-            this.pessoaService.add(p);
+            return this.pessoaDao.add(p);
         }
     }
 
@@ -45,7 +50,7 @@ public class PessoaController {
 
         if (opcao == 0) {
             pessoas.stream().forEach((p) -> {
-                this.pessoaService.delete(p.getId());
+                this.pessoaDao.delete(p.getId());
             });
         }
     }

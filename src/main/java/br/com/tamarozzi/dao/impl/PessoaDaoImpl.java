@@ -3,9 +3,11 @@ package br.com.tamarozzi.dao.impl;
 import br.com.tamarozzi.dao.PessoaDao;
 import br.com.tamarozzi.http.HttpClientAPI;
 import br.com.tamarozzi.model.Pessoa;
+import br.com.tamarozzi.util.ClassMergeUtil;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.lang.reflect.Field;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import org.apache.http.client.utils.URIBuilder;
+import org.json.JSONObject;
 
 /**
  *
@@ -27,24 +30,27 @@ public class PessoaDaoImpl implements PessoaDao {
     }
     
     @Override
-    public void add(Pessoa pessoa) {
+    public JSONObject add(Pessoa pessoa) {
         String pessoaJson = gson.toJson(pessoa);
         String response = HttpClientAPI.sendPost("api/v1/pessoas", pessoaJson);
         
-        if (response == null) {
-            JOptionPane.showMessageDialog(null, "Houve um erro ao cadastrar a pessoa");
-        }
+        Pessoa pessoaNew = this.gson.fromJson(response, Pessoa.class);
+        ClassMergeUtil.merge(pessoa, pessoaNew);
+        
+        JSONObject errors = new JSONObject(response);
+        
+        return !errors.isNull("errors") ? errors.getJSONObject("errors") : null;
     }
 
     @Override
-    public void edit(Pessoa pessoa) {
+    public JSONObject edit(Pessoa pessoa) {
        
         String pessoaJson = gson.toJson(pessoa);
         String response = HttpClientAPI.sendPut("api/v1/pessoas/" + pessoa.getId(), pessoaJson);
         
-        if (response == null) {
-            JOptionPane.showMessageDialog(null, "Houve um erro ao editar a pessoa");
-        }
+        JSONObject errors = new JSONObject(response);
+        
+        return !errors.isNull("errors") ? errors.getJSONObject("errors") : null;
     }
 
     @Override
@@ -58,11 +64,12 @@ public class PessoaDaoImpl implements PessoaDao {
     }
 
     @Override
-    public Pessoa getPessoa(int pessoaId) {
+    public Pessoa getPessoa(Pessoa pessoa) {
         
-        String response = HttpClientAPI.sendGet("api/v1/pessoas/" + pessoaId);
+        String response = HttpClientAPI.sendGet("api/v1/pessoas/" + pessoa.getId());
         
-        Pessoa pessoa = this.gson.fromJson(response, Pessoa.class);
+        Pessoa pessoaNew = this.gson.fromJson(response, Pessoa.class);
+        ClassMergeUtil.merge(pessoa, pessoaNew);
         
         return pessoa;
     }

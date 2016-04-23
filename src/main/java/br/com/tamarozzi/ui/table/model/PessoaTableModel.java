@@ -10,12 +10,12 @@
  */
 package br.com.tamarozzi.ui.table.model;
 
-import java.util.List;
-
-import javax.swing.table.AbstractTableModel;
-
 import br.com.tamarozzi.model.Pessoa;
+import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import javax.swing.table.AbstractTableModel;
 
 public class PessoaTableModel extends AbstractTableModel {
 
@@ -34,7 +34,15 @@ public class PessoaTableModel extends AbstractTableModel {
         this.pessoas = pessoas;
         fireTableDataChanged();
     }
-
+    
+    public void addPessoa(Pessoa pessoa) {
+        List<Pessoa> p = new ArrayList<>();
+        p.add(pessoa);
+        p.addAll(this.pessoas);
+        this.pessoas = p;
+        fireTableDataChanged();
+    }
+    
     @Override
     public Class<?> getColumnClass(int coluna) {
         return this.colTipo[coluna];

@@ -10,6 +10,8 @@ import br.com.tamarozzi.model.Pessoa;
 import br.com.tamarozzi.model.UsuarioLogado;
 import br.com.tamarozzi.ui.table.model.PessoaTableModel;
 import br.com.tamarozzi.util.ButtonTabComponent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.JFrame;
@@ -445,7 +447,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPessoaNovoMousePressed
 
     private void mnuItemPessoaFisicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItemPessoaFisicaActionPerformed
-        new FrmCadastroPessoa().setVisible(true);
+        Pessoa p = new Pessoa();
+       
+        FrmCadastroPessoa form = new FrmCadastroPessoa(p);
+        form.setVisible(true);
+        form.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent evt) {
+                if(p.getId() > 0)
+                    pessoaTableModel.addPessoa(p);
+            }
+        });
     }//GEN-LAST:event_mnuItemPessoaFisicaActionPerformed
 
     private void btnPessoaExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPessoaExcluirActionPerformed
@@ -471,7 +483,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         int index = this.tablePessoa.getSelectedRow();
         
         if(index >= 0) {
-            new FrmCadastroPessoa(this.pessoaTableModel.getPessoaSelected(index)).setVisible(true);
+            Pessoa p = this.pessoaController.getPessoa(this.pessoaTableModel.getPessoaSelected(index));
+            new FrmCadastroPessoa(p).setVisible(true);
         }
     }
     

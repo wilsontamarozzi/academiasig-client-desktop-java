@@ -13,19 +13,17 @@ public class Pessoa {
 
     /* Atributos Pessoas */
     private int id;
+    private int logradouroId;
     private String nome;
     private String tipoPessoa;
     private String observacao;
     private String suporte;
     private String email;
-    private boolean ativo = true;    
-    
+    private boolean ativo = true; 
+        
     /* Atributos de Endereço */
-    private String bairro;
-    private String logradouro;
     private String numero;
     private String complemento;
-    private String cep;
     
     /* Atributos Pessoa Física */
     private String cpf;
@@ -47,37 +45,10 @@ public class Pessoa {
     private String inscricaoEstadual;
     private boolean empresaSistema;
     
+    private Logradouro logradouro;
+    
     public Pessoa() {
         
-    }
-
-    public Pessoa(int id, String nome, String tipoPessoa, String observacao, String suporte, String email, String bairro, String logradouro, String numero, String complemento, String cep, String cpf, String rg, String telefoneResidencial, String telefoneCelular, String telefoneComercial, boolean sexo, Usuario usuario, String telefoneEmpresa, String razaoSocial, String cnpj, String fax, String website, String inscricaoMunicipal, String inscricaoEstadual, boolean empresaSistema) {
-        this.id = id;
-        this.nome = nome;
-        this.tipoPessoa = tipoPessoa;
-        this.observacao = observacao;
-        this.suporte = suporte;
-        this.email = email;
-        this.bairro = bairro;
-        this.logradouro = logradouro;
-        this.numero = numero;
-        this.complemento = complemento;
-        this.cep = cep;
-        this.cpf = cpf;
-        this.rg = rg;
-        this.telefoneResidencial = telefoneResidencial;
-        this.telefoneCelular = telefoneCelular;
-        this.telefoneComercial = telefoneComercial;
-        this.sexo = sexo;
-        this.usuario = usuario;
-        this.telefoneEmpresa = telefoneEmpresa;
-        this.razaoSocial = razaoSocial;
-        this.cnpj = cnpj;
-        this.fax = fax;
-        this.website = website;
-        this.inscricaoMunicipal = inscricaoMunicipal;
-        this.inscricaoEstadual = inscricaoEstadual;
-        this.empresaSistema = empresaSistema;
     }
 
     public int getId() {
@@ -86,6 +57,14 @@ public class Pessoa {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getLogradouroId() {
+        return logradouroId;
+    }
+
+    public void setLogradouroId(int logradouroId) {
+        this.logradouroId = logradouroId;
     }
 
     public String getNome() {
@@ -137,6 +116,10 @@ public class Pessoa {
     }
 
     public String getCpf() {
+        return cpf;
+    }
+    
+    public String getCpfClean() {
         return replace(cpf);
     }
 
@@ -153,6 +136,10 @@ public class Pessoa {
     }
 
     public String getTelefoneResidencial() {
+        return telefoneResidencial;
+    }
+    
+    public String getTelefoneResidencialClean() {
         return replace(telefoneResidencial);
     }
 
@@ -161,14 +148,22 @@ public class Pessoa {
     }
 
     public String getTelefoneCelular() {
-        return replace(telefoneCelular);
+        return telefoneCelular;
     }
+    
+    public String getTelefoneCelularClean() {
+        return replace(telefoneCelular);
+    } 
 
     public void setTelefoneCelular(String telefoneCelular) {
         this.telefoneCelular = telefoneCelular;
     }
 
     public String getTelefoneComercial() {
+        return telefoneComercial;
+    }
+    
+    public String getTelefoneComercialClean() {
         return replace(telefoneComercial);
     }
 
@@ -263,23 +258,7 @@ public class Pessoa {
     public void setEmpresaSistema(boolean empresaSistema) {
         this.empresaSistema = empresaSistema;
     }
-
-    public String getBairro() {
-        return bairro;
-    }
-
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
-    }
-
-    public String getLogradouro() {
-        return logradouro;
-    }
-
-    public void setLogradouro(String logradouro) {
-        this.logradouro = logradouro;
-    }
-
+    
     public String getNumero() {
         return numero;
     }
@@ -296,19 +275,21 @@ public class Pessoa {
         this.complemento = complemento;
     }
 
-    public String getCep() {
-        return replace(cep);
+    public Logradouro getLogradouro() {
+        return logradouro;
     }
 
-    public void setCep(String cep) {
-        this.cep = cep;
+    public void setLogradouro(Logradouro logradouro) {
+        this.logradouro = logradouro;
     }
-    
-    private String replace(String text) {
-        String caracter[] = {"(", ")", "-", ".", " "};
         
-        for(String c : caracter) {
-            text = text.replace(c, "");
+    private String replace(String text) {
+        if(text != null) {
+            String caracter[] = {"(", ")", "-", ".", " "};
+
+            for(String c : caracter) {
+                text = text.replace(c, "");
+            }
         }
         
         return text;

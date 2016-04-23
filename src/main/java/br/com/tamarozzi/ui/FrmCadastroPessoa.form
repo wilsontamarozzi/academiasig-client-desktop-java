@@ -113,14 +113,16 @@
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="lblTelefoneResidencial" max="32767" attributes="0"/>
-                                      <Component id="lblCpf" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="lblNascimento" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="lblCidade" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="lblComplemento" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="lblEndereco" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="lblNome" alignment="0" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="lblTelefoneResidencial" max="32767" attributes="0"/>
+                                          <Component id="lblCpf" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="lblNascimento" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="lblComplemento" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="lblEndereco" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="lblNome" alignment="0" max="32767" attributes="0"/>
+                                      </Group>
+                                      <Component id="lblCidade" alignment="0" min="-2" pref="84" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -129,30 +131,34 @@
                                               <Component id="txtNome" alignment="1" max="32767" attributes="0"/>
                                               <Group type="102" alignment="1" attributes="0">
                                                   <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Group type="102" alignment="0" attributes="0">
-                                                          <Component id="txtEndereco" max="32767" attributes="0"/>
-                                                          <EmptySpace max="-2" attributes="0"/>
-                                                          <Component id="lblNumero" min="-2" max="-2" attributes="0"/>
-                                                      </Group>
                                                       <Group type="102" attributes="0">
                                                           <Component id="txtComplemento" min="-2" pref="117" max="-2" attributes="0"/>
                                                           <EmptySpace max="-2" attributes="0"/>
                                                           <Component id="lblBairro" min="-2" max="-2" attributes="0"/>
                                                           <EmptySpace max="-2" attributes="0"/>
                                                           <Component id="txtBairro" max="32767" attributes="0"/>
-                                                          <EmptySpace max="-2" attributes="0"/>
-                                                          <Component id="lblCep" min="-2" max="-2" attributes="0"/>
                                                       </Group>
+                                                      <Component id="txtEndereco" max="32767" attributes="0"/>
                                                   </Group>
                                                   <EmptySpace max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                      <Component id="txtCep" max="32767" attributes="0"/>
-                                                      <Component id="txtNumero" pref="84" max="32767" attributes="0"/>
+                                                      <Group type="102" alignment="0" attributes="0">
+                                                          <Component id="lblNumero" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="txtNumero" min="-2" pref="84" max="-2" attributes="0"/>
+                                                      </Group>
+                                                      <Group type="102" alignment="0" attributes="0">
+                                                          <Component id="lblCep" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="txtCep" max="32767" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="btnPesquisaCEP" min="-2" max="-2" attributes="0"/>
+                                                      </Group>
                                                   </Group>
                                               </Group>
-                                              <Component id="cbxCidade" max="32767" attributes="0"/>
+                                              <Component id="txtCidade" alignment="0" max="32767" attributes="0"/>
                                           </Group>
-                                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
                                           <Component id="pnlImagem" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" attributes="0">
@@ -241,14 +247,15 @@
                                       <Component id="txtBairro" alignment="2" min="-2" max="-2" attributes="0"/>
                                       <Component id="lblCep" alignment="2" min="-2" max="-2" attributes="0"/>
                                       <Component id="txtCep" alignment="2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btnPesquisaCEP" alignment="2" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="2" attributes="0">
-                                      <Component id="lblCidade" alignment="2" min="-2" max="-2" attributes="0"/>
-                                      <Component id="cbxCidade" alignment="2" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="txtCidade" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblCidade" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <Component id="pnlImagem" alignment="0" pref="98" max="32767" attributes="0"/>
+                              <Component id="pnlImagem" min="-2" pref="98" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="2" attributes="0">
@@ -327,7 +334,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="94" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -338,6 +345,9 @@
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtEndereco">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                  </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lblNumero">
                   <Properties>
@@ -359,6 +369,9 @@
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtBairro">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                  </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lblCep">
                   <Properties>
@@ -370,6 +383,7 @@
                     <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor" preCode="try {" postCode="} catch (java.text.ParseException ex) {&#xa;ex.printStackTrace();&#xa;}">
                       <Format format="##.###-###" subtype="-1" type="5"/>
                     </Property>
+                    <Property name="text" type="java.lang.String" value=""/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lblCidade">
@@ -377,20 +391,10 @@
                     <Property name="text" type="java.lang.String" value="Cidade:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="cbxCidade">
+                <Component class="javax.swing.JTextField" name="txtCidade">
                   <Properties>
-                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="4">
-                        <StringItem index="0" value="Item 1"/>
-                        <StringItem index="1" value="Item 2"/>
-                        <StringItem index="2" value="Item 3"/>
-                        <StringItem index="3" value="Item 4"/>
-                      </StringArray>
-                    </Property>
+                    <Property name="editable" type="boolean" value="false"/>
                   </Properties>
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lblNascimento">
                   <Properties>
@@ -412,6 +416,7 @@
                         <StringItem index="1" value="Feminino"/>
                       </StringArray>
                     </Property>
+                    <Property name="selectedIndex" type="int" value="-1"/>
                   </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -528,6 +533,17 @@
                     <Property name="text" type="java.lang.String" value="Pessoa Inativa:"/>
                     <Property name="horizontalTextPosition" type="int" value="2"/>
                   </Properties>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnPesquisaCEP">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="..."/>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[20, 20]"/>
+                    </Property>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPesquisaCEPActionPerformed"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>

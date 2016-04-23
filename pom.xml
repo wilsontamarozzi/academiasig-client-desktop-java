@@ -7,18 +7,21 @@
     <packaging>jar</packaging>
     
     <dependencies>
+        <!-- DEPENDENCIA DE COMPONENTES DE DATA -->
         <dependency>
             <groupId>com.toedter</groupId>
             <artifactId>jcalendar</artifactId>
             <version>1.4</version>
         </dependency>
 
+        <!-- DEPENDENCIA DO COMPONENTES PARA CONEXÃO HTTP -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.2</version>
         </dependency>
         
+        <!-- DEPENDENCIAS CONVERSÃO DE JSON -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
@@ -31,6 +34,7 @@
             <version>20160212</version>
         </dependency>
         
+        <!-- DEPENDENCIAS DE TESTE -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -56,6 +60,13 @@
             <groupId>com.synthetica</groupId>
             <artifactId>syntheticaBlueSteel</artifactId>
             <version>1</version>
+        </dependency>
+        
+        <!-- DEPENDENCIA PARA BALON NOS COMPONENTES -->
+        <dependency> 
+            <groupId>net.java.balloontip</groupId> 
+            <artifactId>balloontip</artifactId> 
+            <version>1.2.4.1</version> 
         </dependency>
     </dependencies>
     

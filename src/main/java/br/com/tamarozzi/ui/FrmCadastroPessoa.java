@@ -6,22 +6,34 @@
 
 package br.com.tamarozzi.ui;
 
+import br.com.tamarozzi.controller.LogradouroController;
 import br.com.tamarozzi.controller.PessoaController;
+import br.com.tamarozzi.model.Logradouro;
 import br.com.tamarozzi.model.Pessoa;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import net.java.balloontip.BalloonTip;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
  * @author rodrigo.jorge
  */
-public class FrmCadastroPessoa extends javax.swing.JFrame {
+public class FrmCadastroPessoa extends JFrame {
 
     private final PessoaController pessoaController;
+    private final LogradouroController logradouroController;
     
     private final Pessoa pessoa;
+    
+    private BalloonTip balloonTip;
     
     public FrmCadastroPessoa() {
         this.pessoa = new Pessoa();
         this.pessoaController = new PessoaController();
+        this.logradouroController = new LogradouroController();
         
         initComponents();
         setComponents("Cadastrar Pessoa");
@@ -30,6 +42,7 @@ public class FrmCadastroPessoa extends javax.swing.JFrame {
     public FrmCadastroPessoa(Pessoa pessoa) {
         this.pessoa = pessoa;
         this.pessoaController = new PessoaController();
+        this.logradouroController = new LogradouroController();
         
         initComponents();
         setComponents("Alterar Pessoa");
@@ -42,8 +55,7 @@ public class FrmCadastroPessoa extends javax.swing.JFrame {
         this.setTitle(title);
     }
     
-    private void setView(Pessoa p){
-        
+    private void setView(Pessoa p){  
         /* Atributos de Pessoa */
         this.txtNome.setText(p.getNome());
         this.txaObservacao.setText(p.getObservacao());
@@ -52,19 +64,29 @@ public class FrmCadastroPessoa extends javax.swing.JFrame {
         this.chkPessoaInativa.setSelected(!p.isAtivo());
         
         /* Atributos de Endereço */
-        this.txtEndereco.setText(p.getLogradouro());
-        //this.txtNumero.setText(p.getNumero());
+        this.txtNumero.setText(p.getNumero());
         this.txtComplemento.setText(p.getComplemento());
-        this.txtBairro.setText(p.getBairro());
-        this.txtCep.setText(p.getCep());
+        this.refreshEndereco(p.getLogradouro());
         
         /* Atributos de Pessoa Fisíca */
-        this.txtCpf.setText(p.getCpf());
+        this.txtCpf.setText(p.getCpfClean());
         this.txtRg.setText(p.getRg());
-        this.txtTelefoneCelular.setText(p.getTelefoneCelular());
-        this.txtTelefoneComercial.setText(p.getTelefoneComercial());
-        this.txtTelefoneResidencial.setText(p.getTelefoneResidencial());
+        this.txtTelefoneCelular.setText(p.getTelefoneCelularClean());
+        this.txtTelefoneComercial.setText(p.getTelefoneComercialClean());
+        this.txtTelefoneResidencial.setText(p.getTelefoneResidencialClean());
         this.cbxSexo.setSelectedIndex(p.isSexo() == true ? 1 : 0);
+    }
+    
+    private void refreshEndereco(Logradouro l) {
+        if(l != null) {
+            this.pessoa.setLogradouroId(l.getEnderecoCodigo());
+            this.pessoa.setLogradouro(l);
+
+            this.txtCep.setText(l.getEnderecoCep());
+            this.txtEndereco.setText(l.getEnderecoLogradouro());
+            this.txtBairro.setText(l.getBairro().getBairroDescricao());
+            this.txtCidade.setText(l.getBairro().getCidade().getCidadeDescricao());
+        }
     }
 
     /** This method is called from within the constructor to
@@ -93,7 +115,7 @@ public class FrmCadastroPessoa extends javax.swing.JFrame {
         lblCep = new javax.swing.JLabel();
         txtCep = new javax.swing.JFormattedTextField();
         lblCidade = new javax.swing.JLabel();
-        cbxCidade = new javax.swing.JComboBox<>();
+        txtCidade = new javax.swing.JTextField();
         lblNascimento = new javax.swing.JLabel();
         dtcNascimento = new com.toedter.calendar.JDateChooser();
         lblSexo = new javax.swing.JLabel();
@@ -118,6 +140,7 @@ public class FrmCadastroPessoa extends javax.swing.JFrame {
         lblCadastradoPor = new javax.swing.JLabel();
         txtCadastradoPor = new javax.swing.JTextField();
         chkPessoaInativa = new javax.swing.JCheckBox();
+        btnPesquisaCEP = new javax.swing.JButton();
         btnCadastrar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
@@ -145,16 +168,20 @@ public class FrmCadastroPessoa extends javax.swing.JFrame {
         );
         pnlImagemLayout.setVerticalGroup(
             pnlImagemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 94, Short.MAX_VALUE)
         );
 
         lblEndereco.setText("Endereço:");
+
+        txtEndereco.setEditable(false);
 
         lblNumero.setText("Número:");
 
         lblComplemento.setText("Complemento:");
 
         lblBairro.setText("Bairro:");
+
+        txtBairro.setEditable(false);
 
         lblCep.setText("Cep:");
 
@@ -163,16 +190,18 @@ public class FrmCadastroPessoa extends javax.swing.JFrame {
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+        txtCep.setText("");
 
         lblCidade.setText("Cidade:");
 
-        cbxCidade.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        txtCidade.setEditable(false);
 
         lblNascimento.setText("Nascimento:");
 
         lblSexo.setText("Sexo:");
 
         cbxSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Masculino", "Feminino" }));
+        cbxSexo.setSelectedIndex(-1);
 
         lblCpf.setText("CPF:");
 
@@ -229,6 +258,14 @@ public class FrmCadastroPessoa extends javax.swing.JFrame {
         chkPessoaInativa.setText("Pessoa Inativa:");
         chkPessoaInativa.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
+        btnPesquisaCEP.setText("...");
+        btnPesquisaCEP.setPreferredSize(new java.awt.Dimension(20, 20));
+        btnPesquisaCEP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPesquisaCEPActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlDetalhesLayout = new javax.swing.GroupLayout(pnlDetalhes);
         pnlDetalhes.setLayout(pnlDetalhesLayout);
         pnlDetalhesLayout.setHorizontalGroup(
@@ -237,14 +274,15 @@ public class FrmCadastroPessoa extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlDetalhesLayout.createSequentialGroup()
-                        .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblTelefoneResidencial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblCpf, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblNascimento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblCidade, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblComplemento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblEndereco, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(lblTelefoneResidencial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblCpf, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblNascimento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblComplemento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblEndereco, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(lblCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
                         .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlDetalhesLayout.createSequentialGroup()
@@ -253,22 +291,25 @@ public class FrmCadastroPessoa extends javax.swing.JFrame {
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDetalhesLayout.createSequentialGroup()
                                         .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(pnlDetalhesLayout.createSequentialGroup()
-                                                .addComponent(txtEndereco)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(lblNumero))
-                                            .addGroup(pnlDetalhesLayout.createSequentialGroup()
                                                 .addComponent(txtComplemento, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(lblBairro)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtBairro)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(lblCep)))
+                                                .addComponent(txtBairro))
+                                            .addComponent(txtEndereco))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(txtCep)
-                                            .addComponent(txtNumero, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)))
-                                    .addComponent(cbxCidade, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addGroup(pnlDetalhesLayout.createSequentialGroup()
+                                                .addComponent(lblNumero)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(pnlDetalhesLayout.createSequentialGroup()
+                                                .addComponent(lblCep)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(txtCep)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(btnPesquisaCEP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(txtCidade))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(pnlImagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(pnlDetalhesLayout.createSequentialGroup()
@@ -338,12 +379,13 @@ public class FrmCadastroPessoa extends javax.swing.JFrame {
                             .addComponent(lblBairro)
                             .addComponent(txtBairro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblCep)
-                            .addComponent(txtCep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(lblCidade)
-                            .addComponent(cbxCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(pnlImagem, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE))
+                            .addComponent(txtCep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnPesquisaCEP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblCidade)))
+                    .addComponent(pnlImagem, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(lblNascimento)
@@ -449,42 +491,78 @@ public class FrmCadastroPessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        this.pessoaController.editPessoa(this.loadPessoa());
-        this.dispose();
+        JSONObject errors = this.pessoaController.editPessoa(this.loadPessoa());
+        
+        if(errors != null) {
+            this.parseErrors(errors);
+        } else {
+            this.dispose();
+        }
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
+    private void btnPesquisaCEPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisaCEPActionPerformed
+        String cep = this.txtCep.getText();
+        cep = cep.replace(".", "");
+        cep = cep.replace("-", "");
+        
+        this.refreshEndereco(this.logradouroController.getLogradouroByCEP(cep));
+    }//GEN-LAST:event_btnPesquisaCEPActionPerformed
+
     private Pessoa loadPessoa() {
-        
-        Pessoa p;
-        
-        if(this.pessoa != null) {
-            p = this.pessoa;
-        } else {
-            p = new Pessoa();
-        }
-        
+                
         /* Atributos de Pessoa */
-        p.setNome(this.txtNome.getText());
-        p.setEmail(this.txtEmail.getText());
-        p.setObservacao(this.txaObservacao.getText());
+        this.pessoa.setTipoPessoa("F");
+        this.pessoa.setNome(this.txtNome.getText());
+        this.pessoa.setEmail(this.txtEmail.getText());
+        this.pessoa.setObservacao(this.txaObservacao.getText());
         
         /* Atributos de Endereço */
-        p.setLogradouro(this.txtEndereco.getText());
-        p.setNumero(this.txtNumero.getText());
-        p.setComplemento(this.txtComplemento.getText());
-        p.setBairro(this.txtBairro.getText());
-        p.setCep(this.txtCep.getText());
+        this.pessoa.setNumero(this.txtNumero.getText());
+        this.pessoa.setComplemento(this.txtComplemento.getText());
         
-        p.setCpf(this.txtCpf.getText());
-        p.setRg(this.txtRg.getText());
-        p.setTelefoneCelular(this.txtTelefoneCelular.getText());
-        p.setTelefoneComercial(this.txtTelefoneComercial.getText());
-        p.setTelefoneResidencial(this.txtTelefoneResidencial.getText());
-        p.setSexo(this.cbxSexo.getSelectedIndex() == 1);
-        p.setAtivo(!this.chkPessoaInativa.isSelected());
+        this.pessoa.setCpf(this.txtCpf.getText());
+        this.pessoa.setRg(this.txtRg.getText());
+        this.pessoa.setTelefoneCelular(this.txtTelefoneCelular.getText());
+        this.pessoa.setTelefoneComercial(this.txtTelefoneComercial.getText());
+        this.pessoa.setTelefoneResidencial(this.txtTelefoneResidencial.getText());
+        this.pessoa.setSexo(this.cbxSexo.getSelectedIndex() == 1);
+        this.pessoa.setAtivo(!this.chkPessoaInativa.isSelected());
         
-        return p;
+        return this.pessoa;
     }
+    
+    private void parseErrors(JSONObject errors) {
+        
+        errors.keys().forEachRemaining(key -> {
+                
+            JSONArray obj = errors.getJSONArray(key);
+
+            JComponent comp = null;
+            
+            switch(key) {
+                case "nome":
+                    comp = this.txtNome;
+                break;
+                case "sexo":
+                    comp = this.cbxSexo;
+                break;
+                case "tipoPessoa":
+                    JOptionPane.showMessageDialog(null, obj.getString(0), "Erro Critico", JOptionPane.ERROR_MESSAGE);
+                break;
+            }
+            
+            if(this.balloonTip == null && comp != null) {
+                this.balloonTip = new BalloonTip(this.txtNome, obj.getString(0));
+            } else if(comp != null && !this.balloonTip.isVisible()) {
+                this.balloonTip = new BalloonTip(this.txtNome, obj.getString(0));
+            }
+        });
+
+        /*JSONArray sexo = errors.getJSONArray("sexo");
+        if(sexo.length() > 0)
+        new BalloonTip(this.cbxSexo, sexo.getString(0));*/
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -521,7 +599,7 @@ public class FrmCadastroPessoa extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JComboBox<String> cbxCidade;
+    private javax.swing.JButton btnPesquisaCEP;
     private javax.swing.JComboBox<String> cbxSexo;
     private javax.swing.JCheckBox chkPessoaInativa;
     private com.toedter.calendar.JDateChooser dtcNascimento;
@@ -552,6 +630,7 @@ public class FrmCadastroPessoa extends javax.swing.JFrame {
     private javax.swing.JTextField txtBairro;
     private javax.swing.JTextField txtCadastradoPor;
     private javax.swing.JFormattedTextField txtCep;
+    private javax.swing.JTextField txtCidade;
     private javax.swing.JTextField txtComplemento;
     private javax.swing.JFormattedTextField txtCpf;
     private javax.swing.JTextField txtDataCadastro;

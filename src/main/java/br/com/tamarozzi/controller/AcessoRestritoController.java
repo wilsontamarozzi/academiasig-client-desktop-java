@@ -5,9 +5,9 @@
  */
 package br.com.tamarozzi.controller;
 
+import br.com.tamarozzi.dao.UsuarioDao;
+import br.com.tamarozzi.dao.impl.UsuarioDaoImpl;
 import br.com.tamarozzi.model.Usuario;
-import br.com.tamarozzi.services.UsuarioService;
-import br.com.tamarozzi.services.impl.UsuarioServiceImpl;
 
 /**
  *
@@ -15,10 +15,10 @@ import br.com.tamarozzi.services.impl.UsuarioServiceImpl;
  */
 public class AcessoRestritoController {
 
-    private final UsuarioService usuarioService;
+    private final UsuarioDao usuarioDao;
 
     public AcessoRestritoController() {
-        this.usuarioService = new UsuarioServiceImpl();
+        this.usuarioDao = new UsuarioDaoImpl();
     }
 
     public boolean autenticacao(String login, String senha) {
@@ -27,6 +27,6 @@ public class AcessoRestritoController {
         user.setLogin(login);
         user.setSenha(senha);
 
-        return this.usuarioService.autenticacao(user);
+        return this.usuarioDao.autenticacao(user);
     }
 }
