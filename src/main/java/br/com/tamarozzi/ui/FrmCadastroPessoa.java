@@ -10,6 +10,8 @@ import br.com.tamarozzi.controller.LogradouroController;
 import br.com.tamarozzi.controller.PessoaController;
 import br.com.tamarozzi.model.Logradouro;
 import br.com.tamarozzi.model.Pessoa;
+import java.util.Collections;
+import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -36,7 +38,7 @@ public class FrmCadastroPessoa extends JFrame {
         this.logradouroController = new LogradouroController();
         
         initComponents();
-        setComponents("Cadastrar Pessoa");
+        setComponents();
     }
     
     public FrmCadastroPessoa(Pessoa pessoa) {
@@ -45,14 +47,13 @@ public class FrmCadastroPessoa extends JFrame {
         this.logradouroController = new LogradouroController();
         
         initComponents();
-        setComponents("Alterar Pessoa");
+        setComponents();
         
         setView(pessoa);
     }
     
-    private void setComponents(String title) {
+    private void setComponents() {
         this.setLocationRelativeTo(null);
-        this.setTitle(title);
     }
     
     private void setView(Pessoa p){  
@@ -145,7 +146,9 @@ public class FrmCadastroPessoa extends JFrame {
         btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Pessoa");
         setLocation(new java.awt.Point(0, 0));
+        setLocationByPlatform(true);
         setSize(new java.awt.Dimension(780, 600));
 
         pnlGeral.setPreferredSize(new java.awt.Dimension(780, 500));
@@ -533,8 +536,8 @@ public class FrmCadastroPessoa extends JFrame {
     
     private void parseErrors(JSONObject errors) {
         
-        errors.keys().forEachRemaining(key -> {
-                
+        errors.keys().forEachRemaining((String key) -> {
+            
             JSONArray obj = errors.getJSONArray(key);
 
             JComponent comp = null;
@@ -552,15 +555,11 @@ public class FrmCadastroPessoa extends JFrame {
             }
             
             if(this.balloonTip == null && comp != null) {
-                this.balloonTip = new BalloonTip(this.txtNome, obj.getString(0));
+                this.balloonTip = new BalloonTip(comp, obj.getString(0));
             } else if(comp != null && !this.balloonTip.isVisible()) {
-                this.balloonTip = new BalloonTip(this.txtNome, obj.getString(0));
+                this.balloonTip = new BalloonTip(comp, obj.getString(0));
             }
         });
-
-        /*JSONArray sexo = errors.getJSONArray("sexo");
-        if(sexo.length() > 0)
-        new BalloonTip(this.cbxSexo, sexo.getString(0));*/
     }
     
     /**

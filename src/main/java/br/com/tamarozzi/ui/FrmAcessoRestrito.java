@@ -37,11 +37,11 @@ public class FrmAcessoRestrito extends javax.swing.JFrame {
 
         pnlPrincipal = new javax.swing.JPanel();
         lblUsuario = new javax.swing.JLabel();
+        txtUsuario = new javax.swing.JTextField();
         lblSenha = new javax.swing.JLabel();
+        txtSenha = new javax.swing.JPasswordField();
         btnEntrar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
-        txtUsuario = new javax.swing.JTextField();
-        txtSenha = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -51,7 +51,16 @@ public class FrmAcessoRestrito extends javax.swing.JFrame {
 
         lblUsuario.setText("Usuário:");
 
+        txtUsuario.setText("wilson");
+
         lblSenha.setText("Senha:");
+
+        txtSenha.setText("123");
+        txtSenha.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtSenhaKeyPressed(evt);
+            }
+        });
 
         btnEntrar.setText("Entrar");
         btnEntrar.setName("btnEntrar"); // NOI18N
@@ -65,12 +74,6 @@ public class FrmAcessoRestrito extends javax.swing.JFrame {
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
-            }
-        });
-
-        txtSenha.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtSenhaKeyPressed(evt);
             }
         });
 

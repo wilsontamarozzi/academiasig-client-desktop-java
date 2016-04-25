@@ -44,7 +44,7 @@ public class PessoaDaoImplTest {
     /**
      * Test of add method, of class PessoaDaoImpl.
      */
-    @Test
+    //@Test
     public void testAdd() {
         System.out.println("add");
         Pessoa pessoa = new Pessoa();

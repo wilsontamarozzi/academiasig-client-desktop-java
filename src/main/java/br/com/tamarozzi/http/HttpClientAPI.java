@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
@@ -128,16 +130,20 @@ public final class HttpClientAPI {
                 parsingStatusCode(statusCode);
                 //return null;
             }
+            
+            HttpEntity httpEntity = response.getEntity();
 
-            BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent()), StandardCharsets.UTF_8));
+            if(httpEntity != null) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(httpEntity.getContent(), StandardCharsets.UTF_8));
 
-            String output;
-            StringBuilder responseBuffer = new StringBuilder();
-            while ((output = br.readLine()) != null) {
-                responseBuffer.append(output);
-            }
-
-            data = responseBuffer.toString();
+                String output;
+                StringBuilder responseBuffer = new StringBuilder();
+                while ((output = br.readLine()) != null) {
+                    responseBuffer.append(output);
+                }
+                
+                data = responseBuffer.toString();
+            }           
         } catch (MalformedURLException ex) {
             Logger.getLogger(HttpClientAPI.class.getName()).log(Level.SEVERE, null, ex);
         } catch (HttpHostConnectException ex) {

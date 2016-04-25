@@ -40,7 +40,7 @@ public class PessoaController {
         }
     }
 
-    public void deletePessoa(List<Pessoa> pessoas) {
+    public boolean deletePessoa(List<Pessoa> pessoas) {
 
         int opcao = JOptionPane.showConfirmDialog(null,
                 "Confirma a exclusão deste(s) registro(s)?",
@@ -52,6 +52,10 @@ public class PessoaController {
             pessoas.stream().forEach((p) -> {
                 this.pessoaDao.delete(p.getId());
             });
+            
+            return true;
         }
+        
+        return false;
     }
 }

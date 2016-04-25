@@ -5,17 +5,9 @@
  */
 package br.com.tamarozzi.ui;
 
-import br.com.tamarozzi.controller.PessoaController;
-import br.com.tamarozzi.model.Pessoa;
 import br.com.tamarozzi.model.UsuarioLogado;
-import br.com.tamarozzi.ui.table.model.PessoaTableModel;
 import br.com.tamarozzi.util.ButtonTabComponent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Arrays;
-import java.util.List;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -24,32 +16,16 @@ import javax.swing.JPanel;
  */
 public class FrmPrincipal extends javax.swing.JFrame {
 
-    private final PessoaController pessoaController;
-    private final PessoaTableModel pessoaTableModel;
-    
-    private final List<String> listCampoFiltro;
-    private final List<String> listTipoPessoaFiltro;
-    private final List<String> listSituacaoFiltro;
-
     /**
      * Creates new form FrmPrincipal
      */
     public FrmPrincipal() {
-        this.listCampoFiltro = Arrays.asList("todos", "nome", "email");
-        this.listTipoPessoaFiltro = Arrays.asList("todos", "F", "J");
-        this.listSituacaoFiltro = Arrays.asList("todos", "1", "0");
-        this.pessoaController = new PessoaController();
-        this.pessoaTableModel = new PessoaTableModel();
-        
         initComponents();
         setComponents();        
     }
     
     private void setComponents() {
-        /* Inicializa a tabmenu sem nada aberto */
         this.tabMenuGeral.removeAll();
-        /* Seta a primeira coluna com tamanho 20 */
-        this.tablePessoa.getColumnModel().getColumn(0).setMaxWidth(20);
         /* Faz com que a tela abra maximazada */
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setBothTool();
@@ -68,39 +44,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        popMenuPessoa = new javax.swing.JPopupMenu();
-        mnuItemPessoaFisica = new javax.swing.JMenuItem();
-        mnuItemPessoaJuridica = new javax.swing.JMenuItem();
         pnlGeral = new javax.swing.JPanel();
         toolBarGeral = new javax.swing.JToolBar();
         btnPessoa = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JToolBar.Separator();
         btnMensalidade = new javax.swing.JButton();
         tabMenuGeral = new javax.swing.JTabbedPane();
-        tabPessoa = new javax.swing.JPanel();
-        pnlPessoa = new javax.swing.JPanel();
-        lblPesquisa = new javax.swing.JLabel();
-        txtPesquisa = new javax.swing.JTextField();
-        toolBarPessoa = new javax.swing.JToolBar();
-        btnPessoaNovo = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JToolBar.Separator();
-        btnPessoaEditar = new javax.swing.JButton();
-        jSeparator2 = new javax.swing.JToolBar.Separator();
-        btnPessoaExcluir = new javax.swing.JButton();
-        jSeparator3 = new javax.swing.JToolBar.Separator();
-        btnPessoaPesquisar = new javax.swing.JButton();
-        lblEm = new javax.swing.JLabel();
-        cbxEm = new javax.swing.JComboBox<>();
-        lblTipoPessoa = new javax.swing.JLabel();
-        cbxTipoPessoa = new javax.swing.JComboBox<>();
-        lblSituacao = new javax.swing.JLabel();
-        cbxSituacao = new javax.swing.JComboBox<>();
-        spTablePessoa = new javax.swing.JScrollPane();
-        tablePessoa = new javax.swing.JTable();
-        tabBanco = new javax.swing.JPanel();
-        pnlBanco = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tabPessoa = new br.com.tamarozzi.ui.panel.PanelPessoa();
+        tabBanco = new br.com.tamarozzi.ui.panel.PanelBanco();
         bothBar = new javax.swing.JSplitPane();
         lblVersao = new javax.swing.JLabel();
         lblUsuario = new javax.swing.JLabel();
@@ -110,21 +61,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
         itemPessoaCadastro = new javax.swing.JMenuItem();
         menuFerramenta = new javax.swing.JMenu();
 
-        mnuItemPessoaFisica.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/novo-icon.png"))); // NOI18N
-        mnuItemPessoaFisica.setText("Pessoa Física");
-        mnuItemPessoaFisica.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuItemPessoaFisicaActionPerformed(evt);
-            }
-        });
-        popMenuPessoa.add(mnuItemPessoaFisica);
-
-        mnuItemPessoaJuridica.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/novo-icon.png"))); // NOI18N
-        mnuItemPessoaJuridica.setText("Pessoa Jurídica");
-        popMenuPessoa.add(mnuItemPessoaJuridica);
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("AcademiaSIG - Principal");
+        setMinimumSize(new java.awt.Dimension(756, 572));
+        setSize(new java.awt.Dimension(756, 572));
 
         toolBarGeral.setFloatable(false);
         toolBarGeral.setRollover(true);
@@ -149,196 +89,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnMensalidade.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBarGeral.add(btnMensalidade);
 
-        tabPessoa.setName("Pessoas"); // NOI18N
-
-        lblPesquisa.setText("Pesquisa:");
-
-        toolBarPessoa.setFloatable(false);
-        toolBarPessoa.setRollover(true);
-
-        btnPessoaNovo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/novo-icon.png"))); // NOI18N
-        btnPessoaNovo.setText("Novo");
-        btnPessoaNovo.setFocusable(false);
-        btnPessoaNovo.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnPessoaNovo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnPessoaNovo.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                btnPessoaNovoMousePressed(evt);
-            }
-        });
-        toolBarPessoa.add(btnPessoaNovo);
-        toolBarPessoa.add(jSeparator1);
-
-        btnPessoaEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/editar-icon.png"))); // NOI18N
-        btnPessoaEditar.setText("Editar");
-        btnPessoaEditar.setEnabled(false);
-        btnPessoaEditar.setFocusable(false);
-        btnPessoaEditar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnPessoaEditar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnPessoaEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPessoaEditarActionPerformed(evt);
-            }
-        });
-        toolBarPessoa.add(btnPessoaEditar);
-        toolBarPessoa.add(jSeparator2);
-
-        btnPessoaExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/excluir-icon.png"))); // NOI18N
-        btnPessoaExcluir.setText("Excluir");
-        btnPessoaExcluir.setEnabled(false);
-        btnPessoaExcluir.setFocusable(false);
-        btnPessoaExcluir.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnPessoaExcluir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnPessoaExcluir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPessoaExcluirActionPerformed(evt);
-            }
-        });
-        toolBarPessoa.add(btnPessoaExcluir);
-        toolBarPessoa.add(jSeparator3);
-
-        btnPessoaPesquisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/pesquisar-icon.png"))); // NOI18N
-        btnPessoaPesquisar.setText("Pesquisar");
-        btnPessoaPesquisar.setFocusable(false);
-        btnPessoaPesquisar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnPessoaPesquisar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnPessoaPesquisar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPessoaPesquisarActionPerformed(evt);
-            }
-        });
-        toolBarPessoa.add(btnPessoaPesquisar);
-
-        lblEm.setText("Em:");
-
-        cbxEm.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Nome", "E-mail" }));
-        cbxEm.setMinimumSize(new java.awt.Dimension(125, 20));
-        cbxEm.setPreferredSize(new java.awt.Dimension(125, 20));
-
-        lblTipoPessoa.setText("Tipo:");
-
-        cbxTipoPessoa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Pessoa Física", "Pessoa Juridica", "Empresa do Sistema", "Usuario do Sistema" }));
-        cbxTipoPessoa.setMinimumSize(new java.awt.Dimension(125, 20));
-        cbxTipoPessoa.setPreferredSize(new java.awt.Dimension(125, 20));
-
-        lblSituacao.setText("Situação:");
-
-        cbxSituacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Ativo", "Inativo" }));
-        cbxSituacao.setMinimumSize(new java.awt.Dimension(70, 20));
-        cbxSituacao.setPreferredSize(new java.awt.Dimension(70, 20));
-
-        tablePessoa.setModel(pessoaTableModel);
-        tablePessoa.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tablePessoaMouseClicked(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                tablePessoaMousePressed(evt);
-            }
-        });
-        spTablePessoa.setViewportView(tablePessoa);
-
-        javax.swing.GroupLayout pnlPessoaLayout = new javax.swing.GroupLayout(pnlPessoa);
-        pnlPessoa.setLayout(pnlPessoaLayout);
-        pnlPessoaLayout.setHorizontalGroup(
-            pnlPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(spTablePessoa, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(pnlPessoaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(toolBarPessoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(pnlPessoaLayout.createSequentialGroup()
-                        .addComponent(lblPesquisa)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblEm)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbxEm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblTipoPessoa)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbxTipoPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblSituacao)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbxSituacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        pnlPessoaLayout.setVerticalGroup(
-            pnlPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlPessoaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPesquisa)
-                    .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTipoPessoa)
-                    .addComponent(cbxTipoPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblEm)
-                    .addComponent(cbxEm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblSituacao)
-                    .addComponent(cbxSituacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(toolBarPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(spTablePessoa))
-        );
-
-        javax.swing.GroupLayout tabPessoaLayout = new javax.swing.GroupLayout(tabPessoa);
-        tabPessoa.setLayout(tabPessoaLayout);
-        tabPessoaLayout.setHorizontalGroup(
-            tabPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlPessoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        tabPessoaLayout.setVerticalGroup(
-            tabPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlPessoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
         tabMenuGeral.addTab("Pessoas", tabPessoa);
-        tabPessoa.getAccessibleContext().setAccessibleName("Pessoas");
-
-        tabBanco.setName("Bancos"); // NOI18N
-
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane2.setViewportView(jTable2);
-
-        javax.swing.GroupLayout pnlBancoLayout = new javax.swing.GroupLayout(pnlBanco);
-        pnlBanco.setLayout(pnlBancoLayout);
-        pnlBancoLayout.setHorizontalGroup(
-            pnlBancoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
-        );
-        pnlBancoLayout.setVerticalGroup(
-            pnlBancoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBancoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jScrollPane2)
-                .addGap(24, 24, 24))
-        );
-
-        javax.swing.GroupLayout tabBancoLayout = new javax.swing.GroupLayout(tabBanco);
-        tabBanco.setLayout(tabBancoLayout);
-        tabBancoLayout.setHorizontalGroup(
-            tabBancoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlBanco, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        tabBancoLayout.setVerticalGroup(
-            tabBancoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlBanco, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
         tabMenuGeral.addTab("Bancos", tabBanco);
 
         bothBar.setDividerSize(3);
@@ -409,17 +160,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnPessoaPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPessoaPesquisarActionPerformed
-        this.pessoaTableModel.reload(
-            this.pessoaController.getAllPessoa(                 
-                this.listCampoFiltro.get(this.cbxEm.getSelectedIndex()), 
-                this.txtPesquisa.getText(),
-                this.listTipoPessoaFiltro.get(this.cbxTipoPessoa.getSelectedIndex()),
-                this.listSituacaoFiltro.get(this.cbxSituacao.getSelectedIndex())
-            )
-        );
-    }//GEN-LAST:event_btnPessoaPesquisarActionPerformed
-
     private void itemBancoCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemBancoCadastroActionPerformed
         this.addTabMenuGeral(this.tabBanco);
     }//GEN-LAST:event_itemBancoCadastroActionPerformed
@@ -431,71 +171,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void btnPessoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPessoaActionPerformed
         this.addTabMenuGeral(this.tabPessoa);
     }//GEN-LAST:event_btnPessoaActionPerformed
-
-    private void tablePessoaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePessoaMouseClicked
-        if(evt.getClickCount() == 2) {
-           this.editPessoa();
-        }
-    }//GEN-LAST:event_tablePessoaMouseClicked
-
-    private void btnPessoaEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPessoaEditarActionPerformed
-        this.editPessoa();
-    }//GEN-LAST:event_btnPessoaEditarActionPerformed
-
-    private void btnPessoaNovoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPessoaNovoMousePressed
-        this.popMenuPessoa.show(this.btnPessoaNovo, evt.getX(), evt.getY());
-    }//GEN-LAST:event_btnPessoaNovoMousePressed
-
-    private void mnuItemPessoaFisicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItemPessoaFisicaActionPerformed
-        Pessoa p = new Pessoa();
-       
-        FrmCadastroPessoa form = new FrmCadastroPessoa(p);
-        form.setVisible(true);
-        form.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent evt) {
-                if(p.getId() > 0)
-                    pessoaTableModel.addPessoa(p);
-            }
-        });
-    }//GEN-LAST:event_mnuItemPessoaFisicaActionPerformed
-
-    private void btnPessoaExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPessoaExcluirActionPerformed
-        this.deletePessoa();
-    }//GEN-LAST:event_btnPessoaExcluirActionPerformed
-
-    private void tablePessoaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePessoaMousePressed
-        if(!this.btnPessoaEditar.isEnabled()) {
-            this.btnPessoaEditar.setEnabled(true);
-            this.btnPessoaExcluir.setEnabled(true);
-        }
-    }//GEN-LAST:event_tablePessoaMousePressed
-
-    private void deletePessoa() {
-        List<Pessoa> pessoas = this.pessoaTableModel.getPessoasSelected(this.tablePessoa.getSelectedRows());
         
-        if(pessoas != null) {
-            this.pessoaController.deletePessoa(pessoas);
-        }
-    }
-    
-    private void editPessoa() {
-        int index = this.tablePessoa.getSelectedRow();
-        
-        if(index >= 0) {
-            Pessoa p = this.pessoaController.getPessoa(this.pessoaTableModel.getPessoaSelected(index));
-            new FrmCadastroPessoa(p).setVisible(true);
-        }
-    }
-    
     public void addTabMenuGeral(JPanel p) {
         int index = this.tabMenuGeral.indexOfComponent(p);
 
         if(index == -1) {
-                this.tabMenuGeral.addTab(p.getName(), p);
-                this.tabMenuGeral.setTabComponentAt(
-                                this.tabMenuGeral.indexOfComponent(p),
-                                new ButtonTabComponent(this.tabMenuGeral));
+            this.tabMenuGeral.addTab(p.getName(), p);
+            this.tabMenuGeral.setTabComponentAt(
+                this.tabMenuGeral.indexOfComponent(p),
+                new ButtonTabComponent(this.tabMenuGeral));
         }
 
         this.tabMenuGeral.setSelectedComponent(p);
@@ -534,43 +218,18 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JSplitPane bothBar;
     private javax.swing.JButton btnMensalidade;
     private javax.swing.JButton btnPessoa;
-    private javax.swing.JButton btnPessoaEditar;
-    private javax.swing.JButton btnPessoaExcluir;
-    private javax.swing.JButton btnPessoaNovo;
-    private javax.swing.JButton btnPessoaPesquisar;
-    private javax.swing.JComboBox<String> cbxEm;
-    private javax.swing.JComboBox<String> cbxSituacao;
-    private javax.swing.JComboBox<String> cbxTipoPessoa;
     private javax.swing.JMenuItem itemBancoCadastro;
     private javax.swing.JMenuItem itemPessoaCadastro;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JToolBar.Separator jSeparator1;
-    private javax.swing.JToolBar.Separator jSeparator2;
-    private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JLabel lblEm;
-    private javax.swing.JLabel lblPesquisa;
-    private javax.swing.JLabel lblSituacao;
-    private javax.swing.JLabel lblTipoPessoa;
     private javax.swing.JLabel lblUsuario;
     private javax.swing.JLabel lblVersao;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu menuCadastro;
     private javax.swing.JMenu menuFerramenta;
-    private javax.swing.JMenuItem mnuItemPessoaFisica;
-    private javax.swing.JMenuItem mnuItemPessoaJuridica;
-    private javax.swing.JPanel pnlBanco;
     private javax.swing.JPanel pnlGeral;
-    private javax.swing.JPanel pnlPessoa;
-    private javax.swing.JPopupMenu popMenuPessoa;
-    private javax.swing.JScrollPane spTablePessoa;
-    private javax.swing.JPanel tabBanco;
+    private br.com.tamarozzi.ui.panel.PanelBanco tabBanco;
     private javax.swing.JTabbedPane tabMenuGeral;
-    private javax.swing.JPanel tabPessoa;
-    private javax.swing.JTable tablePessoa;
+    private br.com.tamarozzi.ui.panel.PanelPessoa tabPessoa;
     private javax.swing.JToolBar toolBarGeral;
-    private javax.swing.JToolBar toolBarPessoa;
-    private javax.swing.JTextField txtPesquisa;
     // End of variables declaration//GEN-END:variables
 }

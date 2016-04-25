@@ -31,15 +31,31 @@ public class PessoaTableModel extends AbstractTableModel {
     }
 
     public void reload(List<Pessoa> pessoas) {
-        this.pessoas = pessoas;
+        this.pessoas = new ArrayList<>(0);
+        this.pessoas.addAll(pessoas);
+        
         fireTableDataChanged();
     }
     
     public void addPessoa(Pessoa pessoa) {
-        List<Pessoa> p = new ArrayList<>();
-        p.add(pessoa);
-        p.addAll(this.pessoas);
-        this.pessoas = p;
+        Collections.reverse(pessoas);
+        this.pessoas.add(pessoa);
+        Collections.reverse(pessoas);
+        
+        fireTableDataChanged();
+    }
+    
+    public void removePessoa(Pessoa pessoa) {
+        this.pessoas.remove(pessoa);
+        
+        fireTableDataChanged();
+    }
+    
+    public void removePessoa(List<Pessoa> pessoas) {
+        pessoas.forEach(p -> {
+            this.pessoas.remove(p);
+        });
+        
         fireTableDataChanged();
     }
     

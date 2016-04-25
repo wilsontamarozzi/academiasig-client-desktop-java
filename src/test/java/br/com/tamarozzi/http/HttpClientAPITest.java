@@ -63,7 +63,7 @@ public class HttpClientAPITest {
     @Test
     public void testSendGet() {
         System.out.println("sendGet");
-        String urlString = "v1/pessoas/1.json";
+        String urlString = "v1/pessoas/1";
         
         String expResult = null;
         String result = HttpClientAPI.sendGet(urlString);
