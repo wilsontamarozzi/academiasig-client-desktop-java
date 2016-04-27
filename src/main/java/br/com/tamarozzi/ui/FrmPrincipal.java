@@ -52,12 +52,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
         tabMenuGeral = new javax.swing.JTabbedPane();
         tabPessoa = new br.com.tamarozzi.ui.panel.PanelPessoa();
         tabBanco = new br.com.tamarozzi.ui.panel.PanelBanco();
+        tabConta = new br.com.tamarozzi.ui.panel.PanelConta();
         bothBar = new javax.swing.JSplitPane();
         lblVersao = new javax.swing.JLabel();
         lblUsuario = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         menuCadastro = new javax.swing.JMenu();
         itemBancoCadastro = new javax.swing.JMenuItem();
+        itemContaCadastro = new javax.swing.JMenuItem();
         itemPessoaCadastro = new javax.swing.JMenuItem();
         menuFerramenta = new javax.swing.JMenu();
 
@@ -91,6 +93,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         tabMenuGeral.addTab("Pessoas", tabPessoa);
         tabMenuGeral.addTab("Bancos", tabBanco);
+
+        tabConta.setName("Contas"); // NOI18N
+        tabMenuGeral.addTab("Contas", tabConta);
 
         bothBar.setDividerSize(3);
         bothBar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -129,6 +134,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
         menuCadastro.add(itemBancoCadastro);
+
+        itemContaCadastro.setText("Contas");
+        itemContaCadastro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemContaCadastroActionPerformed(evt);
+            }
+        });
+        menuCadastro.add(itemContaCadastro);
 
         itemPessoaCadastro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/pessoa-icon.png"))); // NOI18N
         itemPessoaCadastro.setText("Pessoas");
@@ -171,6 +184,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void btnPessoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPessoaActionPerformed
         this.addTabMenuGeral(this.tabPessoa);
     }//GEN-LAST:event_btnPessoaActionPerformed
+
+    private void itemContaCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemContaCadastroActionPerformed
+        this.addTabMenuGeral(this.tabConta);
+    }//GEN-LAST:event_itemContaCadastroActionPerformed
         
     public void addTabMenuGeral(JPanel p) {
         int index = this.tabMenuGeral.indexOfComponent(p);
@@ -219,6 +236,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnMensalidade;
     private javax.swing.JButton btnPessoa;
     private javax.swing.JMenuItem itemBancoCadastro;
+    private javax.swing.JMenuItem itemContaCadastro;
     private javax.swing.JMenuItem itemPessoaCadastro;
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JLabel lblUsuario;
@@ -228,6 +246,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu menuFerramenta;
     private javax.swing.JPanel pnlGeral;
     private br.com.tamarozzi.ui.panel.PanelBanco tabBanco;
+    private br.com.tamarozzi.ui.panel.PanelConta tabConta;
     private javax.swing.JTabbedPane tabMenuGeral;
     private br.com.tamarozzi.ui.panel.PanelPessoa tabPessoa;
     private javax.swing.JToolBar toolBarGeral;
