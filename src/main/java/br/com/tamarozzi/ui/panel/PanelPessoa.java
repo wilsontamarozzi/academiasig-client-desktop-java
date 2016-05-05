@@ -6,11 +6,13 @@
 package br.com.tamarozzi.ui.panel;
 
 import br.com.tamarozzi.controller.PessoaController;
+import br.com.tamarozzi.interfaces.Observable;
+import br.com.tamarozzi.interfaces.Observer;
 import br.com.tamarozzi.model.Pessoa;
+import static br.com.tamarozzi.typeEnum.EnumTipoPessoa.PESSOA_FISICA;
+import static br.com.tamarozzi.typeEnum.EnumTipoPessoa.PESSOA_JURIDICA;
 import br.com.tamarozzi.ui.FrmCadastroPessoa;
-import br.com.tamarozzi.ui.table.model.PessoaTableModel;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,32 +20,36 @@ import java.util.List;
  *
  * @author Panda
  */
-public class PanelPessoa extends javax.swing.JPanel {
+public class PanelPessoa extends javax.swing.JPanel implements Observable, Observer {
 
-    private final PessoaController pessoaController;
-    private final PessoaTableModel pessoaTableModel;
+    private List<Observer> observers;
     
-    private final List<String> listCampoFiltro;
-    private final List<String> listTipoPessoaFiltro;
-    private final List<String> listSituacaoFiltro;
+    private PessoaController pessoaController;
+    
+    private List<String> listCampoFiltro;
+    private List<String> listTipoPessoaFiltro;
+    private List<String> listSituacaoFiltro; 
+    
+    private FrmCadastroPessoa frmCadastroPessoa;
     
     /**
      * Creates new form PanelPessoa
      */
     public PanelPessoa() {
-        this.listCampoFiltro = Arrays.asList("todos", "nome", "email");
-        this.listTipoPessoaFiltro = Arrays.asList("todos", "F", "J");
-        this.listSituacaoFiltro = Arrays.asList("todos", "1", "0");
-        
-        this.pessoaController = new PessoaController();
-        this.pessoaTableModel = new PessoaTableModel();
-                
+        preInitComponents();
         initComponents();
-        setComponents();
     }
     
-    private void setComponents() {
-        this.tablePessoa.getColumnModel().getColumn(0).setMaxWidth(20);
+    private void preInitComponents() {
+        this.observers = new ArrayList<>();
+        
+        //Filters
+        this.listCampoFiltro = Arrays.asList("search", "nome", "email");
+        this.listTipoPessoaFiltro = Arrays.asList(null, "F", "J");
+        this.listSituacaoFiltro = Arrays.asList(null, "1", "0");
+        
+        //Controllers
+        this.pessoaController = new PessoaController();
     }
 
     /**
@@ -75,7 +81,7 @@ public class PanelPessoa extends javax.swing.JPanel {
         lblSituacao = new javax.swing.JLabel();
         cbxSituacao = new javax.swing.JComboBox<>();
         spTablePessoa = new javax.swing.JScrollPane();
-        tablePessoa = new javax.swing.JTable();
+        tablePessoa = new br.com.tamarozzi.ui.table.TablePessoa();
 
         mnuItemPessoaFisica.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/novo-icon.png"))); // NOI18N
         mnuItemPessoaFisica.setText("Pessoa Física");
@@ -168,7 +174,6 @@ public class PanelPessoa extends javax.swing.JPanel {
         cbxSituacao.setMinimumSize(new java.awt.Dimension(70, 20));
         cbxSituacao.setPreferredSize(new java.awt.Dimension(70, 20));
 
-        tablePessoa.setModel(pessoaTableModel);
         tablePessoa.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tablePessoaMouseClicked(evt);
@@ -183,7 +188,6 @@ public class PanelPessoa extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(spTablePessoa, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,6 +210,7 @@ public class PanelPessoa extends javax.swing.JPanel {
                         .addComponent(cbxSituacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addComponent(spTablePessoa)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -222,8 +227,8 @@ public class PanelPessoa extends javax.swing.JPanel {
                     .addComponent(cbxSituacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(toolBarPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(spTablePessoa, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(spTablePessoa, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -240,7 +245,7 @@ public class PanelPessoa extends javax.swing.JPanel {
     }//GEN-LAST:event_btnPessoaExcluirActionPerformed
 
     private void btnPessoaPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPessoaPesquisarActionPerformed
-        this.pessoaTableModel.reload(
+        this.tablePessoa.reload(
             this.pessoaController.getAllPessoa(
                 this.listCampoFiltro.get(this.cbxEm.getSelectedIndex()),
                 this.txtPesquisa.getText(),
@@ -250,9 +255,13 @@ public class PanelPessoa extends javax.swing.JPanel {
         );
     }//GEN-LAST:event_btnPessoaPesquisarActionPerformed
 
+    private void mnuItemPessoaFisicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItemPessoaFisicaActionPerformed
+        this.addPessoa(PESSOA_FISICA);
+    }//GEN-LAST:event_mnuItemPessoaFisicaActionPerformed
+
     private void tablePessoaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePessoaMouseClicked
         if(evt.getClickCount() == 2) {
-            this.editPessoa();
+            notifyObservers();
         }
     }//GEN-LAST:event_tablePessoaMouseClicked
 
@@ -262,48 +271,36 @@ public class PanelPessoa extends javax.swing.JPanel {
             this.btnPessoaExcluir.setEnabled(true);
         }
     }//GEN-LAST:event_tablePessoaMousePressed
-
-    private void mnuItemPessoaFisicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItemPessoaFisicaActionPerformed
-        Pessoa p = new Pessoa();
-
-        FrmCadastroPessoa form = new FrmCadastroPessoa(p);
-        form.setVisible(true);
-        form.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent evt) {
-                if(p.getId() > 0)
-                pessoaTableModel.addPessoa(p);
-            }
-        });
-    }//GEN-LAST:event_mnuItemPessoaFisicaActionPerformed
-
+        
+    private void addPessoa(String tipoPessoa) {
+        switch(tipoPessoa) {
+            case PESSOA_FISICA:
+                this.frmCadastroPessoa = new FrmCadastroPessoa();
+                this.frmCadastroPessoa.setVisible(true);
+                this.frmCadastroPessoa.registerObserver(this);
+            break;
+            case PESSOA_JURIDICA:
+            break;
+        }
+    }    
+    
     private void deletePessoa() {
-        List<Pessoa> pessoas = this.pessoaTableModel.getPessoasSelected(this.tablePessoa.getSelectedRows());
+        List<Pessoa> pessoas = this.tablePessoa.getPessoasSelected();
         
         if(pessoas != null) {
             if(this.pessoaController.deletePessoa(pessoas)) {
-                this.pessoaTableModel.removePessoa(pessoas);
+                this.tablePessoa.removeItens((List<Object>) (Object) pessoas);
             }
         }
     }
     
-    private void editPessoa() {
-        Pessoa pessoaSelected = this.getPessoaSelected();
+    public void editPessoa() {
+        Pessoa pessoaSelected = this.tablePessoa.getPessoaSelected();
         
         if(pessoaSelected != null) {
             Pessoa p = this.pessoaController.getPessoa(pessoaSelected);
             new FrmCadastroPessoa(p).setVisible(true);
         }
-    }
-    
-    public Pessoa getPessoaSelected() {
-        int index = this.tablePessoa.getSelectedRow();
-        
-        if(index >= 0) {
-            return this.pessoaTableModel.getPessoaSelected(index);
-        }
-        
-        return null;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -325,8 +322,32 @@ public class PanelPessoa extends javax.swing.JPanel {
     private javax.swing.JMenuItem mnuItemPessoaJuridica;
     private javax.swing.JPopupMenu popMenuPessoa;
     private javax.swing.JScrollPane spTablePessoa;
-    public javax.swing.JTable tablePessoa;
+    private br.com.tamarozzi.ui.table.TablePessoa tablePessoa;
     private javax.swing.JToolBar toolBarPessoa;
     private javax.swing.JTextField txtPesquisa;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void registerObserver(Observer ob) {
+        this.observers.add(ob);
+        System.out.println("** Sistema: Observador " + ob.getClass().getName() + " está registrado.");
+    }
+
+    @Override
+    public void removeObserver(Observer ob) {
+        this.observers.remove(ob);
+        System.out.println("** Sistema: Observador " + ob.getClass().getName() + " foi removido.");
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(Observer ob : this.observers) {
+            ob.update(this.tablePessoa.getPessoaSelected());
+        }
+    }
+
+    @Override
+    public void update(Object obj) {
+        this.tablePessoa.addItem(obj);
+    }
 }

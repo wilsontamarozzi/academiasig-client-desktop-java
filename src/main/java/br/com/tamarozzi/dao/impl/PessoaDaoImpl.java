@@ -7,8 +7,8 @@ import br.com.tamarozzi.util.ClassMergeUtil;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import java.lang.reflect.Field;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -77,18 +77,20 @@ public class PessoaDaoImpl implements PessoaDao {
     @Override
     public List<Pessoa> getAllPessoa(String campo, String valor, String tipoPessoa, String situacao) {
 
-        List<Pessoa> pessoas = null;
+        List<Pessoa> pessoas = new ArrayList<>(0);
         
         try {
             URIBuilder builder = new URIBuilder("api/v1/pessoas");
+
+            builder.addParameter(campo, valor);
             
-            if(!campo.equalsIgnoreCase("todos"))        { builder.addParameter(campo, valor);               }
-            if(!tipoPessoa.equalsIgnoreCase("todos"))   { builder.addParameter("tipo_pessoa", tipoPessoa);  }
-            if(!situacao.equalsIgnoreCase("todos"))     { builder.addParameter("ativo", situacao);          }
+            if(tipoPessoa != null) { builder.addParameter("tipo_pessoa", tipoPessoa); }
+            if(situacao != null) { builder.addParameter("ativo", situacao); }
             
             String response = HttpClientAPI.sendGet(builder.toString());
             
-            pessoas = Arrays.asList(this.gson.fromJson(response, Pessoa[].class));
+            if(response != null)            
+                pessoas = Arrays.asList(this.gson.fromJson(response, Pessoa[].class));
         } catch (URISyntaxException ex) {
             Logger.getLogger(PessoaDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }

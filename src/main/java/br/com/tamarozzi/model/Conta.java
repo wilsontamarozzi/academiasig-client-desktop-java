@@ -5,6 +5,7 @@
  */
 package br.com.tamarozzi.model;
 
+import static br.com.tamarozzi.typeEnum.EnumTipoConta.CONTA_CAIXA;
 import java.math.BigDecimal;
 
 /**
@@ -12,10 +13,7 @@ import java.math.BigDecimal;
  * @author Panda
  */
 public class Conta {
-    
-    public static final String CONTA_CORRENTE = "Conta Corrente";
-    public static final String CONTA_CAIXA = "Conta Caixa";
-    
+        
     private int id;
     private String descricao;
     private boolean ativo;
@@ -23,7 +21,7 @@ public class Conta {
     private BigDecimal saldoInicial;
 
     public Conta() {
-        
+        this.tipoConta = CONTA_CAIXA;
     }
     
     public Conta(int id, String descricao, boolean ativo, String tipoConta, BigDecimal saldoInicial) {

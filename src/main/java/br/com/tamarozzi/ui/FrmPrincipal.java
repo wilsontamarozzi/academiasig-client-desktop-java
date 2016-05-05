@@ -5,6 +5,7 @@
  */
 package br.com.tamarozzi.ui;
 
+import br.com.tamarozzi.interfaces.Observer;
 import br.com.tamarozzi.model.UsuarioLogado;
 import br.com.tamarozzi.util.ButtonTabComponent;
 import javax.swing.JFrame;
@@ -14,7 +15,7 @@ import javax.swing.JPanel;
  *
  * @author Panda
  */
-public class FrmPrincipal extends javax.swing.JFrame {
+public class FrmPrincipal extends javax.swing.JFrame implements Observer {
 
     /**
      * Creates new form FrmPrincipal
@@ -33,6 +34,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     
     private void setBothTool() {
         this.lblUsuario.setText(UsuarioLogado.getInstance().getNome());
+        this.tabPessoa.registerObserver(this);
     }
 
     /**
@@ -251,4 +253,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private br.com.tamarozzi.ui.panel.PanelPessoa tabPessoa;
     private javax.swing.JToolBar toolBarGeral;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void update(Object obj) {
+        this.tabPessoa.editPessoa();
+    }
 }

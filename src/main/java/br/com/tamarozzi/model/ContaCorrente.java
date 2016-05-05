@@ -5,6 +5,7 @@
  */
 package br.com.tamarozzi.model;
 
+import static br.com.tamarozzi.typeEnum.EnumTipoConta.CONTA_CORRENTE;
 import java.math.BigDecimal;
 
 /**
@@ -17,17 +18,21 @@ public class ContaCorrente extends Conta {
     private int agenciaDigito;
     private int conta;
     private int contaDigito;
+    private int titularId;
+    private Pessoa titular;
 
     public ContaCorrente() {
-        
+        setTipoConta(CONTA_CORRENTE);
+        this.titular = new Pessoa();
     }
-    
-    public ContaCorrente(int agencia, int agenciaDigito, int conta, int contaDigito, int id, String descricao, boolean ativo, String tipoConta, BigDecimal saldoInicial) {
+
+    public ContaCorrente(int agencia, int agenciaDigito, int conta, int titularId, Pessoa titular, int id, String descricao, boolean ativo, String tipoConta, BigDecimal saldoInicial) {
         super(id, descricao, ativo, tipoConta, saldoInicial);
         this.agencia = agencia;
         this.agenciaDigito = agenciaDigito;
         this.conta = conta;
-        this.contaDigito = contaDigito;
+        this.titularId = titularId;
+        this.titular = titular;
     }
 
     public int getAgencia() {
@@ -60,5 +65,21 @@ public class ContaCorrente extends Conta {
 
     public void setContaDigito(int contaDigito) {
         this.contaDigito = contaDigito;
-    }    
+    }
+
+    public int getTitularId() {
+        return titularId;
+    }
+
+    public void setTitularId(int titularId) {
+        this.titularId = titularId;
+    }
+
+    public Pessoa getTitular() {
+        return titular;
+    }
+
+    public void setTitular(Pessoa titular) {
+        this.titular = titular;
+    }
 }

@@ -8,9 +8,11 @@ package br.com.tamarozzi.ui;
 
 import br.com.tamarozzi.controller.LogradouroController;
 import br.com.tamarozzi.controller.PessoaController;
+import br.com.tamarozzi.interfaces.Observable;
+import br.com.tamarozzi.interfaces.Observer;
 import br.com.tamarozzi.model.Logradouro;
 import br.com.tamarozzi.model.Pessoa;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -23,17 +25,21 @@ import org.json.JSONObject;
  *
  * @author rodrigo.jorge
  */
-public class FrmCadastroPessoa extends JFrame {
+public class FrmCadastroPessoa extends JFrame implements Observable {
 
+    private final List<Observer> observers;
+    
     private final PessoaController pessoaController;
     private final LogradouroController logradouroController;
     
-    private final Pessoa pessoa;
+    private Pessoa pessoa = null;
+    private Logradouro logradouro;
     
     private BalloonTip balloonTip;
     
     public FrmCadastroPessoa() {
-        this.pessoa = new Pessoa();
+        this.observers = new ArrayList<>();
+        this.logradouro = new Logradouro();
         this.pessoaController = new PessoaController();
         this.logradouroController = new LogradouroController();
         
@@ -42,7 +48,9 @@ public class FrmCadastroPessoa extends JFrame {
     }
     
     public FrmCadastroPessoa(Pessoa pessoa) {
+        this.observers = new ArrayList<>();
         this.pessoa = pessoa;
+        this.logradouro = new Logradouro();
         this.pessoaController = new PessoaController();
         this.logradouroController = new LogradouroController();
         
@@ -80,9 +88,6 @@ public class FrmCadastroPessoa extends JFrame {
     
     private void refreshEndereco(Logradouro l) {
         if(l != null) {
-            this.pessoa.setLogradouroId(l.getEnderecoCodigo());
-            this.pessoa.setLogradouro(l);
-
             this.txtCep.setText(l.getEnderecoCep());
             this.txtEndereco.setText(l.getEnderecoLogradouro());
             this.txtBairro.setText(l.getBairro().getBairroDescricao());
@@ -458,9 +463,9 @@ public class FrmCadastroPessoa extends JFrame {
                     .addComponent(toolBarGeral, javax.swing.GroupLayout.DEFAULT_SIZE, 760, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGeralLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnCancelar)))
                 .addContainerGap())
         );
         pnlGeralLayout.setVerticalGroup(
@@ -499,6 +504,7 @@ public class FrmCadastroPessoa extends JFrame {
         if(errors != null) {
             this.parseErrors(errors);
         } else {
+            this.notifyObservers();
             this.dispose();
         }
     }//GEN-LAST:event_btnCadastrarActionPerformed
@@ -508,11 +514,17 @@ public class FrmCadastroPessoa extends JFrame {
         cep = cep.replace(".", "");
         cep = cep.replace("-", "");
         
-        this.refreshEndereco(this.logradouroController.getLogradouroByCEP(cep));
+        this.logradouro = this.logradouroController.getLogradouroByCEP(cep);
+        
+        this.refreshEndereco(this.logradouro);
     }//GEN-LAST:event_btnPesquisaCEPActionPerformed
 
     private Pessoa loadPessoa() {
-                
+        
+        if(this.pessoa == null) {
+            this.pessoa = new Pessoa();
+        }
+        
         /* Atributos de Pessoa */
         this.pessoa.setTipoPessoa("F");
         this.pessoa.setNome(this.txtNome.getText());
@@ -520,6 +532,8 @@ public class FrmCadastroPessoa extends JFrame {
         this.pessoa.setObservacao(this.txaObservacao.getText());
         
         /* Atributos de Endereço */
+        this.pessoa.setLogradouroId(this.logradouro.getEnderecoCodigo());
+        this.pessoa.setLogradouro(this.logradouro);
         this.pessoa.setNumero(this.txtNumero.getText());
         this.pessoa.setComplemento(this.txtComplemento.getText());
         
@@ -578,15 +592,11 @@ public class FrmCadastroPessoa extends JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmCadastroPessoa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmCadastroPessoa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmCadastroPessoa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(FrmCadastroPessoa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        
         //</editor-fold>
 
         /* Create and display the form */
@@ -642,4 +652,23 @@ public class FrmCadastroPessoa extends JFrame {
     private javax.swing.JFormattedTextField txtTelefoneComercial;
     private javax.swing.JFormattedTextField txtTelefoneResidencial;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void registerObserver(Observer ob) {
+        this.observers.add(ob);
+        System.out.println("** Sistema: Observador " + ob.getClass().getName() + " está registrado.");
+    }
+
+    @Override
+    public void removeObserver(Observer ob) {
+        this.observers.remove(ob);
+        System.out.println("** Sistema: Observador " + ob.getClass().getName() + " foi removido.");
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(Observer ob : this.observers) {
+            ob.update(this.pessoa);
+        }
+    }
 }

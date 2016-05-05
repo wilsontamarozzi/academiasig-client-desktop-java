@@ -27,6 +27,7 @@ public class ContaTableModel extends AbstractTableModel {
     private final Class<?>[] colTipo = {String.class, String.class, String.class, Boolean.class};
 
     public ContaTableModel() {
+        this.contas = new ArrayList<>(0);
     }
 
     public void reload(List<Conta> contas) {

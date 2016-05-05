@@ -10,53 +10,23 @@
  */
 package br.com.tamarozzi.ui.table.model;
 
+import br.com.tamarozzi.interfaces.MyAbstractTableModel;
 import br.com.tamarozzi.model.Pessoa;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
-public class PessoaTableModel extends AbstractTableModel {
+public class PessoaTableModel extends AbstractTableModel implements MyAbstractTableModel {
 
-    private static final long serialVersionUID = 1L;
-
-    private List<Pessoa> pessoas;
+    private List<Object> pessoas;
 
     private final String[] colNomes = {"#", "Nome", "E-mail", "Fone Comercial", "Fone Residencial", "Fone Celular", "Inativo"};
 
     private final Class<?>[] colTipo = {String.class, String.class, String.class, String.class, String.class, String.class, Boolean.class};
 
     public PessoaTableModel() {
-    }
-
-    public void reload(List<Pessoa> pessoas) {
         this.pessoas = new ArrayList<>(0);
-        this.pessoas.addAll(pessoas);
-        
-        fireTableDataChanged();
-    }
-    
-    public void addPessoa(Pessoa pessoa) {
-        Collections.reverse(pessoas);
-        this.pessoas.add(pessoa);
-        Collections.reverse(pessoas);
-        
-        fireTableDataChanged();
-    }
-    
-    public void removePessoa(Pessoa pessoa) {
-        this.pessoas.remove(pessoa);
-        
-        fireTableDataChanged();
-    }
-    
-    public void removePessoa(List<Pessoa> pessoas) {
-        pessoas.forEach(p -> {
-            this.pessoas.remove(p);
-        });
-        
-        fireTableDataChanged();
     }
     
     @Override
@@ -85,7 +55,7 @@ public class PessoaTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int linha, int coluna) {
-        Pessoa p = this.pessoas.get(linha);
+        Pessoa p = (Pessoa) this.pessoas.get(linha);
 
         String tipo = p.getTipoPessoa();
 
@@ -113,30 +83,47 @@ public class PessoaTableModel extends AbstractTableModel {
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         return false;
     }
+    
+    @Override
+    public void reload(List<Object> itens) {
+        this.pessoas = new ArrayList<>(0);
+        this.pessoas.addAll(itens);
+        
+        fireTableDataChanged();
+    }
 
-    private Pessoa getPessoaAt(int index) {
+    @Override
+    public void addItem(Object item) {
+        Collections.reverse(pessoas);
+        this.pessoas.add(item);
+        Collections.reverse(pessoas);
+        
+        fireTableDataChanged();
+    }
+
+    @Override
+    public void addItens(List<Object> itens) {
+        this.pessoas.addAll(itens);
+        
+        fireTableDataChanged();
+    }
+
+    @Override
+    public void removeItem(Object item) {
+        this.pessoas.remove(item);
+        
+        fireTableDataChanged();
+    }
+
+    @Override
+    public void removeItens(List<Object> itens) {
+        this.pessoas.removeAll(itens);
+        
+        fireTableDataChanged();
+    }
+
+    @Override
+    public Object getItemAt(int index) {
         return this.pessoas.get(index);
-    }
-
-    public Pessoa getPessoaSelected(int getSelectedRow) {
-        if (getSelectedRow < 0) {
-            return null;
-        }
-
-        return this.getPessoaAt(getSelectedRow);
-    }
-
-    public List<Pessoa> getPessoasSelected(int[] getSelectedRows) {
-        if (getSelectedRows.length <= 0) {
-            return null;
-        }
-
-        List<Pessoa> selectedPessoas = new ArrayList<>(0);
-
-        for (int i : getSelectedRows) {
-            selectedPessoas.add(this.getPessoaAt(i));
-        }
-
-        return selectedPessoas;
     }
 }

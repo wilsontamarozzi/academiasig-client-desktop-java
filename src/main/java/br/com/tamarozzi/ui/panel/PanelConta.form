@@ -8,15 +8,15 @@
         <Property name="useNullLayout" type="boolean" value="true"/>
       </Layout>
       <SubComponents>
-        <MenuItem class="javax.swing.JMenuItem" name="mnuItemContaCorrent">
+        <MenuItem class="javax.swing.JMenuItem" name="mnuItemContaCorrente">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/imagens/novo-icon.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Pessoa F&#xed;sica"/>
+            <Property name="text" type="java.lang.String" value="Conta Corrente"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuItemContaCorrentActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuItemContaCorrenteActionPerformed"/>
           </Events>
         </MenuItem>
       </SubComponents>

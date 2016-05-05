@@ -32,11 +32,11 @@ public class ContaController {
         return this.contaDao.getConta(p);
     }
 
-    public JSONObject editConta(Conta p) {
-        if (p.getId() > 0) {
-            return this.contaDao.edit(p);
+    public JSONObject editConta(Conta c) {
+        if (c.getId() > 0) {
+            return this.contaDao.edit(c);
         } else {
-            return this.contaDao.add(p);
+            return this.contaDao.add(c);
         }
     }
 

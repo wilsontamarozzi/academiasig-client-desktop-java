@@ -9,7 +9,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
@@ -66,9 +65,13 @@ public final class HttpClientAPI {
         return response != null;
     }
 
-    private static synchronized HttpClient getInstance() {
+    private static HttpClient getInstance() {
         if (instance == null) {
-            instance = HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider).build();
+            synchronized (HttpClient.class) {
+                if(instance == null) {
+                    instance = HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider).build();
+                }
+            }
         }
 
         return instance;
@@ -126,6 +129,10 @@ public final class HttpClientAPI {
 
             int statusCode = response.getStatusLine().getStatusCode();
 
+            if (statusCode == 404) {
+                return null;
+            }
+            
             if (statusCode != 200 && statusCode != 201) {
                 parsingStatusCode(statusCode);
                 //return null;
@@ -167,7 +174,7 @@ public final class HttpClientAPI {
                 JOptionPane.showMessageDialog(null, "Erro ao se conectar ao servidor.");
                 break;
             case 404:
-                JOptionPane.showMessageDialog(null, "Página não encontrada.");
+                //JOptionPane.showMessageDialog(null, "Página não encontrada.");
                 generateLogStatusCode(statusCode);
                 break;
             case 401:

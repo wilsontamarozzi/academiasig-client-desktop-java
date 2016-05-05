@@ -7,8 +7,14 @@ package br.com.tamarozzi.ui.panel;
 
 import br.com.tamarozzi.controller.ContaController;
 import br.com.tamarozzi.model.Conta;
-//import br.com.tamarozzi.ui.FrmCadastroConta;
+import br.com.tamarozzi.model.ContaCorrente;
+import static br.com.tamarozzi.typeEnum.EnumTipoConta.CONTA_CAIXA;
+import static br.com.tamarozzi.typeEnum.EnumTipoConta.CONTA_CORRENTE;
+import br.com.tamarozzi.ui.FrmCadastroConta;
+import br.com.tamarozzi.ui.FrmCadastroContaCorrente;
 import br.com.tamarozzi.ui.table.model.ContaTableModel;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,7 +36,7 @@ public class PanelConta extends javax.swing.JPanel {
      */
     public PanelConta() {
         this.listCampoFiltro = Arrays.asList("todos", "descricao");
-        this.listTipoContaFiltro = Arrays.asList("todos", Conta.CONTA_CAIXA, Conta.CONTA_CORRENTE);
+        this.listTipoContaFiltro = Arrays.asList(null, CONTA_CAIXA, CONTA_CORRENTE);
         this.listSituacaoFiltro = Arrays.asList("todos", "1", "0");
         
         this.contaController = new ContaController();
@@ -54,7 +60,7 @@ public class PanelConta extends javax.swing.JPanel {
     private void initComponents() {
 
         popMenu = new javax.swing.JPopupMenu();
-        mnuItemContaCorrent = new javax.swing.JMenuItem();
+        mnuItemContaCorrente = new javax.swing.JMenuItem();
         lblPesquisa = new javax.swing.JLabel();
         txtPesquisa = new javax.swing.JTextField();
         toolBar = new javax.swing.JToolBar();
@@ -74,14 +80,14 @@ public class PanelConta extends javax.swing.JPanel {
         spTable = new javax.swing.JScrollPane();
         tableConta = new javax.swing.JTable();
 
-        mnuItemContaCorrent.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/novo-icon.png"))); // NOI18N
-        mnuItemContaCorrent.setText("Pessoa Física");
-        mnuItemContaCorrent.addActionListener(new java.awt.event.ActionListener() {
+        mnuItemContaCorrente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/novo-icon.png"))); // NOI18N
+        mnuItemContaCorrente.setText("Conta Corrente");
+        mnuItemContaCorrente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuItemContaCorrentActionPerformed(evt);
+                mnuItemContaCorrenteActionPerformed(evt);
             }
         });
-        popMenu.add(mnuItemContaCorrent);
+        popMenu.add(mnuItemContaCorrente);
 
         setName("Pessoas"); // NOI18N
 
@@ -256,19 +262,19 @@ public class PanelConta extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_tableContaMousePressed
 
-    private void mnuItemContaCorrentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItemContaCorrentActionPerformed
-        /*ContaCorrente c = new ContaCorrente();
+    private void mnuItemContaCorrenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItemContaCorrenteActionPerformed
+        ContaCorrente c = new ContaCorrente();
         
-        FrmCadastroConta form = new FrmCadastroConta(c);
+        FrmCadastroContaCorrente form = new FrmCadastroContaCorrente(c);
         form.setVisible(true);
         form.addWindowListener(new WindowAdapter() {
-        @Override
-        public void windowClosed(WindowEvent evt) {
-        if(c.getId() > 0)
-        contaTableModel.addConta(c);
-        }
-        });*/
-    }//GEN-LAST:event_mnuItemContaCorrentActionPerformed
+            @Override
+            public void windowClosed(WindowEvent evt) {
+                if(c.getId() > 0)
+                contaTableModel.addConta(c);
+            }
+        });
+    }//GEN-LAST:event_mnuItemContaCorrenteActionPerformed
 
     private void deleteConta() {
         List<Conta> contas = this.contaTableModel.getContasSelected(this.tableConta.getSelectedRows());
@@ -284,8 +290,16 @@ public class PanelConta extends javax.swing.JPanel {
         Conta contaSelected = this.getContaSelected();
         
         if(contaSelected != null) {
-            Conta p = this.contaController.getConta(contaSelected);
-            //new FrmCadastroConta(p).setVisible(true);
+            Conta c = this.contaController.getConta(contaSelected);
+                        
+            switch(c.getTipoConta()) {
+                case CONTA_CAIXA:
+                    new FrmCadastroConta(c).setVisible(true);
+                break;
+                case CONTA_CORRENTE:
+                    new FrmCadastroContaCorrente((ContaCorrente) c).setVisible(true);
+                break;
+            }
         }
     }
     
@@ -314,7 +328,7 @@ public class PanelConta extends javax.swing.JPanel {
     private javax.swing.JLabel lblPesquisa;
     private javax.swing.JLabel lblSituacao;
     private javax.swing.JLabel lblTipo;
-    private javax.swing.JMenuItem mnuItemContaCorrent;
+    private javax.swing.JMenuItem mnuItemContaCorrente;
     private javax.swing.JPopupMenu popMenu;
     private javax.swing.JScrollPane spTable;
     public javax.swing.JTable tableConta;

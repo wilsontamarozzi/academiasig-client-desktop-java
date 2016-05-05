@@ -4,6 +4,8 @@ import br.com.tamarozzi.dao.ContaDao;
 import br.com.tamarozzi.http.HttpClientAPI;
 import br.com.tamarozzi.model.Conta;
 import br.com.tamarozzi.model.ContaCorrente;
+import static br.com.tamarozzi.typeEnum.EnumTipoConta.CONTA_CAIXA;
+import static br.com.tamarozzi.typeEnum.EnumTipoConta.CONTA_CORRENTE;
 import br.com.tamarozzi.util.ClassMergeUtil;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -72,8 +74,18 @@ public class ContaDaoImpl implements ContaDao {
         
         String response = HttpClientAPI.sendGet("api/v1/contas/" + conta.getId());
         
-        Conta contaNew = this.gson.fromJson(response, Conta.class);
-        ClassMergeUtil.merge(conta, contaNew);
+        Conta contaNew;
+        
+        switch(conta.getTipoConta()) {
+            case CONTA_CAIXA:
+                contaNew = this.gson.fromJson(response, Conta.class);
+                ClassMergeUtil.merge(conta, contaNew);
+            break;
+            case CONTA_CORRENTE:
+                contaNew = this.gson.fromJson(response, ContaCorrente.class);
+                ClassMergeUtil.merge(conta, contaNew);
+            break;
+        }
         
         return conta;
     }
@@ -82,18 +94,19 @@ public class ContaDaoImpl implements ContaDao {
     public List<Conta> getAllConta(String campo, String valor, String tipoConta, String situacao) {
 
         List<Conta> contas = new ArrayList<>(0);
-                
-        switch(tipoConta) {
-            case Conta.CONTA_CAIXA:
-                contas.addAll(this.getAllContas(campo, valor, tipoConta, situacao, Conta[].class));
-            break;
-            case Conta.CONTA_CORRENTE :
-                contas.addAll(this.getAllContas(campo, valor, tipoConta, situacao, ContaCorrente[].class));
-            break;
-            default:
-                contas.addAll(this.getAllContas(campo, valor, Conta.CONTA_CAIXA, situacao, Conta[].class));
-                contas.addAll(this.getAllContas(campo, valor, Conta.CONTA_CORRENTE, situacao, ContaCorrente[].class));
-            break;
+        
+        if(tipoConta == null) {
+            contas.addAll(this.getAllContas(campo, valor, CONTA_CAIXA, situacao, Conta[].class));
+            contas.addAll(this.getAllContas(campo, valor, CONTA_CORRENTE, situacao, ContaCorrente[].class));
+        } else {
+            switch(tipoConta) {
+                case CONTA_CAIXA:
+                    contas.addAll(this.getAllContas(campo, valor, tipoConta, situacao, Conta[].class));
+                break;
+                case CONTA_CORRENTE :
+                    contas.addAll(this.getAllContas(campo, valor, tipoConta, situacao, ContaCorrente[].class));
+                break;
+            }
         }
         
         contas.sort(Comparator.comparing(c -> c.getId()));

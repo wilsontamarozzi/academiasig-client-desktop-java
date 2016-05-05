@@ -21,7 +21,7 @@ public class ClassMergeUtil {
         for (Field field : objectMain.getClass().getDeclaredFields()) {
             try {
                 field.setAccessible(true);
-                field.set(objectMain, field.get(objectCopy));    
+                field.set(objectMain, field.get(objectCopy));
             } catch (IllegalArgumentException | IllegalAccessException ex) {
                 Logger.getLogger(PessoaDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
