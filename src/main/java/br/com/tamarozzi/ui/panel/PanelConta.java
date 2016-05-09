@@ -6,15 +6,16 @@
 package br.com.tamarozzi.ui.panel;
 
 import br.com.tamarozzi.controller.ContaController;
+import br.com.tamarozzi.interfaces.MyAbstractPanelModel;
+import br.com.tamarozzi.interfaces.Observable;
+import br.com.tamarozzi.interfaces.Observer;
 import br.com.tamarozzi.model.Conta;
 import br.com.tamarozzi.model.ContaCorrente;
 import static br.com.tamarozzi.typeEnum.EnumTipoConta.CONTA_CAIXA;
 import static br.com.tamarozzi.typeEnum.EnumTipoConta.CONTA_CORRENTE;
 import br.com.tamarozzi.ui.FrmCadastroConta;
 import br.com.tamarozzi.ui.FrmCadastroContaCorrente;
-import br.com.tamarozzi.ui.table.model.ContaTableModel;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,32 +23,37 @@ import java.util.List;
  *
  * @author Panda
  */
-public class PanelConta extends javax.swing.JPanel {
+public class PanelConta extends javax.swing.JPanel implements MyAbstractPanelModel, Observable, Observer {
 
-    private final ContaController contaController;
-    private final ContaTableModel contaTableModel;
+     private List<Observer> observers;
     
-    private final List<String> listCampoFiltro;
-    private final List<String> listTipoContaFiltro;
-    private final List<String> listSituacaoFiltro;
+    private ContaController contaController;
+    
+    private List<String> listCampoFiltro;
+    private List<String> listTipoContaFiltro;
+    private List<String> listSituacaoFiltro;
+    
+    private FrmCadastroConta frmCadastroConta;
+    private FrmCadastroContaCorrente frmCadastroContaCorrente;
     
     /**
      * Creates new form PanelConta
      */
     public PanelConta() {
-        this.listCampoFiltro = Arrays.asList("todos", "descricao");
+        preInitComponents();
+        initComponents();
+    }
+    
+    private void preInitComponents() {
+        this.observers = new ArrayList<>();
+        
+        //Filters
+        this.listCampoFiltro = Arrays.asList("search", "descricao");
         this.listTipoContaFiltro = Arrays.asList(null, CONTA_CAIXA, CONTA_CORRENTE);
         this.listSituacaoFiltro = Arrays.asList("todos", "1", "0");
         
+        //Controllers
         this.contaController = new ContaController();
-        this.contaTableModel = new ContaTableModel();
-                
-        initComponents();
-        setComponents();
-    }
-    
-    private void setComponents() {
-        this.tableConta.getColumnModel().getColumn(0).setMaxWidth(20);
     }
 
     /**
@@ -60,6 +66,7 @@ public class PanelConta extends javax.swing.JPanel {
     private void initComponents() {
 
         popMenu = new javax.swing.JPopupMenu();
+        mnuItemContaCaixa = new javax.swing.JMenuItem();
         mnuItemContaCorrente = new javax.swing.JMenuItem();
         lblPesquisa = new javax.swing.JLabel();
         txtPesquisa = new javax.swing.JTextField();
@@ -77,8 +84,17 @@ public class PanelConta extends javax.swing.JPanel {
         cbxTipo = new javax.swing.JComboBox<>();
         lblSituacao = new javax.swing.JLabel();
         cbxSituacao = new javax.swing.JComboBox<>();
-        spTable = new javax.swing.JScrollPane();
-        tableConta = new javax.swing.JTable();
+        spTableConta = new javax.swing.JScrollPane();
+        tableConta = new br.com.tamarozzi.ui.table.TableConta();
+
+        mnuItemContaCaixa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/novo-icon.png"))); // NOI18N
+        mnuItemContaCaixa.setText("Conta Caixa");
+        mnuItemContaCaixa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItemContaCaixaActionPerformed(evt);
+            }
+        });
+        popMenu.add(mnuItemContaCaixa);
 
         mnuItemContaCorrente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/novo-icon.png"))); // NOI18N
         mnuItemContaCorrente.setText("Conta Corrente");
@@ -167,7 +183,6 @@ public class PanelConta extends javax.swing.JPanel {
         cbxSituacao.setMinimumSize(new java.awt.Dimension(70, 20));
         cbxSituacao.setPreferredSize(new java.awt.Dimension(70, 20));
 
-        tableConta.setModel(contaTableModel);
         tableConta.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tableContaMouseClicked(evt);
@@ -176,13 +191,12 @@ public class PanelConta extends javax.swing.JPanel {
                 tableContaMousePressed(evt);
             }
         });
-        spTable.setViewportView(tableConta);
+        spTableConta.setViewportView(tableConta);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(spTable, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,6 +219,7 @@ public class PanelConta extends javax.swing.JPanel {
                         .addComponent(cbxSituacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addComponent(spTableConta)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -221,8 +236,8 @@ public class PanelConta extends javax.swing.JPanel {
                     .addComponent(cbxSituacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(spTable, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(spTableConta, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -231,15 +246,15 @@ public class PanelConta extends javax.swing.JPanel {
     }//GEN-LAST:event_btnNovoMousePressed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        this.editConta();
+        this.editItem();
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        this.deleteConta();
+        this.deleteItem();
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
-        this.contaTableModel.reload(
+        this.tableConta.reload(
             this.contaController.getAllConta(
                 this.listCampoFiltro.get(this.cbxEm.getSelectedIndex()),
                 this.txtPesquisa.getText(),
@@ -249,9 +264,13 @@ public class PanelConta extends javax.swing.JPanel {
         );
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
+    private void mnuItemContaCorrenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItemContaCorrenteActionPerformed
+        this.addItem(CONTA_CORRENTE);
+    }//GEN-LAST:event_mnuItemContaCorrenteActionPerformed
+
     private void tableContaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableContaMouseClicked
         if(evt.getClickCount() == 2) {
-            this.editConta();
+            notifyObservers();
         }
     }//GEN-LAST:event_tableContaMouseClicked
 
@@ -262,56 +281,9 @@ public class PanelConta extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_tableContaMousePressed
 
-    private void mnuItemContaCorrenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItemContaCorrenteActionPerformed
-        ContaCorrente c = new ContaCorrente();
-        
-        FrmCadastroContaCorrente form = new FrmCadastroContaCorrente(c);
-        form.setVisible(true);
-        form.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent evt) {
-                if(c.getId() > 0)
-                contaTableModel.addConta(c);
-            }
-        });
-    }//GEN-LAST:event_mnuItemContaCorrenteActionPerformed
-
-    private void deleteConta() {
-        List<Conta> contas = this.contaTableModel.getContasSelected(this.tableConta.getSelectedRows());
-        
-        if(contas != null) {
-            if(this.contaController.deleteConta(contas)) {
-                this.contaTableModel.removeConta(contas);
-            }
-        }
-    }
-    
-    private void editConta() {
-        Conta contaSelected = this.getContaSelected();
-        
-        if(contaSelected != null) {
-            Conta c = this.contaController.getConta(contaSelected);
-                        
-            switch(c.getTipoConta()) {
-                case CONTA_CAIXA:
-                    new FrmCadastroConta(c).setVisible(true);
-                break;
-                case CONTA_CORRENTE:
-                    new FrmCadastroContaCorrente((ContaCorrente) c).setVisible(true);
-                break;
-            }
-        }
-    }
-    
-    public Conta getContaSelected() {
-        int index = this.tableConta.getSelectedRow();
-        
-        if(index >= 0) {
-            return this.contaTableModel.getContaSelected(index);
-        }
-        
-        return null;
-    }
+    private void mnuItemContaCaixaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItemContaCaixaActionPerformed
+        this.addItem(CONTA_CAIXA);
+    }//GEN-LAST:event_mnuItemContaCaixaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditar;
@@ -328,11 +300,81 @@ public class PanelConta extends javax.swing.JPanel {
     private javax.swing.JLabel lblPesquisa;
     private javax.swing.JLabel lblSituacao;
     private javax.swing.JLabel lblTipo;
+    private javax.swing.JMenuItem mnuItemContaCaixa;
     private javax.swing.JMenuItem mnuItemContaCorrente;
     private javax.swing.JPopupMenu popMenu;
-    private javax.swing.JScrollPane spTable;
-    public javax.swing.JTable tableConta;
+    private javax.swing.JScrollPane spTableConta;
+    private br.com.tamarozzi.ui.table.TableConta tableConta;
     private javax.swing.JToolBar toolBar;
     private javax.swing.JTextField txtPesquisa;
     // End of variables declaration//GEN-END:variables
+    
+    @Override
+    public void registerObserver(Observer ob) {
+        this.observers.add(ob);
+        System.out.println("** Sistema: Observado " + this.getClass().getName() + " - Observador " + ob.getClass().getName() + " está registrado.");
+    }
+
+    @Override
+    public void removeObserver(Observer ob) {
+        this.observers.remove(ob);
+        System.out.println("** Sistema: Observado " + this.getClass().getName() + " - Observador " + ob.getClass().getName() + " foi removido.");
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(Observer ob : this.observers) {
+            ob.update(this.tableConta.getContaSelected());
+        }
+    }
+
+    @Override
+    public void update(Object obj) {
+        this.tableConta.addItem(obj);
+    }
+
+    @Override
+    public void addItem(String tipoConta) {
+        switch(tipoConta) {
+            case CONTA_CAIXA:
+                this.frmCadastroConta = new FrmCadastroConta();
+                this.frmCadastroConta.registerObserver(this);
+                this.frmCadastroConta.setVisible(true);                
+            break;
+            case CONTA_CORRENTE:
+                this.frmCadastroContaCorrente = new FrmCadastroContaCorrente();
+                this.frmCadastroContaCorrente.registerObserver(this);
+                this.frmCadastroContaCorrente.setVisible(true);                
+            break;
+        }
+    }
+
+    @Override
+    public void editItem() {
+        Conta contaSelected = this.tableConta.getContaSelected();
+        
+        if(contaSelected != null) {
+            Conta c = this.contaController.getConta(contaSelected);
+                        
+            switch(c.getTipoConta()) {
+                case CONTA_CAIXA:
+                    new FrmCadastroConta(c).setVisible(true);
+                break;
+                case CONTA_CORRENTE:
+                    new FrmCadastroContaCorrente((ContaCorrente) c).setVisible(true);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void deleteItem() {
+        List<Conta> contas = this.tableConta.getContasSelected();
+        
+        if(contas != null) {
+            if(this.contaController.deleteConta(contas)) {
+                this.tableConta.removeItem(contas);
+            }
+        }
+    }
 }

@@ -38,13 +38,14 @@ public class ContaDaoImpl implements ContaDao {
     @Override
     public JSONObject add(Conta conta) {
         String contaJson = gson.toJson(conta);
+        
         String response = HttpClientAPI.sendPost("api/v1/contas", contaJson);
         
         Conta contaNew = this.gson.fromJson(response, Conta.class);
-        ClassMergeUtil.merge(conta, contaNew);
-        
+        conta.setId(contaNew.getId());
+       
         JSONObject errors = new JSONObject(response);
-        
+
         return !errors.isNull("errors") ? errors.getJSONObject("errors") : null;
     }
 
@@ -92,7 +93,7 @@ public class ContaDaoImpl implements ContaDao {
 
     @Override
     public List<Conta> getAllConta(String campo, String valor, String tipoConta, String situacao) {
-
+        
         List<Conta> contas = new ArrayList<>(0);
         
         if(tipoConta == null) {
@@ -121,14 +122,15 @@ public class ContaDaoImpl implements ContaDao {
         try {
             URIBuilder builder = new URIBuilder("api/v1/contas");
 
-            if(!campo.equalsIgnoreCase("todos"))    { builder.addParameter(campo, valor); }
-            if(!situacao.equalsIgnoreCase("todos")) { builder.addParameter("ativo", situacao); }
-
+            builder.addParameter(campo, valor);
             builder.addParameter("tipo_conta", tipoConta);
+            
+            if(!situacao.equalsIgnoreCase("todos")) { builder.addParameter("ativo", situacao); }
 
             String response = HttpClientAPI.sendGet(builder.toString());
 
-            contas.addAll(Arrays.asList(this.gson.fromJson(response, tipoObject)));
+            if(response != null)
+                contas = Arrays.asList(this.gson.fromJson(response, tipoObject));
         } catch (JsonSyntaxException | URISyntaxException ex) {
             Logger.getLogger(ContaDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }

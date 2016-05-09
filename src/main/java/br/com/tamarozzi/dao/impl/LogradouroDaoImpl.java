@@ -7,6 +7,7 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -70,7 +71,7 @@ public class LogradouroDaoImpl implements LogradouroDao {
     @Override
     public List<Logradouro> getAllLogradouro(String campo, String valor) {
 
-        List<Logradouro> logradouros = null;
+        List<Logradouro> logradouros = new ArrayList<>(0);
         
         try {
             URIBuilder builder = new URIBuilder("api/v1/logradouros");
@@ -79,7 +80,8 @@ public class LogradouroDaoImpl implements LogradouroDao {
                         
             String response = HttpClientAPI.sendGet(builder.toString());
             
-            logradouros = Arrays.asList(this.gson.fromJson(response, Logradouro[].class));
+            if(response != null)
+                logradouros = Arrays.asList(this.gson.fromJson(response, Logradouro[].class));
         } catch (URISyntaxException ex) {
             Logger.getLogger(LogradouroDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }

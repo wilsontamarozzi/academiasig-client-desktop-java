@@ -28,17 +28,19 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 
 public final class HttpClientAPI {
 
-    //http://academiasig-api.herokuapp.com/
-    private static final String host = "http://localhost:8080/";
+    //private static final String host = "http://localhost:8080/";
+    private static final String host = "http://academiasig-api.herokuapp.com/";
 
     private static CredentialsProvider credentialsProvider;
 
@@ -90,7 +92,7 @@ public final class HttpClientAPI {
         HttpPost postRequest = new HttpPost(host + urlString);
         postRequest.addHeader(HTTP.CONTENT_TYPE, "application/json");
         postRequest.setEntity(new UrlEncodedFormEntity(nvps, StandardCharsets.UTF_8));
-        
+             
         return executeRequest(postRequest);
     }
 
@@ -100,13 +102,15 @@ public final class HttpClientAPI {
         postRequest.addHeader(HTTP.CONTENT_TYPE, "application/json");
         postRequest.setEntity(new StringEntity(content, StandardCharsets.UTF_8));
 
-        return executeRequest(postRequest);
+        String resp = executeRequest(postRequest);
+        
+        System.out.println(resp);
+        
+        return resp;
     }
 
     public static String sendPut(String urlString, String content) {
-        
-        System.out.println(content);
-        
+                
         HttpPut putRequest = new HttpPut(host + urlString);
         putRequest.addHeader(HTTP.CONTENT_TYPE, "application/json");
         putRequest.setEntity(new StringEntity(content, StandardCharsets.UTF_8));
@@ -145,12 +149,14 @@ public final class HttpClientAPI {
 
                 String output;
                 StringBuilder responseBuffer = new StringBuilder();
-                while ((output = br.readLine()) != null) {
+                while((output = br.readLine()) != null) {
                     responseBuffer.append(output);
                 }
                 
                 data = responseBuffer.toString();
-            }           
+            }
+            
+            EntityUtils.consume(httpEntity);
         } catch (MalformedURLException ex) {
             Logger.getLogger(HttpClientAPI.class.getName()).log(Level.SEVERE, null, ex);
         } catch (HttpHostConnectException ex) {
@@ -158,6 +164,8 @@ public final class HttpClientAPI {
             JOptionPane.showMessageDialog(null, "Connection time out: connect.");
         } catch (IOException ex) {
             Logger.getLogger(HttpClientAPI.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ((HttpRequestBase) request).releaseConnection();
         }
 
         return data;

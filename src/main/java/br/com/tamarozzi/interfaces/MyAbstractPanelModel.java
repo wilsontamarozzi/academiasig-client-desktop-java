@@ -9,9 +9,9 @@ package br.com.tamarozzi.interfaces;
  *
  * @author Wilson
  */
-public interface DefaultPanelModel {
+public interface MyAbstractPanelModel {
     
-    public void saveItem();
+    public void addItem(String typeItem);
     public void editItem();
     public void deleteItem();
 }

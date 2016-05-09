@@ -27,10 +27,10 @@ import org.json.JSONObject;
  */
 public class FrmCadastroPessoa extends JFrame implements Observable {
 
-    private final List<Observer> observers;
+    private List<Observer> observers;
     
-    private final PessoaController pessoaController;
-    private final LogradouroController logradouroController;
+    private PessoaController pessoaController;
+    private LogradouroController logradouroController;
     
     private Pessoa pessoa = null;
     private Logradouro logradouro;
@@ -38,26 +38,26 @@ public class FrmCadastroPessoa extends JFrame implements Observable {
     private BalloonTip balloonTip;
     
     public FrmCadastroPessoa() {
-        this.observers = new ArrayList<>();
-        this.logradouro = new Logradouro();
-        this.pessoaController = new PessoaController();
-        this.logradouroController = new LogradouroController();
-        
+        preInitComponents();
         initComponents();
         setComponents();
     }
     
     public FrmCadastroPessoa(Pessoa pessoa) {
-        this.observers = new ArrayList<>();
         this.pessoa = pessoa;
-        this.logradouro = new Logradouro();
-        this.pessoaController = new PessoaController();
-        this.logradouroController = new LogradouroController();
         
+        preInitComponents();
         initComponents();
         setComponents();
         
         setView(pessoa);
+    }
+    
+    private void preInitComponents() {
+        this.observers = new ArrayList<>();
+        this.logradouro = new Logradouro();
+        this.pessoaController = new PessoaController();
+        this.logradouroController = new LogradouroController();
     }
     
     private void setComponents() {
@@ -656,13 +656,13 @@ public class FrmCadastroPessoa extends JFrame implements Observable {
     @Override
     public void registerObserver(Observer ob) {
         this.observers.add(ob);
-        System.out.println("** Sistema: Observador " + ob.getClass().getName() + " está registrado.");
+        System.out.println("** Sistema: Observado " + this.getClass().getName() + " - Observador " + ob.getClass().getName() + " está registrado.");
     }
 
     @Override
     public void removeObserver(Observer ob) {
         this.observers.remove(ob);
-        System.out.println("** Sistema: Observador " + ob.getClass().getName() + " foi removido.");
+        System.out.println("** Sistema: Observado " + this.getClass().getName() + " - Observador " + ob.getClass().getName() + " foi removido.");
     }
 
     @Override

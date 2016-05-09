@@ -7,6 +7,7 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -70,7 +71,7 @@ public class CidadeDaoImpl implements CidadeDao {
     @Override
     public List<Cidade> getAllCidade(String campo, String valor) {
 
-        List<Cidade> cidades = null;
+        List<Cidade> cidades = new ArrayList<>(0);
         
         try {
             URIBuilder builder = new URIBuilder("api/v1/cidades");
@@ -78,8 +79,9 @@ public class CidadeDaoImpl implements CidadeDao {
             if(!campo.equalsIgnoreCase("todos"))        { builder.addParameter(campo, valor);               }
                         
             String response = HttpClientAPI.sendGet(builder.toString());
-            
-            cidades = Arrays.asList(this.gson.fromJson(response, Cidade[].class));
+           
+            if(response != null)
+                cidades = Arrays.asList(this.gson.fromJson(response, Cidade[].class));
         } catch (URISyntaxException ex) {
             Logger.getLogger(CidadeDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }

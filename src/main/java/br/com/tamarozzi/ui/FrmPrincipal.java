@@ -15,7 +15,7 @@ import javax.swing.JPanel;
  *
  * @author Panda
  */
-public class FrmPrincipal extends javax.swing.JFrame implements Observer {
+public class FrmPrincipal extends javax.swing.JFrame {
 
     /**
      * Creates new form FrmPrincipal
@@ -27,14 +27,33 @@ public class FrmPrincipal extends javax.swing.JFrame implements Observer {
     
     private void setComponents() {
         this.tabMenuGeral.removeAll();
-        /* Faz com que a tela abra maximazada */
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setBothTool();
+        
+        this.tabPessoa.registerObserver(new Observer() {
+            @Override
+            public void update(Object obj) {
+                tabPessoa.editPessoa();
+            }
+        });
+        
+        this.tabBanco.registerObserver(new Observer() {
+            @Override
+            public void update(Object obj) {
+                tabBanco.editBanco();
+            }
+        });
+        
+        this.tabConta.registerObserver(new Observer() {
+            @Override
+            public void update(Object obj) {
+                tabConta.editItem();
+            }
+        });
     }
     
     private void setBothTool() {
         this.lblUsuario.setText(UsuarioLogado.getInstance().getNome());
-        this.tabPessoa.registerObserver(this);
     }
 
     /**
@@ -253,9 +272,4 @@ public class FrmPrincipal extends javax.swing.JFrame implements Observer {
     private br.com.tamarozzi.ui.panel.PanelPessoa tabPessoa;
     private javax.swing.JToolBar toolBarGeral;
     // End of variables declaration//GEN-END:variables
-
-    @Override
-    public void update(Object obj) {
-        this.tabPessoa.editPessoa();
-    }
 }

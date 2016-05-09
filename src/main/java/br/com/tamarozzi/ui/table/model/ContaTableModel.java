@@ -10,17 +10,18 @@
  */
 package br.com.tamarozzi.ui.table.model;
 
+import br.com.tamarozzi.interfaces.MyAbstractTableModel;
 import br.com.tamarozzi.model.Conta;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
-public class ContaTableModel extends AbstractTableModel {
+public class ContaTableModel extends AbstractTableModel implements MyAbstractTableModel {
 
     private static final long serialVersionUID = 1L;
 
-    private List<Conta> contas;
+    private List<Object> contas;
 
     private final String[] colNomes = {"#", "Descrição", "Tipo Conta", "Inativo"};
 
@@ -28,35 +29,6 @@ public class ContaTableModel extends AbstractTableModel {
 
     public ContaTableModel() {
         this.contas = new ArrayList<>(0);
-    }
-
-    public void reload(List<Conta> contas) {
-        this.contas = new ArrayList<>(0);
-        this.contas.addAll(contas);
-        
-        fireTableDataChanged();
-    }
-    
-    public void addConta(Conta conta) {
-        Collections.reverse(contas);
-        this.contas.add(conta);
-        Collections.reverse(contas);
-        
-        fireTableDataChanged();
-    }
-    
-    public void removeConta(Conta conta) {
-        this.contas.remove(conta);
-        
-        fireTableDataChanged();
-    }
-    
-    public void removeConta(List<Conta> contas) {
-        contas.forEach(p -> {
-            this.contas.remove(p);
-        });
-        
-        fireTableDataChanged();
     }
     
     @Override
@@ -85,8 +57,7 @@ public class ContaTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int linha, int coluna) {
-
-        Conta c = this.contas.get(linha);
+        Conta c = (Conta) this.contas.get(linha);
         
         switch (coluna) {
             case 0:
@@ -107,29 +78,46 @@ public class ContaTableModel extends AbstractTableModel {
         return false;
     }
 
-    private Conta getContaAt(int index) {
+    @Override
+    public void reload(List<Object> itens) {
+        this.contas = new ArrayList<>(0);
+        this.contas.addAll(itens);
+        
+        fireTableDataChanged();
+    }
+
+    @Override
+    public void addItem(Object item) {
+        Collections.reverse(contas);
+        this.contas.add(item);
+        Collections.reverse(contas);
+        
+        fireTableDataChanged();
+    }
+
+    @Override
+    public void addItens(List<Object> itens) {
+        this.contas.addAll(itens);
+        
+        fireTableDataChanged();
+    }
+
+    @Override
+    public void removeItem(Object item) {
+        this.contas.remove(item);
+        
+        fireTableDataChanged();
+    }
+
+    @Override
+    public void removeItens(List<Object> itens) {
+        this.contas.removeAll(itens);
+        
+        fireTableDataChanged();
+    }
+
+    @Override
+    public Object getItemAt(int index) {
         return this.contas.get(index);
-    }
-
-    public Conta getContaSelected(int getSelectedRow) {
-        if (getSelectedRow < 0) {
-            return null;
-        }
-
-        return this.getContaAt(getSelectedRow);
-    }
-
-    public List<Conta> getContasSelected(int[] getSelectedRows) {
-        if (getSelectedRows.length <= 0) {
-            return null;
-        }
-
-        List<Conta> selectedContas = new ArrayList<>(0);
-
-        for (int i : getSelectedRows) {
-            selectedContas.add(this.getContaAt(i));
-        }
-
-        return selectedContas;
     }
 }

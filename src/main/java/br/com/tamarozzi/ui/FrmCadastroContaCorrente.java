@@ -6,10 +6,16 @@
 package br.com.tamarozzi.ui;
 
 import br.com.tamarozzi.controller.ContaController;
+import br.com.tamarozzi.interfaces.Observable;
 import br.com.tamarozzi.interfaces.Observer;
+import br.com.tamarozzi.model.Banco;
 import br.com.tamarozzi.model.Conta;
 import br.com.tamarozzi.model.ContaCorrente;
 import br.com.tamarozzi.model.Pessoa;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import net.java.balloontip.BalloonTip;
@@ -20,46 +26,80 @@ import org.json.JSONObject;
  *
  * @author Wilson
  */
-public class FrmCadastroContaCorrente extends javax.swing.JDialog implements Observer {
+public class FrmCadastroContaCorrente extends javax.swing.JDialog implements Observable {
 
-    private final ContaController contaController;
+    private List<Observer> observers;
     
-    private final ContaCorrente contaCorrente;
+    private ContaController contaController;
     
-    private final FrmPesquisaPessoa frmPesquisaPessoa;
+    private FrmPesquisaPessoa frmPesquisaPessoa;
+    private FrmPesquisaBanco frmPesquisaBanco;
+    
+    private ContaCorrente contaCorrente = null;
+    private Pessoa titular;
+    private Banco banco;
     
     private BalloonTip balloonTip;
         
-    /**
-     * Creates new form FrmCadastroContaCorrente
-     * @param c
-     */
+    public FrmCadastroContaCorrente() {
+        preInitComponents();
+        initComponents();
+        setComponents();
+    }
     
     public FrmCadastroContaCorrente(ContaCorrente c) {
         this.contaCorrente = c;
-        this.contaController = new ContaController();
-        this.frmPesquisaPessoa = new FrmPesquisaPessoa();
         
+        preInitComponents();
         initComponents();
         setComponents();
         
         setView(c);
     }
     
+    private void preInitComponents() {
+        this.observers = new ArrayList<>();
+        this.titular = new Pessoa();
+        this.banco = new Banco();
+        this.contaController = new ContaController();
+        this.frmPesquisaPessoa = new FrmPesquisaPessoa();
+        this.frmPesquisaBanco = new FrmPesquisaBanco();
+    }
+    
     private void setComponents() {
         this.setLocationRelativeTo(null);
-        this.frmPesquisaPessoa.panelPessoaPesquisa.registerObserver(this);
+        this.frmPesquisaPessoa.panelPessoaPesquisa.registerObserver(new Observer() {
+            @Override
+            public void update(Object obj) {
+                titular = (Pessoa) obj;
+                frmPesquisaPessoa.setVisible(false);
+                txtTitular.setText(titular.getNome());
+            }
+        });
+        
+        this.frmPesquisaBanco.panelPesquisaBanco.registerObserver(new Observer() {
+            @Override
+            public void update(Object obj) {
+                banco = (Banco) obj;
+                frmPesquisaBanco.setVisible(false);
+                txtBanco.setText(banco.getNome());
+            }
+        });
     }
     
     private void setView(ContaCorrente c) {
         this.txtDescricao.setText(c.getDescricao());
-        this.txtAgencia.setValue(c.getAgencia());
-        this.txtAgenciaDigito.setValue(c.getAgenciaDigito());
-        this.txtConta.setValue(c.getConta());
-        this.txtContaDigito.setValue(c.getContaDigito());
+        this.txtAgencia.setValue(new BigDecimal(c.getAgencia()));
+        this.txtAgenciaDigito.setValue(new BigDecimal(c.getAgenciaDigito()));
+        this.txtConta.setValue(new BigDecimal(c.getConta()));
+        this.txtContaDigito.setValue(new BigDecimal(c.getContaDigito()));
         
         if(c.getTitular() != null) {
             this.txtTitular.setText(c.getTitular().getNome());
+        }
+        
+        if(c.getBanco() != null) {
+            this.txtBanco.setText(c.getBanco().getNome());
         }
     }
 
@@ -82,12 +122,13 @@ public class FrmCadastroContaCorrente extends javax.swing.JDialog implements Obs
         lblBanco = new javax.swing.JLabel();
         txtBanco = new javax.swing.JTextField();
         lblAgencia = new javax.swing.JLabel();
-        txtAgencia = new javax.swing.JFormattedTextField();
-        txtAgenciaDigito = new javax.swing.JFormattedTextField();
+        txtAgencia = new br.com.tamarozzi.util.JNumberFormatFieldUtil(new DecimalFormat("#"), 4);
+        txtAgenciaDigito = new br.com.tamarozzi.util.JNumberFormatFieldUtil(new DecimalFormat("#"), 1);
         lblConta = new javax.swing.JLabel();
-        txtConta = new javax.swing.JFormattedTextField();
-        txtContaDigito = new javax.swing.JFormattedTextField();
+        txtConta = new br.com.tamarozzi.util.JNumberFormatFieldUtil(new DecimalFormat("#"), 11);
+        txtContaDigito = new br.com.tamarozzi.util.JNumberFormatFieldUtil(new DecimalFormat("#"), 1);
         btnTitular = new javax.swing.JButton();
+        btnBanco = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         btnCadastrar = new javax.swing.JButton();
 
@@ -107,21 +148,23 @@ public class FrmCadastroContaCorrente extends javax.swing.JDialog implements Obs
 
         lblAgencia.setText("Agência:");
 
-        txtAgencia.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-
-        txtAgenciaDigito.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("0"))));
+        txtAgenciaDigito.setPreferredSize(new java.awt.Dimension(6, 20));
 
         lblConta.setText("Conta:");
-
-        txtConta.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-
-        txtContaDigito.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("0"))));
 
         btnTitular.setText("jButton1");
         btnTitular.setPreferredSize(new java.awt.Dimension(23, 23));
         btnTitular.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnTitularMouseClicked(evt);
+            }
+        });
+
+        btnBanco.setText("jButton1");
+        btnBanco.setPreferredSize(new java.awt.Dimension(23, 23));
+        btnBanco.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBancoMouseClicked(evt);
             }
         });
 
@@ -155,7 +198,9 @@ public class FrmCadastroContaCorrente extends javax.swing.JDialog implements Obs
                             .addComponent(txtTitular)
                             .addComponent(txtBanco))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnTitular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnTitular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBanco, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         pnlDetalhesLayout.setVerticalGroup(
@@ -173,17 +218,16 @@ public class FrmCadastroContaCorrente extends javax.swing.JDialog implements Obs
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtBanco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblBanco))
+                    .addComponent(lblBanco)
+                    .addComponent(btnBanco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtConta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtContaDigito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtAgencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtAgenciaDigito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblConta)
-                        .addComponent(lblAgencia)))
+                .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblConta)
+                    .addComponent(lblAgencia)
+                    .addComponent(txtAgencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtConta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtAgenciaDigito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtContaDigito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -253,6 +297,7 @@ public class FrmCadastroContaCorrente extends javax.swing.JDialog implements Obs
         if(errors != null) {
             this.parseErrors(errors);
         } else {
+            this.notifyObservers();
             this.dispose();
         }
     }//GEN-LAST:event_btnCadastrarActionPerformed
@@ -265,13 +310,23 @@ public class FrmCadastroContaCorrente extends javax.swing.JDialog implements Obs
         this.frmPesquisaPessoa.setVisible(true);
     }//GEN-LAST:event_btnTitularMouseClicked
 
+    private void btnBancoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBancoMouseClicked
+        this.frmPesquisaBanco.setVisible(true);
+    }//GEN-LAST:event_btnBancoMouseClicked
+
     private Conta loadConta() {
         
+        if(this.contaCorrente == null) {
+            this.contaCorrente = new ContaCorrente();
+        }
+        
         this.contaCorrente.setDescricao(this.txtDescricao.getText());
-        this.contaCorrente.setAgencia(Integer.parseInt(this.txtAgencia.getText()));
-        this.contaCorrente.setAgenciaDigito(Integer.parseInt(this.txtAgenciaDigito.getText()));
-        this.contaCorrente.setConta(Integer.parseInt(this.txtConta.getText()));
-        this.contaCorrente.setContaDigito(Integer.parseInt(this.txtContaDigito.getText()));
+        this.contaCorrente.setAgencia(this.txtAgencia.getValue().intValue());
+        this.contaCorrente.setAgenciaDigito(this.txtAgenciaDigito.getValue().intValue());
+        this.contaCorrente.setConta(this.txtConta.getValue().intValue());
+        this.contaCorrente.setContaDigito(this.txtContaDigito.getValue().intValue());
+        this.contaCorrente.setTitular(titular);
+        this.contaCorrente.setBanco(banco);
         
         return this.contaCorrente;
     }
@@ -293,6 +348,9 @@ public class FrmCadastroContaCorrente extends javax.swing.JDialog implements Obs
                 break;
                 case "conta":
                     comp = this.txtConta;
+                break;
+                case "banco":
+                    comp = this.txtBanco;
                 break;
                 case "tipoConta":
                     JOptionPane.showMessageDialog(null, obj.getString(0), "Erro Critico", JOptionPane.ERROR_MESSAGE);
@@ -344,6 +402,7 @@ public class FrmCadastroContaCorrente extends javax.swing.JDialog implements Obs
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBanco;
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnTitular;
@@ -355,20 +414,31 @@ public class FrmCadastroContaCorrente extends javax.swing.JDialog implements Obs
     private javax.swing.JPanel pnlDetalhes;
     private javax.swing.JPanel pnlGeral;
     private javax.swing.JTabbedPane tabMenuGeral;
-    private javax.swing.JFormattedTextField txtAgencia;
-    private javax.swing.JFormattedTextField txtAgenciaDigito;
+    private br.com.tamarozzi.util.JNumberFormatFieldUtil txtAgencia;
+    private br.com.tamarozzi.util.JNumberFormatFieldUtil txtAgenciaDigito;
     private javax.swing.JTextField txtBanco;
-    private javax.swing.JFormattedTextField txtConta;
-    private javax.swing.JFormattedTextField txtContaDigito;
+    private br.com.tamarozzi.util.JNumberFormatFieldUtil txtConta;
+    private br.com.tamarozzi.util.JNumberFormatFieldUtil txtContaDigito;
     private javax.swing.JTextField txtDescricao;
     private javax.swing.JTextField txtTitular;
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void update(Object obj) {
-        Pessoa p = (Pessoa) obj;
-        this.frmPesquisaPessoa.setVisible(false);
-        this.contaCorrente.setTitular(p);
-        this.txtTitular.setText(p.getNome());
+    public void registerObserver(Observer ob) {
+        this.observers.add(ob);
+        System.out.println("** Sistema: Observado " + this.getClass().getName() + " - Observador " + ob.getClass().getName() + " está registrado.");
+    }
+
+    @Override
+    public void removeObserver(Observer ob) {
+        this.observers.remove(ob);
+        System.out.println("** Sistema: Observado " + this.getClass().getName() + " - Observador " + ob.getClass().getName() + " foi removido.");
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(Observer ob : this.observers) {
+            ob.update(this.contaCorrente);
+        }
     }
 }

@@ -19,20 +19,26 @@ public class ContaCorrente extends Conta {
     private int conta;
     private int contaDigito;
     private int titularId;
+    private int bancoId;
     private Pessoa titular;
+    private Banco banco;
 
     public ContaCorrente() {
         setTipoConta(CONTA_CORRENTE);
         this.titular = new Pessoa();
+        this.banco = new Banco();
     }
 
-    public ContaCorrente(int agencia, int agenciaDigito, int conta, int titularId, Pessoa titular, int id, String descricao, boolean ativo, String tipoConta, BigDecimal saldoInicial) {
+    public ContaCorrente(int agencia, int agenciaDigito, int conta, int contaDigito, int titularId, int bancoId, Pessoa titular, Banco banco, int id, String descricao, boolean ativo, String tipoConta, BigDecimal saldoInicial) {
         super(id, descricao, ativo, tipoConta, saldoInicial);
         this.agencia = agencia;
         this.agenciaDigito = agenciaDigito;
         this.conta = conta;
+        this.contaDigito = contaDigito;
         this.titularId = titularId;
+        this.bancoId = bancoId;
         this.titular = titular;
+        this.banco = banco;
     }
 
     public int getAgencia() {
@@ -75,11 +81,29 @@ public class ContaCorrente extends Conta {
         this.titularId = titularId;
     }
 
+    public int getBancoId() {
+        return bancoId;
+    }
+
+    public void setBancoId(int bancoId) {
+        this.bancoId = bancoId;
+    }
+
     public Pessoa getTitular() {
         return titular;
     }
 
     public void setTitular(Pessoa titular) {
         this.titular = titular;
+        this.setTitularId(titular.getId());
+    }
+
+    public Banco getBanco() {
+        return banco;
+    }
+
+    public void setBanco(Banco banco) {
+        this.banco = banco;
+        setBancoId(banco.getId());
     }
 }

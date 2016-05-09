@@ -276,8 +276,8 @@ public class PanelPessoa extends javax.swing.JPanel implements Observable, Obser
         switch(tipoPessoa) {
             case PESSOA_FISICA:
                 this.frmCadastroPessoa = new FrmCadastroPessoa();
-                this.frmCadastroPessoa.setVisible(true);
                 this.frmCadastroPessoa.registerObserver(this);
+                this.frmCadastroPessoa.setVisible(true);                
             break;
             case PESSOA_JURIDICA:
             break;
@@ -330,13 +330,13 @@ public class PanelPessoa extends javax.swing.JPanel implements Observable, Obser
     @Override
     public void registerObserver(Observer ob) {
         this.observers.add(ob);
-        System.out.println("** Sistema: Observador " + ob.getClass().getName() + " está registrado.");
+        System.out.println("** Sistema: Observado " + this.getClass().getName() + " - Observador " + ob.getClass().getName() + " está registrado.");
     }
 
     @Override
     public void removeObserver(Observer ob) {
         this.observers.remove(ob);
-        System.out.println("** Sistema: Observador " + ob.getClass().getName() + " foi removido.");
+        System.out.println("** Sistema: Observado " + this.getClass().getName() + " - Observador " + ob.getClass().getName() + " foi removido.");
     }
 
     @Override

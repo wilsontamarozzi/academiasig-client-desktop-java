@@ -6,11 +6,11 @@
 package br.com.tamarozzi.ui.panel;
 
 import br.com.tamarozzi.controller.BancoController;
+import br.com.tamarozzi.interfaces.Observable;
+import br.com.tamarozzi.interfaces.Observer;
 import br.com.tamarozzi.model.Banco;
 import br.com.tamarozzi.ui.FrmCadastroBanco;
-import br.com.tamarozzi.ui.table.model.BancoTableModel;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,28 +18,32 @@ import java.util.List;
  *
  * @author Panda
  */
-public class PanelBanco extends javax.swing.JPanel {
+public class PanelBanco extends javax.swing.JPanel implements Observable, Observer {
 
-    private final BancoController bancoController;
-    private final BancoTableModel bancoTableModel;
+    private List<Observer> observers;
     
-    private final List<String> listCampoFiltro;
+    private BancoController bancoController;
+    
+    private List<String> listCampoFiltro;
+    
+    private FrmCadastroBanco frmCadastroBanco;
     
     /**
      * Creates new form PanelBanco
      */
     public PanelBanco() {
-        this.listCampoFiltro = Arrays.asList("todos", "nome", "numero");
-        
-        this.bancoController = new BancoController();
-        this.bancoTableModel = new BancoTableModel();
-                
+        preInitComponents();
         initComponents();
-        setComponents();
     }
     
-    private void setComponents() {
-        this.table.getColumnModel().getColumn(0).setMaxWidth(20);
+    private void preInitComponents() {
+        this.observers = new ArrayList<>();
+        
+        //Filters
+        this.listCampoFiltro = Arrays.asList("search", "nome", "numero");
+        
+        //Controllers
+        this.bancoController = new BancoController();
     }
 
     /**
@@ -63,8 +67,8 @@ public class PanelBanco extends javax.swing.JPanel {
         btnPesquisar = new javax.swing.JButton();
         lblEm = new javax.swing.JLabel();
         cbxEm = new javax.swing.JComboBox<>();
-        spTable = new javax.swing.JScrollPane();
-        table = new javax.swing.JTable();
+        spTableBanco = new javax.swing.JScrollPane();
+        tableBanco = new br.com.tamarozzi.ui.table.TableBanco();
 
         setName("Bancos"); // NOI18N
 
@@ -132,22 +136,20 @@ public class PanelBanco extends javax.swing.JPanel {
         cbxEm.setMinimumSize(new java.awt.Dimension(125, 20));
         cbxEm.setPreferredSize(new java.awt.Dimension(125, 20));
 
-        table.setModel(bancoTableModel);
-        table.addMouseListener(new java.awt.event.MouseAdapter() {
+        tableBanco.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tableMouseClicked(evt);
+                tableBancoMouseClicked(evt);
             }
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                tableMousePressed(evt);
+                tableBancoMousePressed(evt);
             }
         });
-        spTable.setViewportView(table);
+        spTableBanco.setViewportView(tableBanco);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(spTable, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -162,6 +164,7 @@ public class PanelBanco extends javax.swing.JPanel {
                         .addComponent(cbxEm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 280, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addComponent(spTableBanco)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -174,8 +177,8 @@ public class PanelBanco extends javax.swing.JPanel {
                     .addComponent(cbxEm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(spTable, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(spTableBanco, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -188,7 +191,7 @@ public class PanelBanco extends javax.swing.JPanel {
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
-        this.bancoTableModel.reload(
+        this.tableBanco.reload(
             this.bancoController.getAllBanco(
                 this.listCampoFiltro.get(this.cbxEm.getSelectedIndex()),
                 this.txtPesquisa.getText()
@@ -196,60 +199,46 @@ public class PanelBanco extends javax.swing.JPanel {
         );
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
-    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
-        if(evt.getClickCount() == 2) {
-            this.editBanco();
-        }
-    }//GEN-LAST:event_tableMouseClicked
+    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
+        this.addBanco();
+    }//GEN-LAST:event_btnNovoActionPerformed
 
-    private void tableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMousePressed
+    private void tableBancoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableBancoMouseClicked
+        if(evt.getClickCount() == 2) {
+            notifyObservers();
+        }
+    }//GEN-LAST:event_tableBancoMouseClicked
+
+    private void tableBancoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableBancoMousePressed
         if(!this.btnEditar.isEnabled()) {
             this.btnEditar.setEnabled(true);
             this.btnExcluir.setEnabled(true);
         }
-    }//GEN-LAST:event_tableMousePressed
+    }//GEN-LAST:event_tableBancoMousePressed
 
-    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        Banco b = new Banco();
-
-        FrmCadastroBanco form = new FrmCadastroBanco(b);
-        form.setVisible(true);
-        form.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent evt) {
-                if(b.getId() > 0)
-                bancoTableModel.addBanco(b);
-            }
-        });
-    }//GEN-LAST:event_btnNovoActionPerformed
-
+    private void addBanco() {
+        this.frmCadastroBanco = new FrmCadastroBanco();
+        this.frmCadastroBanco.registerObserver(this);
+        this.frmCadastroBanco.setVisible(true);
+    }
+    
     private void deleteBanco() {
-        List<Banco> bancos = this.bancoTableModel.getBancosSelected(this.table.getSelectedRows());
+        List<Banco> bancos = this.tableBanco.getBancosSelected();
         
         if(bancos != null) {
             if(this.bancoController.deleteBanco(bancos)) {
-                this.bancoTableModel.removeBanco(bancos);
+                this.tableBanco.removeItem(bancos);
             }
         }
     }
     
-    private void editBanco() {
-        Banco bancoSelected = this.getBancoSelected();
+    public void editBanco() {
+        Banco bancoSelected = this.tableBanco.getBancoSelected();
         
         if(bancoSelected != null) {
             Banco b = this.bancoController.getBanco(bancoSelected);
             new FrmCadastroBanco(b).setVisible(true);
         }
-    }
-    
-    public Banco getBancoSelected() {
-        int index = this.table.getSelectedRow();
-        
-        if(index >= 0) {
-            return this.bancoTableModel.getBancoSelected(index);
-        }
-        
-        return null;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -263,9 +252,33 @@ public class PanelBanco extends javax.swing.JPanel {
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JLabel lblEm;
     private javax.swing.JLabel lblPesquisa;
-    private javax.swing.JScrollPane spTable;
-    public javax.swing.JTable table;
+    private javax.swing.JScrollPane spTableBanco;
+    private br.com.tamarozzi.ui.table.TableBanco tableBanco;
     private javax.swing.JToolBar toolBar;
     private javax.swing.JTextField txtPesquisa;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void registerObserver(Observer ob) {
+        this.observers.add(ob);
+        System.out.println("** Sistema: Observado " + this.getClass().getName() + " - Observador " + ob.getClass().getName() + " está registrado.");
+    }
+
+    @Override
+    public void removeObserver(Observer ob) {
+        this.observers.remove(ob);
+        System.out.println("** Sistema: Observado " + this.getClass().getName() + " - Observador " + ob.getClass().getName() + " foi removido.");
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(Observer ob : this.observers) {
+            ob.update(this.tableBanco.getBancoSelected());
+        }
+    }
+
+    @Override
+    public void update(Object obj) {
+        this.tableBanco.addItem(obj);
+    }
 }

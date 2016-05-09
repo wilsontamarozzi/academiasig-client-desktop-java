@@ -10,52 +10,23 @@
  */
 package br.com.tamarozzi.ui.table.model;
 
+import br.com.tamarozzi.interfaces.MyAbstractTableModel;
 import br.com.tamarozzi.model.Banco;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
-public class BancoTableModel extends AbstractTableModel {
+public class BancoTableModel extends AbstractTableModel implements MyAbstractTableModel {
 
-    private static final long serialVersionUID = 1L;
-
-    private List<Banco> bancos;
+    private List<Object> bancos;
 
     private final String[] colNomes = {"#", "Nome", "Número"};
 
     private final Class<?>[] colTipo = {String.class, String.class, String.class};
 
     public BancoTableModel() {
-    }
-
-    public void reload(List<Banco> bancos) {
         this.bancos = new ArrayList<>(0);
-        this.bancos.addAll(bancos);
-        
-        fireTableDataChanged();
-    }
-    
-    public void addBanco(Banco banco) {
-        Collections.reverse(bancos);
-        this.bancos.add(banco);
-        Collections.reverse(bancos);
-        
-        fireTableDataChanged();
-    }
-    
-    public void removeBanco(Banco banco) {
-        this.bancos.remove(banco);
-        
-        fireTableDataChanged();
-    }
-    
-    public void removeBanco(List<Banco> bancos) {
-        bancos.forEach(b -> {
-            this.bancos.remove(b);
-        });
-        
-        fireTableDataChanged();
     }
     
     @Override
@@ -84,7 +55,7 @@ public class BancoTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int linha, int coluna) {
-        Banco object = this.bancos.get(linha);
+        Banco object = (Banco) this.bancos.get(linha);
 
         switch (coluna) {
             case 0:
@@ -103,29 +74,46 @@ public class BancoTableModel extends AbstractTableModel {
         return false;
     }
 
-    private Banco getBancoAt(int index) {
+    @Override
+    public void reload(List<Object> itens) {
+        this.bancos = new ArrayList<>(0);
+        this.bancos.addAll(itens);
+        
+        fireTableDataChanged();
+    }
+
+    @Override
+    public void addItem(Object item) {
+        Collections.reverse(bancos);
+        this.bancos.add(item);
+        Collections.reverse(bancos);
+        
+        fireTableDataChanged();
+    }
+
+    @Override
+    public void addItens(List<Object> itens) {
+        this.bancos.addAll(itens);
+        
+        fireTableDataChanged();
+    }
+
+    @Override
+    public void removeItem(Object item) {
+        this.bancos.remove(item);
+        
+        fireTableDataChanged();
+    }
+
+    @Override
+    public void removeItens(List<Object> itens) {
+        this.bancos.removeAll(itens);
+        
+        fireTableDataChanged();
+    }
+
+    @Override
+    public Object getItemAt(int index) {
         return this.bancos.get(index);
-    }
-
-    public Banco getBancoSelected(int getSelectedRow) {
-        if (getSelectedRow < 0) {
-            return null;
-        }
-
-        return this.getBancoAt(getSelectedRow);
-    }
-
-    public List<Banco> getBancosSelected(int[] getSelectedRows) {
-        if (getSelectedRows.length <= 0) {
-            return null;
-        }
-
-        List<Banco> selectedBancos = new ArrayList<>(0);
-
-        for (int i : getSelectedRows) {
-            selectedBancos.add(this.getBancoAt(i));
-        }
-
-        return selectedBancos;
-    }
+    }    
 }

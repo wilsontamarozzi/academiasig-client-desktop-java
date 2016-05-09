@@ -5,29 +5,52 @@
  */
 package br.com.tamarozzi.ui;
 
+import br.com.tamarozzi.controller.ContaController;
+import br.com.tamarozzi.interfaces.Observable;
+import br.com.tamarozzi.interfaces.Observer;
 import br.com.tamarozzi.model.Conta;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import net.java.balloontip.BalloonTip;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
  * @author Wilson
  */
-public class FrmCadastroConta extends javax.swing.JDialog {
+public class FrmCadastroConta extends javax.swing.JDialog implements Observable {
 
-    private final Conta conta;
+    private List<Observer> observers;
+    
+    private ContaController contaController;
+    
+    private Conta conta = null;
     
     private BalloonTip balloonTip;
     
-    /**
-     * Creates new form FrmCadastroContaCorrente
-     */
+    public FrmCadastroConta() {
+        preInitComponents();
+        initComponents();
+        setComponents();
+    }
+    
     public FrmCadastroConta(Conta c) {
         this.conta = c;
         
+        preInitComponents();
         initComponents();
         setComponents();
         
         setView(c);
+    }
+    
+    private void preInitComponents() {
+        this.observers = new ArrayList<>();
+        
+        this.contaController = new ContaController();
     }
     
     private void setComponents() {
@@ -155,19 +178,56 @@ public class FrmCadastroConta extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        /*JSONObject errors = this.pessoaController.editPessoa(this.loadPessoa());
+        JSONObject errors = this.contaController.editConta(this.loadConta());
         
         if(errors != null) {
-        this.parseErrors(errors);
+            this.parseErrors(errors);
         } else {
-        this.dispose();
-        }*/
+            this.notifyObservers();
+            this.dispose();
+        }
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private Conta loadConta() {
+        
+        if(this.conta == null) {
+            this.conta = new Conta();
+        }
+        
+        this.conta.setDescricao(this.txtDescricao.getText());
+        
+        return this.conta;
+    }
+    
+    private void parseErrors(JSONObject errors) {
+        
+        errors.keys().forEachRemaining((String key) -> {
+            
+            JSONArray obj = errors.getJSONArray(key);
+
+            JComponent comp = null;
+            
+            switch(key) {
+                case "descricao":
+                    comp = this.txtDescricao;
+                break;
+                case "tipoConta":
+                    JOptionPane.showMessageDialog(null, obj.getString(0), "Erro Critico", JOptionPane.ERROR_MESSAGE);
+                break;
+            }
+            
+            if(this.balloonTip == null && comp != null) {
+                this.balloonTip = new BalloonTip(comp, obj.getString(0));
+            } else if(comp != null && !this.balloonTip.isVisible()) {
+                this.balloonTip = new BalloonTip(comp, obj.getString(0));
+            }
+        });
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -219,4 +279,23 @@ public class FrmCadastroConta extends javax.swing.JDialog {
     private javax.swing.JTextField txtDescricao;
     private javax.swing.JTextField txtTitular;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void registerObserver(Observer ob) {
+        this.observers.add(ob);
+        System.out.println("** Sistema: Observado " + this.getClass().getName() + " - Observador " + ob.getClass().getName() + " está registrado.");
+    }
+
+    @Override
+    public void removeObserver(Observer ob) {
+        this.observers.remove(ob);
+        System.out.println("** Sistema: Observado " + this.getClass().getName() + " - Observador " + ob.getClass().getName() + " foi removido.");
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(Observer ob : this.observers) {
+            ob.update(this.conta);
+        }
+    }    
 }

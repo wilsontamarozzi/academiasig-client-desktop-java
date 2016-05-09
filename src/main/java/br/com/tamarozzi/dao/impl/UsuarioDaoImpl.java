@@ -30,5 +30,4 @@ public class UsuarioDaoImpl implements UsuarioDao {
     public List<Usuario> getAllUsuario() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 }

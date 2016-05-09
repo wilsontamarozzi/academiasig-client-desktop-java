@@ -8,6 +8,7 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -76,16 +77,17 @@ public class BancoDaoImpl implements BancoDao {
     @Override
     public List<Banco> getAllBanco(String campo, String valor) {
 
-        List<Banco> bancos = null;
+        List<Banco> bancos = new ArrayList<>(0);
         
         try {
             URIBuilder builder = new URIBuilder("api/v1/bancos");
             
-            if(!campo.equalsIgnoreCase("todos")) { builder.addParameter(campo, valor); }
+            builder.addParameter(campo, valor);
             
             String response = HttpClientAPI.sendGet(builder.toString());
             
-            bancos = Arrays.asList(this.gson.fromJson(response, Banco[].class));
+            if(response != null)
+                bancos = Arrays.asList(this.gson.fromJson(response, Banco[].class));
         } catch (URISyntaxException ex) {
             Logger.getLogger(BancoDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }

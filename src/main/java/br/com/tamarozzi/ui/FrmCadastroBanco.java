@@ -6,12 +6,11 @@
 package br.com.tamarozzi.ui;
 
 import br.com.tamarozzi.controller.BancoController;
+import br.com.tamarozzi.interfaces.Observable;
+import br.com.tamarozzi.interfaces.Observer;
 import br.com.tamarozzi.model.Banco;
-import java.util.Collections;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Set;
 import javax.swing.JComponent;
 import net.java.balloontip.BalloonTip;
 import org.json.JSONArray;
@@ -21,29 +20,34 @@ import org.json.JSONObject;
  *
  * @author Panda
  */
-public class FrmCadastroBanco extends javax.swing.JDialog {
+public class FrmCadastroBanco extends javax.swing.JDialog implements Observable {
 
-    private final BancoController bancoController;
-    private final Banco banco;
+    private List<Observer> observers;
+    
+    private BancoController bancoController;
+    private Banco banco = null;
     
     private BalloonTip balloonTip;
     
     public FrmCadastroBanco() {
-        this.banco = new Banco();
-        this.bancoController = new BancoController();
-        
+        preInitComponents();
         initComponents();
         setComponents();
     }
     
     public FrmCadastroBanco(Banco banco) {
         this.banco = banco;
-        this.bancoController = new BancoController();
         
+        preInitComponents();
         initComponents();
         setComponents();
         
         setView(banco);
+    }
+    
+    private void preInitComponents() {
+        this.observers = new ArrayList<>();
+        this.bancoController = new BancoController();
     }
     
     private void setComponents() {
@@ -169,11 +173,17 @@ public class FrmCadastroBanco extends javax.swing.JDialog {
         if(errors != null) {
             this.parseErrors(errors);
         } else {
+            this.notifyObservers();
             this.dispose();
         }
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     public Banco loadBanco() {
+        
+        if(this.banco == null) {
+            this.banco = new Banco();
+        }
+        
         this.banco.setNome(this.txtNome.getText());
         this.banco.setNumero(this.txtNumero.getText());
         
@@ -254,4 +264,23 @@ public class FrmCadastroBanco extends javax.swing.JDialog {
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtNumero;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void registerObserver(Observer ob) {
+        this.observers.add(ob);
+        System.out.println("** Sistema: Observado FrmCadastroBanco - Observador " + ob.getClass().getName() + " está registrado.");
+    }
+
+    @Override
+    public void removeObserver(Observer ob) {
+        this.observers.remove(ob);
+        System.out.println("** Sistema: Observado FrmCadastroBanco - Observador " + ob.getClass().getName() + " foi removido.");
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(Observer ob : this.observers) {
+            ob.update(this.banco);
+        }
+    }
 }
