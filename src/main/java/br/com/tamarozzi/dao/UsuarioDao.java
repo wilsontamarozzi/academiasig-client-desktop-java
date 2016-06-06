@@ -5,6 +5,7 @@
  */
 package br.com.tamarozzi.dao;
 
+import br.com.tamarozzi.model.Pessoa;
 import br.com.tamarozzi.model.Usuario;
 import java.util.List;
 
@@ -18,5 +19,5 @@ public interface UsuarioDao {
 
     public Usuario getUsuario(int id);
 
-    public List<Usuario> getAllUsuario();
+    public List<Pessoa> getAllUsuario();
 }

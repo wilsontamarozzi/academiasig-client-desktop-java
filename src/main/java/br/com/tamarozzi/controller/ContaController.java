@@ -33,7 +33,7 @@ public class ContaController {
     }
 
     public JSONObject editConta(Conta c) {
-        if (c.getId() > 0) {
+        if (c.getUUID() != null) {
             return this.contaDao.edit(c);
         } else {
             return this.contaDao.add(c);
@@ -50,7 +50,7 @@ public class ContaController {
 
         if (opcao == 0) {
             contas.stream().forEach((p) -> {
-                this.contaDao.delete(p.getId());
+                this.contaDao.delete(p.getUUID());
             });
             
             return true;

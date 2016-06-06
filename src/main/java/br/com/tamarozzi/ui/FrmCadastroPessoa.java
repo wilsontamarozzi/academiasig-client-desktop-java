@@ -12,6 +12,7 @@ import br.com.tamarozzi.interfaces.Observable;
 import br.com.tamarozzi.interfaces.Observer;
 import br.com.tamarozzi.model.Logradouro;
 import br.com.tamarozzi.model.Pessoa;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComponent;
@@ -36,9 +37,10 @@ public class FrmCadastroPessoa extends JFrame implements Observable {
     private Logradouro logradouro;
     
     private BalloonTip balloonTip;
+    private SimpleDateFormat dateFormat;
     
     public FrmCadastroPessoa() {
-        preInitComponents();
+        preInitComponents("Cadastro de Pessoa");
         initComponents();
         setComponents();
     }
@@ -46,18 +48,22 @@ public class FrmCadastroPessoa extends JFrame implements Observable {
     public FrmCadastroPessoa(Pessoa pessoa) {
         this.pessoa = pessoa;
         
-        preInitComponents();
+        preInitComponents(pessoa.getCodigo() + " - " + pessoa.getNome());
         initComponents();
         setComponents();
         
         setView(pessoa);
     }
     
-    private void preInitComponents() {
+    private void preInitComponents(String title) {
+        this.setTitle(title);
+        
         this.observers = new ArrayList<>();
         this.logradouro = new Logradouro();
         this.pessoaController = new PessoaController();
         this.logradouroController = new LogradouroController();
+        
+        this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }
     
     private void setComponents() {
@@ -69,8 +75,13 @@ public class FrmCadastroPessoa extends JFrame implements Observable {
         this.txtNome.setText(p.getNome());
         this.txaObservacao.setText(p.getObservacao());
         this.txtEmail.setText(p.getEmail());
-        this.txtDataCadastro.setText("10/10/2010");
+        this.txtDataCadastro.setText(this.dateFormat.format(p.getDataCadastro()));
+        this.dtcNascimento.setDate(p.getDataNascimento());
         this.chkPessoaInativa.setSelected(!p.isAtivo());
+        
+        if(p.getCadastradoPor() != null) {
+            this.txtCadastradoPor.setText(p.getCadastradoPor().getNome());
+        }
         
         /* Atributos de Endereço */
         this.txtNumero.setText(p.getNumero());
@@ -123,7 +134,7 @@ public class FrmCadastroPessoa extends JFrame implements Observable {
         lblCidade = new javax.swing.JLabel();
         txtCidade = new javax.swing.JTextField();
         lblNascimento = new javax.swing.JLabel();
-        dtcNascimento = new com.toedter.calendar.JDateChooser();
+        dtcNascimento = new com.toedter.calendar.JDateChooser("dd/MM/yyyy", "##/##/#####", '_');
         lblSexo = new javax.swing.JLabel();
         cbxSexo = new javax.swing.JComboBox<>();
         lblCpf = new javax.swing.JLabel();
@@ -151,7 +162,6 @@ public class FrmCadastroPessoa extends JFrame implements Observable {
         btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Pessoa");
         setLocation(new java.awt.Point(0, 0));
         setLocationByPlatform(true);
         setSize(new java.awt.Dimension(780, 600));
@@ -266,7 +276,7 @@ public class FrmCadastroPessoa extends JFrame implements Observable {
         chkPessoaInativa.setText("Pessoa Inativa:");
         chkPessoaInativa.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
-        btnPesquisaCEP.setText("...");
+        btnPesquisaCEP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/mostrar-icon.png"))); // NOI18N
         btnPesquisaCEP.setPreferredSize(new java.awt.Dimension(20, 20));
         btnPesquisaCEP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -544,6 +554,7 @@ public class FrmCadastroPessoa extends JFrame implements Observable {
         this.pessoa.setTelefoneResidencial(this.txtTelefoneResidencial.getText());
         this.pessoa.setSexo(this.cbxSexo.getSelectedIndex() == 1);
         this.pessoa.setAtivo(!this.chkPessoaInativa.isSelected());
+        this.pessoa.setDataNascimento(this.dtcNascimento.getDate());
         
         return this.pessoa;
     }
@@ -573,35 +584,6 @@ public class FrmCadastroPessoa extends JFrame implements Observable {
             } else if(comp != null && !this.balloonTip.isVisible()) {
                 this.balloonTip = new BalloonTip(comp, obj.getString(0));
             }
-        });
-    }
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmCadastroPessoa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            new FrmCadastroPessoa().setVisible(true);
         });
     }
 
@@ -634,7 +616,7 @@ public class FrmCadastroPessoa extends JFrame implements Observable {
     private javax.swing.JPanel pnlGeral;
     private javax.swing.JPanel pnlImagem;
     private javax.swing.JScrollPane spObservacao;
-    private javax.swing.JTabbedPane toolBarGeral;
+    public javax.swing.JTabbedPane toolBarGeral;
     private javax.swing.JTextArea txaObservacao;
     private javax.swing.JTextField txtBairro;
     private javax.swing.JTextField txtCadastradoPor;

@@ -1,0 +1,438 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package br.com.tamarozzi.ui;
+
+import br.com.tamarozzi.controller.TarefaCategoriaController;
+import br.com.tamarozzi.controller.TarefaController;
+import br.com.tamarozzi.controller.UsuarioController;
+import br.com.tamarozzi.interfaces.Observable;
+import br.com.tamarozzi.interfaces.Observer;
+import br.com.tamarozzi.model.Pessoa;
+import br.com.tamarozzi.model.Tarefa;
+import br.com.tamarozzi.model.TarefaCategoria;
+import br.com.tamarozzi.model.TarefaComentario;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import net.java.balloontip.BalloonTip;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+/**
+ *
+ * @author Wilson
+ */
+public class FrmCadastroTarefa extends javax.swing.JFrame implements  Observable {
+
+    private List<Observer> observers;
+    
+    private TarefaController tarefaController;
+    private TarefaCategoriaController tarefaCategoriaController;
+    private UsuarioController usuarioController;
+    
+    private Tarefa tarefa = null;
+    private List<TarefaCategoria> categorias;
+    private List<Pessoa> responsaveis;
+    
+    private SimpleDateFormat dateFormat;
+    
+    private BalloonTip balloonTip;
+    
+    public FrmCadastroTarefa() {
+        preInitComponents("Cadastro de Tarefa");
+        initComponents();
+        setComponents();
+        
+        setComentariosEmBranco();
+    }
+    
+    public FrmCadastroTarefa(Tarefa tarefa) {
+        this.tarefa = tarefa;
+        
+        preInitComponents("Alterar Tarefa");
+        initComponents();
+        setComponents();
+        
+        setView(tarefa);
+    }
+    
+    private void preInitComponents(String title) {
+        this.setTitle(title);
+        
+        this.observers = new ArrayList<>(0);
+        this.categorias = new ArrayList<>(0);
+        this.tarefaController = new TarefaController();
+        this.tarefaCategoriaController = new TarefaCategoriaController();
+        this.usuarioController = new UsuarioController();
+        
+        this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    }
+    
+    private void setComponents() {
+        this.setLocationRelativeTo(null);
+        this.dtcVencimento.setDate(new Date());
+        
+        this.setTarefaCategorias();
+        this.setResponsaveis();
+    }
+    
+    private void setTarefaCategorias() {
+        this.categorias = tarefaCategoriaController.getAllTarefaCategoria("search", "");
+        
+        if(this.categorias != null) {
+            for(TarefaCategoria c : this.categorias) {
+                this.cbxCategoria.addItem(c.getDescricao());
+            }
+        }
+        
+        this.cbxCategoria.setSelectedIndex(-1);
+    }
+    
+    private void setResponsaveis() {
+        this.responsaveis = usuarioController.getAllUsuario();
+        
+        if(this.responsaveis != null) {
+            for(Pessoa u : this.responsaveis) {
+                this.cbxResponsavel.addItem(u.getNome());
+            }
+        }  
+    }
+    
+    private void setView(Tarefa t) {
+        this.txtDescricao.setText(t.getDescricao());
+        this.txtNumero.setText(t.getUUID());
+        this.chkConcluida.setSelected(t.isConcluida());
+        this.dtcVencimento.setDate(t.getDataVencimento());
+        
+        if(t.getCategoria() != null) {
+            this.cbxCategoria.setSelectedItem(t.getCategoria().getDescricao());
+        }
+        
+        if(t.getResponsavel() != null) {
+            this.cbxResponsavel.setSelectedItem(t.getResponsavel().getNome());
+        }
+        
+        if(t.getComentarios() != null) {
+            JPanel p = new JPanel();
+            p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+
+            for(TarefaComentario c : t.getComentarios()) {
+                JTextArea textArea = new JTextArea("Data: " + this.dateFormat.format(c.getDataCadastro()) + "\n\n " + c.getComentario());
+                textArea.setLineWrap(true);
+                textArea.setEditable(false);
+                
+                JScrollPane sp = new JScrollPane(textArea);
+                sp.setBorder(BorderFactory.createEmptyBorder(7, 0, 0, 0));
+                p.add(sp);
+            }
+        
+            this.spHistorico.setViewportView(p);
+        }
+    }
+    
+    private void setComentariosEmBranco() {
+       JTextArea textArea = new JTextArea("Nenhum comentário.");
+       textArea.setEditable(false);
+       this.spHistorico.setViewportView(textArea);
+    }
+    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        pnlGeral = new javax.swing.JPanel();
+        pnlComponentes = new javax.swing.JPanel();
+        lblNumero = new javax.swing.JLabel();
+        txtNumero = new javax.swing.JLabel();
+        lblTitulo = new javax.swing.JLabel();
+        txtDescricao = new javax.swing.JTextField();
+        lblCategoria = new javax.swing.JLabel();
+        cbxCategoria = new javax.swing.JComboBox<>();
+        btnCategoria = new javax.swing.JButton();
+        lblResponsavel = new javax.swing.JLabel();
+        cbxResponsavel = new javax.swing.JComboBox<>();
+        lblVencimento = new javax.swing.JLabel();
+        dtcVencimento = new com.toedter.calendar.JDateChooser("dd/MM/yyyy", "##/##/#####", '_');
+        spComentario = new javax.swing.JScrollPane();
+        txaComentario = new javax.swing.JTextArea();
+        chkConcluida = new javax.swing.JCheckBox();
+        spHistorico = new javax.swing.JScrollPane();
+        btnCancelar = new javax.swing.JButton();
+        btnCadastrar = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        pnlComponentes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        lblNumero.setText("Número:");
+
+        txtNumero.setText("1");
+        txtNumero.setPreferredSize(new java.awt.Dimension(50, 20));
+
+        lblTitulo.setText("Título:");
+
+        lblCategoria.setText("Categoria:");
+
+        btnCategoria.setText("...");
+        btnCategoria.setPreferredSize(new java.awt.Dimension(23, 23));
+
+        lblResponsavel.setText("Responsável:");
+
+        lblVencimento.setText("Vencimento:");
+
+        txaComentario.setColumns(20);
+        txaComentario.setLineWrap(true);
+        txaComentario.setRows(5);
+        spComentario.setViewportView(txaComentario);
+
+        chkConcluida.setText("Concluída");
+
+        javax.swing.GroupLayout pnlComponentesLayout = new javax.swing.GroupLayout(pnlComponentes);
+        pnlComponentes.setLayout(pnlComponentesLayout);
+        pnlComponentesLayout.setHorizontalGroup(
+            pnlComponentesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlComponentesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlComponentesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblNumero)
+                    .addComponent(lblTitulo)
+                    .addComponent(lblCategoria)
+                    .addComponent(lblVencimento))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlComponentesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlComponentesLayout.createSequentialGroup()
+                        .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(txtDescricao)
+                    .addGroup(pnlComponentesLayout.createSequentialGroup()
+                        .addGroup(pnlComponentesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(dtcVencimento, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+                            .addComponent(cbxCategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblResponsavel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbxResponsavel, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(pnlComponentesLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(pnlComponentesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlComponentesLayout.createSequentialGroup()
+                        .addComponent(chkConcluida)
+                        .addGap(416, 416, 416))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlComponentesLayout.createSequentialGroup()
+                        .addGroup(pnlComponentesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(spHistorico, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(spComentario))
+                        .addGap(10, 10, 10))))
+        );
+        pnlComponentesLayout.setVerticalGroup(
+            pnlComponentesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlComponentesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlComponentesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblNumero)
+                    .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlComponentesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(lblTitulo)
+                    .addComponent(txtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlComponentesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(lblCategoria)
+                    .addComponent(cbxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblResponsavel)
+                    .addComponent(cbxResponsavel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlComponentesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(dtcVencimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblVencimento))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(spComentario, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkConcluida)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(spHistorico, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+
+        btnCadastrar.setText("OK");
+        btnCadastrar.setPreferredSize(new java.awt.Dimension(77, 23));
+        btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCadastrarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlGeralLayout = new javax.swing.GroupLayout(pnlGeral);
+        pnlGeral.setLayout(pnlGeralLayout);
+        pnlGeralLayout.setHorizontalGroup(
+            pnlGeralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlGeralLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlGeralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pnlComponentes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGeralLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCancelar)))
+                .addContainerGap())
+        );
+        pnlGeralLayout.setVerticalGroup(
+            pnlGeralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGeralLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(pnlComponentes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlGeralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCancelar)
+                    .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlGeral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlGeral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
+        JSONObject errors = this.tarefaController.editTarefa(this.loadTarefa());
+        
+        if(errors != null) {
+            this.parseErrors(errors);
+        } else {
+            this.notifyObservers();
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnCadastrarActionPerformed
+
+    private Tarefa loadTarefa() {
+        
+        if(this.tarefa == null) {
+            this.tarefa = new Tarefa();
+        }
+        
+        this.tarefa.setDescricao(this.txtDescricao.getText());
+        this.tarefa.setResponsavel(this.responsaveis.get(this.cbxResponsavel.getSelectedIndex()));
+        this.tarefa.setCategoria(this.categorias.get(this.cbxCategoria.getSelectedIndex()));
+        this.tarefa.setDataVencimento(this.dtcVencimento.getDate());
+        
+        boolean concluida = this.chkConcluida.isSelected();
+        
+        /* FAZER ESSA REGRA COMO TRIGGER NO POSTGRES */
+        if(concluida) {
+            this.tarefa.setConcluida(concluida);
+            this.tarefa.setDataConclusao(new Date());
+        }
+        
+        if(!this.txaComentario.getText().isEmpty()) {
+            TarefaComentario tc = new TarefaComentario();
+            tc.setComentario(this.txaComentario.getText());
+
+            this.tarefa.addComentario(tc);
+        }
+        
+        return this.tarefa;        
+    }
+    
+    private void parseErrors(JSONObject errors) {
+        
+        errors.keys().forEachRemaining((String key) -> {
+            
+            JSONArray obj = errors.getJSONArray(key);
+
+            JComponent comp = null;
+            
+            switch(key) {
+                case "descricao":
+                    comp = this.txtDescricao;
+                break;
+            }
+            
+            if(this.balloonTip == null && comp != null) {
+                this.balloonTip = new BalloonTip(comp, obj.getString(0));
+            } else if(comp != null && !this.balloonTip.isVisible()) {
+                this.balloonTip = new BalloonTip(comp, obj.getString(0));
+            }
+        });
+    }
+    
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCadastrar;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnCategoria;
+    private javax.swing.JComboBox<String> cbxCategoria;
+    private javax.swing.JComboBox<String> cbxResponsavel;
+    private javax.swing.JCheckBox chkConcluida;
+    private com.toedter.calendar.JDateChooser dtcVencimento;
+    private javax.swing.JLabel lblCategoria;
+    private javax.swing.JLabel lblNumero;
+    private javax.swing.JLabel lblResponsavel;
+    private javax.swing.JLabel lblTitulo;
+    private javax.swing.JLabel lblVencimento;
+    private javax.swing.JPanel pnlComponentes;
+    private javax.swing.JPanel pnlGeral;
+    private javax.swing.JScrollPane spComentario;
+    private javax.swing.JScrollPane spHistorico;
+    private javax.swing.JTextArea txaComentario;
+    private javax.swing.JTextField txtDescricao;
+    private javax.swing.JLabel txtNumero;
+    // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void registerObserver(Observer ob) {
+        this.observers.add(ob);
+        System.out.println("** Sistema: Observado " + this.getClass().getName() + " - Observador " + ob.getClass().getName() + " está registrado.");
+    }
+
+    @Override
+    public void removeObserver(Observer ob) {
+        this.observers.remove(ob);
+        System.out.println("** Sistema: Observado " + this.getClass().getName() + " - Observador " + ob.getClass().getName() + " foi removido.");
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(Observer ob : this.observers) {
+            ob.update(this.tarefa);
+        }
+    }
+}

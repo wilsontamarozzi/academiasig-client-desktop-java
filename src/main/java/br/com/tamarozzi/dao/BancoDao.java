@@ -11,7 +11,7 @@ public interface BancoDao {
 
     public JSONObject edit(Banco banco);
 
-    public void delete(int bancoId);
+    public void delete(String bancoUUID);
     
     public Banco getBanco(Banco banco);
 

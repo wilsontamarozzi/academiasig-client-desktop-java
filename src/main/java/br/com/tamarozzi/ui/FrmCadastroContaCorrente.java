@@ -93,6 +93,7 @@ public class FrmCadastroContaCorrente extends javax.swing.JDialog implements Obs
         this.txtAgenciaDigito.setValue(new BigDecimal(c.getAgenciaDigito()));
         this.txtConta.setValue(new BigDecimal(c.getConta()));
         this.txtContaDigito.setValue(new BigDecimal(c.getContaDigito()));
+        this.chkAtivo.setSelected(c.isAtivo());
         
         if(c.getTitular() != null) {
             this.txtTitular.setText(c.getTitular().getNome());
@@ -129,6 +130,7 @@ public class FrmCadastroContaCorrente extends javax.swing.JDialog implements Obs
         txtContaDigito = new br.com.tamarozzi.util.JNumberFormatFieldUtil(new DecimalFormat("#"), 1);
         btnTitular = new javax.swing.JButton();
         btnBanco = new javax.swing.JButton();
+        chkAtivo = new javax.swing.JCheckBox();
         btnCancelar = new javax.swing.JButton();
         btnCadastrar = new javax.swing.JButton();
 
@@ -168,6 +170,9 @@ public class FrmCadastroContaCorrente extends javax.swing.JDialog implements Obs
             }
         });
 
+        chkAtivo.setSelected(true);
+        chkAtivo.setText("Ativa");
+
         javax.swing.GroupLayout pnlDetalhesLayout = new javax.swing.GroupLayout(pnlDetalhes);
         pnlDetalhes.setLayout(pnlDetalhesLayout);
         pnlDetalhesLayout.setHorizontalGroup(
@@ -181,7 +186,14 @@ public class FrmCadastroContaCorrente extends javax.swing.JDialog implements Obs
                     .addComponent(lblAgencia))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtDescricao)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDetalhesLayout.createSequentialGroup()
+                        .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtTitular)
+                            .addComponent(txtBanco))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnTitular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBanco, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(pnlDetalhesLayout.createSequentialGroup()
                         .addComponent(txtAgencia, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -191,16 +203,11 @@ public class FrmCadastroContaCorrente extends javax.swing.JDialog implements Obs
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtConta, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtContaDigito, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 49, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDetalhesLayout.createSequentialGroup()
-                        .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTitular)
-                            .addComponent(txtBanco))
+                        .addComponent(txtContaDigito, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlDetalhesLayout.createSequentialGroup()
+                        .addComponent(txtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnTitular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnBanco, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(chkAtivo)))
                 .addContainerGap())
         );
         pnlDetalhesLayout.setVerticalGroup(
@@ -209,7 +216,8 @@ public class FrmCadastroContaCorrente extends javax.swing.JDialog implements Obs
                 .addContainerGap()
                 .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDescricao)
-                    .addComponent(txtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chkAtivo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtTitular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -325,8 +333,15 @@ public class FrmCadastroContaCorrente extends javax.swing.JDialog implements Obs
         this.contaCorrente.setAgenciaDigito(this.txtAgenciaDigito.getValue().intValue());
         this.contaCorrente.setConta(this.txtConta.getValue().intValue());
         this.contaCorrente.setContaDigito(this.txtContaDigito.getValue().intValue());
-        this.contaCorrente.setTitular(titular);
-        this.contaCorrente.setBanco(banco);
+        this.contaCorrente.setAtivo(this.chkAtivo.isSelected());
+        
+        if(titular.getUUID() != null) {
+            this.contaCorrente.setTitular(titular);
+        }
+        
+        if(banco.getUUID() != null) {
+            this.contaCorrente.setBanco(banco);
+        }        
         
         return this.contaCorrente;
     }
@@ -406,6 +421,7 @@ public class FrmCadastroContaCorrente extends javax.swing.JDialog implements Obs
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnTitular;
+    private javax.swing.JCheckBox chkAtivo;
     private javax.swing.JLabel lblAgencia;
     private javax.swing.JLabel lblBanco;
     private javax.swing.JLabel lblConta;

@@ -7,17 +7,19 @@ package br.com.tamarozzi.controller;
 
 import br.com.tamarozzi.dao.UsuarioDao;
 import br.com.tamarozzi.dao.impl.UsuarioDaoImpl;
+import br.com.tamarozzi.model.Pessoa;
 import br.com.tamarozzi.model.Usuario;
+import java.util.List;
 
 /**
  *
  * @author Monde
  */
-public class AcessoRestritoController {
+public class UsuarioController {
 
     private final UsuarioDao usuarioDao;
 
-    public AcessoRestritoController() {
+    public UsuarioController() {
         this.usuarioDao = new UsuarioDaoImpl();
     }
 
@@ -28,5 +30,9 @@ public class AcessoRestritoController {
         user.setSenha(senha);
 
         return this.usuarioDao.autenticacao(user);
+    }
+    
+    public List<Pessoa> getAllUsuario() {
+        return this.usuarioDao.getAllUsuario();
     }
 }

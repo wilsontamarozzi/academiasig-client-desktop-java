@@ -39,8 +39,8 @@ import org.apache.http.util.EntityUtils;
 
 public final class HttpClientAPI {
 
-    //private static final String host = "http://localhost:8080/";
-    private static final String host = "http://academiasig-api.herokuapp.com/";
+    private static final String host = "http://localhost:8080/";
+    //private static final String host = "http://academiasig-api.herokuapp.com/";
 
     private static CredentialsProvider credentialsProvider;
 
@@ -98,6 +98,8 @@ public final class HttpClientAPI {
 
     public static String sendPost(String urlString, String content) {
 
+        System.out.println(content);
+        
         HttpPost postRequest = new HttpPost(host + urlString);
         postRequest.addHeader(HTTP.CONTENT_TYPE, "application/json");
         postRequest.setEntity(new StringEntity(content, StandardCharsets.UTF_8));
@@ -110,7 +112,9 @@ public final class HttpClientAPI {
     }
 
     public static String sendPut(String urlString, String content) {
-                
+        
+        System.out.println(content);
+        
         HttpPut putRequest = new HttpPut(host + urlString);
         putRequest.addHeader(HTTP.CONTENT_TYPE, "application/json");
         putRequest.setEntity(new StringEntity(content, StandardCharsets.UTF_8));
@@ -124,8 +128,8 @@ public final class HttpClientAPI {
 
     private static String executeRequest(HttpUriRequest request) {
 
-        System.out.println(request.getURI().toString());
-
+        System.out.println("** Sistema: " + request.getMethod() + " - " + request.getURI().toString());
+        
         String data = null;
 
         try {

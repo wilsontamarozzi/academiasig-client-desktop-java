@@ -11,7 +11,7 @@ public interface ContaDao {
 
     public JSONObject edit(Conta conta);
 
-    public void delete(int contaId);
+    public void delete(String contaUUID);
     
     public Conta getConta(Conta conta);
 

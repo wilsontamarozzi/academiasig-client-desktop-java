@@ -33,7 +33,7 @@ public class BancoController {
     }
 
     public JSONObject editBanco(Banco p) {
-        if (p.getId() > 0) {
+        if (p.getUUID() != null) {
             return this.bancoDao.edit(p);
         } else {
             return this.bancoDao.add(p);
@@ -50,7 +50,7 @@ public class BancoController {
 
         if (opcao == 0) {
             bancos.stream().forEach((p) -> {
-                this.bancoDao.delete(p.getId());
+                this.bancoDao.delete(p.getUUID());
             });
             
             return true;

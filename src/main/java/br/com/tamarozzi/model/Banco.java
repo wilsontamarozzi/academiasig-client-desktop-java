@@ -11,7 +11,7 @@ package br.com.tamarozzi.model;
  */
 public class Banco {
     
-    private int id;
+    private String UUID;
     private String nome;
     private String numero;
 
@@ -19,12 +19,12 @@ public class Banco {
         
     }
     
-    public int getId() {
-        return id;
+    public String getUUID() {
+        return UUID;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUUID(String UUID) {
+        this.UUID = UUID;
     }
 
     public String getNome() {

@@ -14,7 +14,7 @@ import java.math.BigDecimal;
  */
 public class Conta {
         
-    private int id;
+    private String UUID;
     private String descricao;
     private boolean ativo;
     private String tipoConta;
@@ -24,20 +24,20 @@ public class Conta {
         this.tipoConta = CONTA_CAIXA;
     }
     
-    public Conta(int id, String descricao, boolean ativo, String tipoConta, BigDecimal saldoInicial) {
-        this.id = id;
+    public Conta(String UUID, String descricao, boolean ativo, String tipoConta, BigDecimal saldoInicial) {
+        this.UUID = UUID;
         this.descricao = descricao;
         this.ativo = ativo;
         this.tipoConta = tipoConta;
         this.saldoInicial = saldoInicial;
     }
 
-    public int getId() {
-        return id;
+    public String getUUID() {
+        return UUID;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUUID(String UUID) {
+        this.UUID = UUID;
     }
 
     public String getDescricao() {

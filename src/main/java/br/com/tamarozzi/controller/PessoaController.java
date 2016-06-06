@@ -33,7 +33,7 @@ public class PessoaController {
     }
 
     public JSONObject editPessoa(Pessoa p) {
-        if (p.getId() > 0) {
+        if (p.getUUID() != null) {
             return this.pessoaDao.edit(p);
         } else {
             return this.pessoaDao.add(p);
@@ -50,7 +50,7 @@ public class PessoaController {
 
         if (opcao == 0) {
             pessoas.stream().forEach((p) -> {
-                this.pessoaDao.delete(p.getId());
+                this.pessoaDao.delete(p.getUUID());
             });
             
             return true;

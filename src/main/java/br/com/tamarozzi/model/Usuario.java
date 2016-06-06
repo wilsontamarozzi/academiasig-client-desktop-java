@@ -5,13 +5,16 @@
  */
 package br.com.tamarozzi.model;
 
+import br.com.tamarozzi.util.MD5EncodeUtil;
+
 /**
  *
  * @author Monde
  */
 public class Usuario {
 
-    private int id;
+    private String UUID;
+    private String pessoaUUID;
     private String nome;
     private String login;
     private String senha;
@@ -19,19 +22,20 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(int id, String nome, String login, String senha) {
-        this.id = id;
-        this.nome = nome;
-        this.login = login;
-        this.senha = senha;
+    public String getUUID() {
+        return UUID;
     }
 
-    public int getId() {
-        return id;
+    public void setUUID(String UUID) {
+        this.UUID = UUID;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public String getPessoaUUID() {
+        return pessoaUUID;
+    }
+
+    public void setPessoaUUID(String pessoaUUID) {
+        this.pessoaUUID = pessoaUUID;
     }
 
     public String getNome() {
@@ -56,5 +60,15 @@ public class Usuario {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+    
+    public boolean alterarSenha(String novaSenha, String senhaRepetida) {
+        
+        if(novaSenha.equals(senhaRepetida)) {
+            this.senha = MD5EncodeUtil.encode(novaSenha);
+            return true;
+        }
+        
+        return false;
     }
 }

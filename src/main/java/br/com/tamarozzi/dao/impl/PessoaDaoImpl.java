@@ -26,7 +26,12 @@ public class PessoaDaoImpl implements PessoaDao {
     private final Gson gson;
     
     public PessoaDaoImpl() {
-        this.gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).setPrettyPrinting().create();
+        this.gson = new GsonBuilder().
+            //setDateFormat(DateFormat.FULL, DateFormat.FULL).
+            setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").
+            setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).
+            setPrettyPrinting().
+            create();
     }
     
     @Override
@@ -35,7 +40,7 @@ public class PessoaDaoImpl implements PessoaDao {
         String response = HttpClientAPI.sendPost("api/v1/pessoas", pessoaJson);
         
         Pessoa pessoaNew = this.gson.fromJson(response, Pessoa.class);
-        ClassMergeUtil.merge(pessoa, pessoaNew);
+        pessoa.setUUID(pessoaNew.getUUID());
         
         JSONObject errors = new JSONObject(response);
         
@@ -46,7 +51,7 @@ public class PessoaDaoImpl implements PessoaDao {
     public JSONObject edit(Pessoa pessoa) {
        
         String pessoaJson = gson.toJson(pessoa);
-        String response = HttpClientAPI.sendPut("api/v1/pessoas/" + pessoa.getId(), pessoaJson);
+        String response = HttpClientAPI.sendPut("api/v1/pessoas/" + pessoa.getUUID(), pessoaJson);
         
         JSONObject errors = new JSONObject(response);
         
@@ -54,7 +59,7 @@ public class PessoaDaoImpl implements PessoaDao {
     }
 
     @Override
-    public void delete(int pessoaId) {
+    public void delete(String pessoaId) {
         
         String response = HttpClientAPI.sendDelete("api/v1/pessoas/" + pessoaId);
         
@@ -66,10 +71,13 @@ public class PessoaDaoImpl implements PessoaDao {
     @Override
     public Pessoa getPessoa(Pessoa pessoa) {
         
-        String response = HttpClientAPI.sendGet("api/v1/pessoas/" + pessoa.getId());
+        String response = HttpClientAPI.sendGet("api/v1/pessoas/" + pessoa.getUUID());
         
         Pessoa pessoaNew = this.gson.fromJson(response, Pessoa.class);
-        ClassMergeUtil.merge(pessoa, pessoaNew);
+        
+        if(pessoaNew != null) {
+            ClassMergeUtil.merge(pessoa, pessoaNew);
+        }
         
         return pessoa;
     }

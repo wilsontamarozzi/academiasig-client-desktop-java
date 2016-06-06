@@ -48,7 +48,7 @@ public class HttpClientAPITest {
     /**
      * Test of autenticacao method, of class HttpClientAPI.
      */
-    @Test
+    //@Test
     public void testAutenticacao() {
         System.out.println("autenticacao");
         
@@ -60,7 +60,7 @@ public class HttpClientAPITest {
     /**
      * Test of sendGet method, of class HttpClientAPI.
      */
-    @Test
+    //@Test
     public void testSendGet() {
         System.out.println("sendGet");
         String urlString = "v1/pessoas/1";
@@ -73,7 +73,7 @@ public class HttpClientAPITest {
     /**
      * Test of sendPost method, of class HttpClientAPI.
      */
-    @Test
+    //@Test
     public void testSendPost() {
         System.out.println("sendPost");
         String urlString = "v1/usuarios/auth";

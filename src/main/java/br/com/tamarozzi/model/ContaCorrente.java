@@ -18,8 +18,8 @@ public class ContaCorrente extends Conta {
     private int agenciaDigito;
     private int conta;
     private int contaDigito;
-    private int titularId;
-    private int bancoId;
+    private String titularUUID;
+    private String bancoUUID;
     private Pessoa titular;
     private Banco banco;
 
@@ -29,14 +29,14 @@ public class ContaCorrente extends Conta {
         this.banco = new Banco();
     }
 
-    public ContaCorrente(int agencia, int agenciaDigito, int conta, int contaDigito, int titularId, int bancoId, Pessoa titular, Banco banco, int id, String descricao, boolean ativo, String tipoConta, BigDecimal saldoInicial) {
-        super(id, descricao, ativo, tipoConta, saldoInicial);
+    public ContaCorrente(int agencia, int agenciaDigito, int conta, int contaDigito, String titularUUID, String bancoUUID, Pessoa titular, Banco banco, String UUID, String descricao, boolean ativo, String tipoConta, BigDecimal saldoInicial) {
+        super(UUID, descricao, ativo, tipoConta, saldoInicial);
         this.agencia = agencia;
         this.agenciaDigito = agenciaDigito;
         this.conta = conta;
         this.contaDigito = contaDigito;
-        this.titularId = titularId;
-        this.bancoId = bancoId;
+        this.titularUUID = titularUUID;
+        this.bancoUUID = bancoUUID;
         this.titular = titular;
         this.banco = banco;
     }
@@ -73,20 +73,20 @@ public class ContaCorrente extends Conta {
         this.contaDigito = contaDigito;
     }
 
-    public int getTitularId() {
-        return titularId;
+    public String getTitularUUID() {
+        return titularUUID;
     }
 
-    public void setTitularId(int titularId) {
-        this.titularId = titularId;
+    public void setTitularUUID(String titularUUID) {
+        this.titularUUID = titularUUID;
     }
 
-    public int getBancoId() {
-        return bancoId;
+    public String getBancoUUID() {
+        return bancoUUID;
     }
 
-    public void setBancoId(int bancoId) {
-        this.bancoId = bancoId;
+    public void setBancoUUID(String bancoUUID) {
+        this.bancoUUID = bancoUUID;
     }
 
     public Pessoa getTitular() {
@@ -95,7 +95,7 @@ public class ContaCorrente extends Conta {
 
     public void setTitular(Pessoa titular) {
         this.titular = titular;
-        this.setTitularId(titular.getId());
+        this.setTitularUUID(titular.getUUID());
     }
 
     public Banco getBanco() {
@@ -104,6 +104,6 @@ public class ContaCorrente extends Conta {
 
     public void setBanco(Banco banco) {
         this.banco = banco;
-        setBancoId(banco.getId());
+        this.setBancoUUID(banco.getUUID());
     }
 }

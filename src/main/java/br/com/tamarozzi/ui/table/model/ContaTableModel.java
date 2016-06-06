@@ -23,7 +23,7 @@ public class ContaTableModel extends AbstractTableModel implements MyAbstractTab
 
     private List<Object> contas;
 
-    private final String[] colNomes = {"#", "Descrição", "Tipo Conta", "Inativo"};
+    private final String[] colNomes = {"#", "Descrição", "Tipo Conta", "Ativo"};
 
     private final Class<?>[] colTipo = {String.class, String.class, String.class, Boolean.class};
 
@@ -67,7 +67,7 @@ public class ContaTableModel extends AbstractTableModel implements MyAbstractTab
             case 2:
                 return c.getTipoConta();
             case 3:
-                return !c.isAtivo();
+                return c.isAtivo();
             default:
                 return null;
         }

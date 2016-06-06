@@ -15,7 +15,6 @@ import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,7 +31,11 @@ public class ContaDaoImpl implements ContaDao {
     private final Gson gson;
     
     public ContaDaoImpl() {
-        this.gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).setPrettyPrinting().create();
+        this.gson = new GsonBuilder().
+            setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").
+            setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).
+            setPrettyPrinting().
+            create();
     }
     
     @Override
@@ -42,7 +45,7 @@ public class ContaDaoImpl implements ContaDao {
         String response = HttpClientAPI.sendPost("api/v1/contas", contaJson);
         
         Conta contaNew = this.gson.fromJson(response, Conta.class);
-        conta.setId(contaNew.getId());
+        conta.setUUID(contaNew.getUUID());
        
         JSONObject errors = new JSONObject(response);
 
@@ -53,7 +56,7 @@ public class ContaDaoImpl implements ContaDao {
     public JSONObject edit(Conta conta) {
        
         String contaJson = gson.toJson(conta);
-        String response = HttpClientAPI.sendPut("api/v1/contas/" + conta.getId(), contaJson);
+        String response = HttpClientAPI.sendPut("api/v1/contas/" + conta.getUUID(), contaJson);
         
         JSONObject errors = new JSONObject(response);
         
@@ -61,9 +64,9 @@ public class ContaDaoImpl implements ContaDao {
     }
 
     @Override
-    public void delete(int contaId) {
+    public void delete(String contaUUID) {
         
-        String response = HttpClientAPI.sendDelete("api/v1/contas/" + contaId);
+        String response = HttpClientAPI.sendDelete("api/v1/contas/" + contaUUID);
         
         if(response != null) {
             JOptionPane.showMessageDialog(null, "Houve um erro ao excluir o(s) registro(s)");
@@ -73,18 +76,22 @@ public class ContaDaoImpl implements ContaDao {
     @Override
     public Conta getConta(Conta conta) {
         
-        String response = HttpClientAPI.sendGet("api/v1/contas/" + conta.getId());
+        String response = HttpClientAPI.sendGet("api/v1/contas/" + conta.getUUID());
         
         Conta contaNew;
         
         switch(conta.getTipoConta()) {
             case CONTA_CAIXA:
                 contaNew = this.gson.fromJson(response, Conta.class);
-                ClassMergeUtil.merge(conta, contaNew);
+                if(contaNew != null) {
+                    ClassMergeUtil.merge(conta, contaNew);
+                }
             break;
             case CONTA_CORRENTE:
                 contaNew = this.gson.fromJson(response, ContaCorrente.class);
-                ClassMergeUtil.merge(conta, contaNew);
+                if(contaNew != null) {
+                    ClassMergeUtil.merge(conta, contaNew);
+                }
             break;
         }
         
@@ -110,7 +117,7 @@ public class ContaDaoImpl implements ContaDao {
             }
         }
         
-        contas.sort(Comparator.comparing(c -> c.getId()));
+        //contas.sort(Comparator.comparing(c -> c.getUUID()));
         
         return contas;
     }

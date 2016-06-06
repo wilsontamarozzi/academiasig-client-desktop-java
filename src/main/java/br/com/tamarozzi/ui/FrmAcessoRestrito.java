@@ -5,7 +5,7 @@
  */
 package br.com.tamarozzi.ui;
 
-import br.com.tamarozzi.controller.AcessoRestritoController;
+import br.com.tamarozzi.controller.UsuarioController;
 import java.awt.event.KeyEvent;
 
 /**
@@ -14,15 +14,16 @@ import java.awt.event.KeyEvent;
  */
 public class FrmAcessoRestrito extends javax.swing.JFrame {
 
-    private final AcessoRestritoController acessoRestritoController;
+    private final UsuarioController acessoRestritoController;
 
-    /**
-     * Creates new form FrmPrincipal
-     */
     public FrmAcessoRestrito() {
-        this.acessoRestritoController = new AcessoRestritoController();
+        this.acessoRestritoController = new UsuarioController();
 
         initComponents();
+        setComponents();
+    }
+    
+    private void setComponents() {
         this.setLocationRelativeTo(null);
     }
 

@@ -5,6 +5,8 @@
  */
 package br.com.tamarozzi.model;
 
+import java.util.Date;
+
 /**
  *
  * @author Panda
@@ -12,14 +14,17 @@ package br.com.tamarozzi.model;
 public class Pessoa {
 
     /* Atributos Pessoas */
-    private int id;
+    private String UUID;
     private int logradouroId;
+    private int codigo;
     private String nome;
     private String tipoPessoa;
     private String observacao;
     private String suporte;
     private String email;
-    private boolean ativo = true; 
+    private boolean ativo = true;
+    private Date dataCadastro;
+    private Pessoa CadastradoPor;
         
     /* Atributos de Endereço */
     private String numero;
@@ -34,6 +39,7 @@ public class Pessoa {
     private boolean sexo;
     private boolean usuarioSistema = false;
     private Usuario usuario;
+    private Date dataNascimento;
     
     /* Atributos Pessoa Jurídicas */
     private String telefoneEmpresa;
@@ -51,12 +57,12 @@ public class Pessoa {
         
     }
 
-    public int getId() {
-        return id;
+    public String getUUID() {
+        return UUID;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUUID(String UUID) {
+        this.UUID = UUID;
     }
 
     public int getLogradouroId() {
@@ -65,6 +71,14 @@ public class Pessoa {
 
     public void setLogradouroId(int logradouroId) {
         this.logradouroId = logradouroId;
+    }
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
     }
 
     public String getNome() {
@@ -113,6 +127,14 @@ public class Pessoa {
 
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
+    }
+
+    public Pessoa getCadastradoPor() {
+        return CadastradoPor;
+    }
+
+    public void setCadastradoPor(Pessoa CadastradoPor) {
+        this.CadastradoPor = CadastradoPor;
     }
 
     public String getCpf() {
@@ -282,7 +304,23 @@ public class Pessoa {
     public void setLogradouro(Logradouro logradouro) {
         this.logradouro = logradouro;
     }
-        
+
+    public Date getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(Date dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
+
+    public Date getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(Date dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+    
     private String replace(String text) {
         if(text != null) {
             String caracter[] = {"(", ")", "-", ".", " "};

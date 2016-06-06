@@ -96,7 +96,11 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="txtTitular" pref="302" max="32767" attributes="0"/>
-                              <Component id="txtDescricao" max="32767" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Component id="txtDescricao" max="32767" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="chkAtivo" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -109,6 +113,7 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="lblDescricao" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="txtDescricao" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="chkAtivo" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -134,6 +139,12 @@
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtTitular">
+                </Component>
+                <Component class="javax.swing.JCheckBox" name="chkAtivo">
+                  <Properties>
+                    <Property name="selected" type="boolean" value="true"/>
+                    <Property name="text" type="java.lang.String" value="Ativa"/>
+                  </Properties>
                 </Component>
               </SubComponents>
             </Container>

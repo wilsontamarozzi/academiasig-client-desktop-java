@@ -35,7 +35,7 @@ public class BancoDaoImpl implements BancoDao {
         String response = HttpClientAPI.sendPost("api/v1/bancos", bancoJson);
         
         Banco bancoNew = this.gson.fromJson(response, Banco.class);
-        ClassMergeUtil.merge(banco, bancoNew);
+        banco.setUUID(bancoNew.getUUID());
         
         JSONObject errors = new JSONObject(response);
         
@@ -46,7 +46,7 @@ public class BancoDaoImpl implements BancoDao {
     public JSONObject edit(Banco banco) {
        
         String bancoJson = gson.toJson(banco);
-        String response = HttpClientAPI.sendPut("api/v1/bancos/" + banco.getId(), bancoJson);
+        String response = HttpClientAPI.sendPut("api/v1/bancos/" + banco.getUUID(), bancoJson);
         
         JSONObject errors = new JSONObject(response);
         
@@ -54,9 +54,9 @@ public class BancoDaoImpl implements BancoDao {
     }
 
     @Override
-    public void delete(int bancoId) {
+    public void delete(String bancoUUID) {
         
-        String response = HttpClientAPI.sendDelete("api/v1/bancos/" + bancoId);
+        String response = HttpClientAPI.sendDelete("api/v1/bancos/" + bancoUUID);
         
         if(response != null) {
             JOptionPane.showMessageDialog(null, "Houve um erro ao excluir o(s) registro(s)");
@@ -66,10 +66,13 @@ public class BancoDaoImpl implements BancoDao {
     @Override
     public Banco getBanco(Banco banco) {
         
-        String response = HttpClientAPI.sendGet("api/v1/bancos/" + banco.getId());
+        String response = HttpClientAPI.sendGet("api/v1/bancos/" + banco.getUUID());
         
         Banco bancoNew = this.gson.fromJson(response, Banco.class);
-        ClassMergeUtil.merge(banco, bancoNew);
+        
+        if(bancoNew != null) {
+            ClassMergeUtil.merge(banco, bancoNew);
+        }
         
         return banco;
     }

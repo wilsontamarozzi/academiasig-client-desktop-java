@@ -11,7 +11,7 @@ public interface PessoaDao {
 
     public JSONObject edit(Pessoa pessoa);
 
-    public void delete(int pessoaId);
+    public void delete(String pessoaId);
     
     public Pessoa getPessoa(Pessoa pessoa);
 

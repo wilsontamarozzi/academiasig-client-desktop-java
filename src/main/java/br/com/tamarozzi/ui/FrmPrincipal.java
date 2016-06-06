@@ -27,7 +27,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     
     private void setComponents() {
         this.tabMenuGeral.removeAll();
-        //this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setBothTool();
         
         this.tabPessoa.registerObserver(new Observer() {
@@ -50,6 +50,20 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 tabConta.editItem();
             }
         });
+        
+        this.tabTarefa.registerObserver(new Observer() {
+            @Override
+            public void update(Object obj) {
+                tabTarefa.editItem();
+            }
+        });
+        
+        this.tabLancamentoCategoria.registerObserver(new Observer() {
+            @Override
+            public void update(Object obj) {
+                tabLancamentoCategoria.editItem();
+            }
+        });
     }
     
     private void setBothTool() {
@@ -70,19 +84,28 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnPessoa = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JToolBar.Separator();
         btnMensalidade = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        btnLancamento = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
+        btnTarefas = new javax.swing.JButton();
         tabMenuGeral = new javax.swing.JTabbedPane();
         tabPessoa = new br.com.tamarozzi.ui.panel.PanelPessoa();
         tabBanco = new br.com.tamarozzi.ui.panel.PanelBanco();
         tabConta = new br.com.tamarozzi.ui.panel.PanelConta();
+        tabTarefa = new br.com.tamarozzi.ui.panel.PanelTarefa();
+        tabLancamentoCategoria = new br.com.tamarozzi.ui.panel.PanelLancamentoCategoria();
         bothBar = new javax.swing.JSplitPane();
         lblVersao = new javax.swing.JLabel();
         lblUsuario = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         menuCadastro = new javax.swing.JMenu();
         itemBancoCadastro = new javax.swing.JMenuItem();
+        itemLancamentoCategoria = new javax.swing.JMenuItem();
         itemContaCadastro = new javax.swing.JMenuItem();
         itemPessoaCadastro = new javax.swing.JMenuItem();
+        itemTarefaCadastro = new javax.swing.JMenuItem();
         menuFerramenta = new javax.swing.JMenu();
+        itemAlterarSenha = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("AcademiaSIG - Principal");
@@ -105,18 +128,46 @@ public class FrmPrincipal extends javax.swing.JFrame {
         toolBarGeral.add(btnPessoa);
         toolBarGeral.add(jSeparator4);
 
-        btnMensalidade.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/calendario-icon.png"))); // NOI18N
+        btnMensalidade.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/event-icon.png"))); // NOI18N
         btnMensalidade.setText("Mensalidades");
         btnMensalidade.setFocusable(false);
         btnMensalidade.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnMensalidade.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBarGeral.add(btnMensalidade);
+        toolBarGeral.add(jSeparator1);
+
+        btnLancamento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/dollar-icon.png"))); // NOI18N
+        btnLancamento.setText("Contas a Pagar / Receber");
+        btnLancamento.setFocusable(false);
+        btnLancamento.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnLancamento.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnLancamento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLancamentoActionPerformed(evt);
+            }
+        });
+        toolBarGeral.add(btnLancamento);
+        toolBarGeral.add(jSeparator2);
+
+        btnTarefas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/alarm-clock-icon.png"))); // NOI18N
+        btnTarefas.setText("Tarefas");
+        btnTarefas.setFocusable(false);
+        btnTarefas.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnTarefas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnTarefas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTarefasActionPerformed(evt);
+            }
+        });
+        toolBarGeral.add(btnTarefas);
 
         tabMenuGeral.addTab("Pessoas", tabPessoa);
         tabMenuGeral.addTab("Bancos", tabBanco);
 
         tabConta.setName("Contas"); // NOI18N
         tabMenuGeral.addTab("Contas", tabConta);
+        tabMenuGeral.addTab("Tarefas", tabTarefa);
+        tabMenuGeral.addTab("Categorias", tabLancamentoCategoria);
 
         bothBar.setDividerSize(3);
         bothBar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -146,6 +197,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addComponent(bothBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        tabMenuGeral.getAccessibleContext().setAccessibleName("tabMenuGeral");
+
         menuCadastro.setText("Cadastro");
 
         itemBancoCadastro.setText("Bancos");
@@ -155,6 +208,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
         menuCadastro.add(itemBancoCadastro);
+
+        itemLancamentoCategoria.setText("Categorias");
+        itemLancamentoCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemLancamentoCategoriaActionPerformed(evt);
+            }
+        });
+        menuCadastro.add(itemLancamentoCategoria);
 
         itemContaCadastro.setText("Contas");
         itemContaCadastro.addActionListener(new java.awt.event.ActionListener() {
@@ -173,9 +234,28 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         menuCadastro.add(itemPessoaCadastro);
 
+        itemTarefaCadastro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/alarm-clock-icon.png"))); // NOI18N
+        itemTarefaCadastro.setText("Tarefas");
+        itemTarefaCadastro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemTarefaCadastroActionPerformed(evt);
+            }
+        });
+        menuCadastro.add(itemTarefaCadastro);
+
         menuBar.add(menuCadastro);
 
         menuFerramenta.setText("Ferramentas");
+
+        itemAlterarSenha.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/senha-icon-small.png"))); // NOI18N
+        itemAlterarSenha.setText("Alterar Senha");
+        itemAlterarSenha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemAlterarSenhaActionPerformed(evt);
+            }
+        });
+        menuFerramenta.add(itemAlterarSenha);
+
         menuBar.add(menuFerramenta);
 
         setJMenuBar(menuBar);
@@ -209,6 +289,31 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void itemContaCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemContaCadastroActionPerformed
         this.addTabMenuGeral(this.tabConta);
     }//GEN-LAST:event_itemContaCadastroActionPerformed
+
+    private void itemAlterarSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAlterarSenhaActionPerformed
+//        FrmAlterarSenha frmAlterarSenha = new FrmAlterarSenha(UsuarioLogado.getInstance().getUsuario());
+//        frmAlterarSenha.setVisible(true);
+           FrmCadastroPessoa f = new FrmCadastroPessoa(UsuarioLogado.getInstance());
+           f.setVisible(true);
+           f.toolBarGeral.setSelectedIndex(0);
+    }//GEN-LAST:event_itemAlterarSenhaActionPerformed
+
+    private void btnTarefasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTarefasActionPerformed
+        this.addTabMenuGeral(this.tabTarefa);
+        //this.tabTarefa.setView();
+    }//GEN-LAST:event_btnTarefasActionPerformed
+
+    private void itemTarefaCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemTarefaCadastroActionPerformed
+        this.addTabMenuGeral(this.tabTarefa);
+    }//GEN-LAST:event_itemTarefaCadastroActionPerformed
+
+    private void btnLancamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLancamentoActionPerformed
+        
+    }//GEN-LAST:event_btnLancamentoActionPerformed
+
+    private void itemLancamentoCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemLancamentoCategoriaActionPerformed
+        this.addTabMenuGeral(this.tabLancamentoCategoria);
+    }//GEN-LAST:event_itemLancamentoCategoriaActionPerformed
         
     public void addTabMenuGeral(JPanel p) {
         int index = this.tabMenuGeral.indexOfComponent(p);
@@ -223,42 +328,20 @@ public class FrmPrincipal extends javax.swing.JFrame {
         this.tabMenuGeral.setSelectedComponent(p);
     }
     
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            new FrmPrincipal().setVisible(true);
-        });
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSplitPane bothBar;
+    private javax.swing.JButton btnLancamento;
     private javax.swing.JButton btnMensalidade;
     private javax.swing.JButton btnPessoa;
+    private javax.swing.JButton btnTarefas;
+    private javax.swing.JMenuItem itemAlterarSenha;
     private javax.swing.JMenuItem itemBancoCadastro;
     private javax.swing.JMenuItem itemContaCadastro;
+    private javax.swing.JMenuItem itemLancamentoCategoria;
     private javax.swing.JMenuItem itemPessoaCadastro;
+    private javax.swing.JMenuItem itemTarefaCadastro;
+    private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JLabel lblUsuario;
     private javax.swing.JLabel lblVersao;
@@ -268,8 +351,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel pnlGeral;
     private br.com.tamarozzi.ui.panel.PanelBanco tabBanco;
     private br.com.tamarozzi.ui.panel.PanelConta tabConta;
+    private br.com.tamarozzi.ui.panel.PanelLancamentoCategoria tabLancamentoCategoria;
     private javax.swing.JTabbedPane tabMenuGeral;
     private br.com.tamarozzi.ui.panel.PanelPessoa tabPessoa;
+    private br.com.tamarozzi.ui.panel.PanelTarefa tabTarefa;
     private javax.swing.JToolBar toolBarGeral;
     // End of variables declaration//GEN-END:variables
 }

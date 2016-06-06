@@ -227,7 +227,7 @@ public class PanelBanco extends javax.swing.JPanel implements Observable, Observ
         
         if(bancos != null) {
             if(this.bancoController.deleteBanco(bancos)) {
-                this.tableBanco.removeItem(bancos);
+                this.tableBanco.removeItens((List<Object>) (Object) bancos);
             }
         }
     }

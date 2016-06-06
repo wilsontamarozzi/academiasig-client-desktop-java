@@ -59,6 +59,7 @@ public class FrmCadastroConta extends javax.swing.JDialog implements Observable 
     
     private void setView(Conta c) {
         this.txtDescricao.setText(c.getDescricao());
+        this.chkAtivo.setSelected(c.isAtivo());
     }
 
     /**
@@ -77,6 +78,7 @@ public class FrmCadastroConta extends javax.swing.JDialog implements Observable 
         txtDescricao = new javax.swing.JTextField();
         lblTitular = new javax.swing.JLabel();
         txtTitular = new javax.swing.JTextField();
+        chkAtivo = new javax.swing.JCheckBox();
         btnCancelar = new javax.swing.JButton();
         btnCadastrar = new javax.swing.JButton();
 
@@ -87,6 +89,9 @@ public class FrmCadastroConta extends javax.swing.JDialog implements Observable 
         lblDescricao.setText("Descrição:");
 
         lblTitular.setText("Titular:");
+
+        chkAtivo.setSelected(true);
+        chkAtivo.setText("Ativa");
 
         javax.swing.GroupLayout pnlDetalhesLayout = new javax.swing.GroupLayout(pnlDetalhes);
         pnlDetalhes.setLayout(pnlDetalhesLayout);
@@ -100,7 +105,10 @@ public class FrmCadastroConta extends javax.swing.JDialog implements Observable 
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtTitular, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
-                    .addComponent(txtDescricao))
+                    .addGroup(pnlDetalhesLayout.createSequentialGroup()
+                        .addComponent(txtDescricao)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(chkAtivo)))
                 .addContainerGap())
         );
         pnlDetalhesLayout.setVerticalGroup(
@@ -109,7 +117,8 @@ public class FrmCadastroConta extends javax.swing.JDialog implements Observable 
                 .addContainerGap()
                 .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDescricao)
-                    .addComponent(txtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chkAtivo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlDetalhesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtTitular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -199,6 +208,7 @@ public class FrmCadastroConta extends javax.swing.JDialog implements Observable 
         }
         
         this.conta.setDescricao(this.txtDescricao.getText());
+        this.conta.setAtivo(this.chkAtivo.isSelected());
         
         return this.conta;
     }
@@ -271,6 +281,7 @@ public class FrmCadastroConta extends javax.swing.JDialog implements Observable 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JCheckBox chkAtivo;
     private javax.swing.JLabel lblDescricao;
     private javax.swing.JLabel lblTitular;
     private javax.swing.JPanel pnlDetalhes;
