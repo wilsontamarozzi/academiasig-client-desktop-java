@@ -11,32 +11,27 @@
 package br.com.tamarozzi.ui.table.model;
 
 import br.com.tamarozzi.interfaces.MyAbstractTableModel;
-import br.com.tamarozzi.model.Tarefa;
+import br.com.tamarozzi.model.LancamentoCategoria;
+import br.com.tamarozzi.util.MoneyFormatUtil;
 import java.awt.Color;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
-public class TarefaTableModel extends AbstractTableModel implements MyAbstractTableModel {
-
-    private SimpleDateFormat dateFormat;
+public class LancamentoCategoriaTableModel extends AbstractTableModel implements MyAbstractTableModel {
     
-    private List<Object> tarefas;
+    private List<Object> lancamentoCategorias;
     
     private List<Color> rowColours;
 
-    private final String[] colNomes = {"#", "Categoria", "Descrição", "Responsável", "Data Cadastro", "Data Vencimento", "Data Conclusão", "Concluída"};
+    private final String[] colNomes = {"#", "Grupo - Categoria", "Valor"};
 
-    private final Class<?>[] colTipo = {String.class, String.class, String.class, String.class, String.class, String.class, String.class, Boolean.class};
+    private final Class<?>[] colTipo = {String.class, String.class, String.class};
 
-    public TarefaTableModel() {
-        this.tarefas = new ArrayList<>(0);
+    public LancamentoCategoriaTableModel() {
+        this.lancamentoCategorias = new ArrayList<>(0);
         this.rowColours = new ArrayList<>(0);
-        
-        this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }
     
     public Color getRowColour(int row) {
@@ -60,61 +55,37 @@ public class TarefaTableModel extends AbstractTableModel implements MyAbstractTa
 
     @Override
     public int getRowCount() {
-        if (this.tarefas == null) {
+        if (this.lancamentoCategorias == null) {
             return 0;
         }
 
-        return this.tarefas.size();
+        return this.lancamentoCategorias.size();
     }
 
     @Override
     public Object getValueAt(int linha, int coluna) {
-        Tarefa object = (Tarefa) this.tarefas.get(linha);
+        LancamentoCategoria object = (LancamentoCategoria) this.lancamentoCategorias.get(linha);
 
-        this.checkTask(linha, object);
+        this.setColor(linha, object);
         
         switch (coluna) {
             case 0:
                 return "*";
             case 1:
-                return object.getCategoria().getDescricao();
+                return object.getCategoria().getNome();
             case 2:
-                return object.getDescricao();
-            case 3:
-                return object.getResponsavel().getNome();
-            case 4:
-                return this.dateFormat.format(object.getDataCadastro());
-            case 5:
-                return this.dateFormat.format(object.getDataVencimento());
-            case 6:
-                if(object.getDataConclusao() == null) {
-                    return "";
-                }
-                
-                return this.dateFormat.format(object.getDataConclusao());
-            case 7:
-                return object.isConcluida();
+                return MoneyFormatUtil.formatReal(object.getValor());
             default:
                 return null;
         }
     }
     
-    public void checkTask(int row, Tarefa tarefa) {
-        
-        if(tarefa.isConcluida()) {
-            this.rowColours.add(row, Color.GRAY);
-        } else {        
-            if(tarefa.getDataVencimento().before(new Date())) {
-                this.rowColours.add(row, Color.RED);
-            }
-            
-            if(tarefa.getDataVencimento().after(new Date())) {
-                this.rowColours.add(row, Color.BLACK);      
-            }
-            
-            if(tarefa.getDataVencimento().equals(new Date())) {
-                this.rowColours.add(row, Color.BLUE);
-            }
+    public void setColor(int row, LancamentoCategoria lancamentoCategoria) {
+               
+        if(lancamentoCategoria.getCategoria().getTipo().equalsIgnoreCase("Despesa")) {
+            this.rowColours.add(row, Color.RED);
+        } else {
+            this.rowColours.add(row, Color.BLACK);      
         }
     }
 
@@ -126,44 +97,44 @@ public class TarefaTableModel extends AbstractTableModel implements MyAbstractTa
     @Override
     public void reload(List<Object> itens) {
         this.rowColours = new ArrayList<>(0);
-        this.tarefas = new ArrayList<>(0);
-        this.tarefas.addAll(itens);
+        this.lancamentoCategorias = new ArrayList<>(0);
+        this.lancamentoCategorias.addAll(itens);
         
         fireTableDataChanged();
     }
 
     @Override
     public void addItem(Object item) {
-        Collections.reverse(tarefas);
-        this.tarefas.add(item);
-        Collections.reverse(tarefas);
+        Collections.reverse(lancamentoCategorias);
+        this.lancamentoCategorias.add(item);
+        Collections.reverse(lancamentoCategorias);
         
         fireTableDataChanged();
     }
 
     @Override
     public void addItens(List<Object> itens) {
-        this.tarefas.addAll(itens);
+        this.lancamentoCategorias.addAll(itens);
         
         fireTableDataChanged();
     }
 
     @Override
     public void removeItem(Object item) {
-        this.tarefas.remove(item);
+        this.lancamentoCategorias.remove(item);
         
         fireTableDataChanged();
     }
 
     @Override
     public void removeItens(List<Object> itens) {
-        this.tarefas.removeAll(itens);
+        this.lancamentoCategorias.removeAll(itens);
         
         fireTableDataChanged();
     }
 
     @Override
     public Object getItemAt(int index) {
-        return this.tarefas.get(index);
+        return this.lancamentoCategorias.get(index);
     }    
 }

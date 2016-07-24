@@ -6,8 +6,8 @@
 package br.com.tamarozzi.ui.treeTable.model;
 
 import br.com.tamarozzi.interfaces.MyAbstractTableModel;
-import br.com.tamarozzi.model.LancamentoCategoria;
-import br.com.tamarozzi.model.LancamentoCategoriaGrupo;
+import br.com.tamarozzi.model.FinanceiroCategoria;
+import br.com.tamarozzi.model.FinanceiroCategoriaGrupo;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -17,7 +17,7 @@ import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
  *
  * @author Wilson
  */
-public class LancamentoCategoriaTreeTableModel extends AbstractTreeTableModel implements MyAbstractTableModel {
+public class FinanceiroCategoriaTreeTableModel extends AbstractTreeTableModel implements MyAbstractTableModel {
 
     private List<Object> grupos;
     
@@ -25,7 +25,7 @@ public class LancamentoCategoriaTreeTableModel extends AbstractTreeTableModel im
     
     private final Class<?>[] colTipo = {String.class, String.class};
     
-    public LancamentoCategoriaTreeTableModel() {
+    public FinanceiroCategoriaTreeTableModel() {
         super(new Object());
         this.grupos = new ArrayList<>(0);
     }
@@ -47,16 +47,16 @@ public class LancamentoCategoriaTreeTableModel extends AbstractTreeTableModel im
     
     @Override
     public Object getValueAt(Object node, int column) {
-        if (node instanceof LancamentoCategoriaGrupo) {
-            LancamentoCategoriaGrupo grupo = (LancamentoCategoriaGrupo) node;    
+        if (node instanceof FinanceiroCategoriaGrupo) {
+            FinanceiroCategoriaGrupo grupo = (FinanceiroCategoriaGrupo) node;    
             switch (column) {
                 case 0:
                     return grupo.getNome();
                 case 1:
                     return grupo.getTipo();
             }
-        } else if (node instanceof LancamentoCategoria) {
-            LancamentoCategoria categoria = (LancamentoCategoria) node;
+        } else if (node instanceof FinanceiroCategoria) {
+            FinanceiroCategoria categoria = (FinanceiroCategoria) node;
             switch (column) {
                 case 0:
                     return categoria.getNome();
@@ -69,8 +69,8 @@ public class LancamentoCategoriaTreeTableModel extends AbstractTreeTableModel im
 
     @Override
     public Object getChild(Object parent, int index) {
-        if (parent instanceof LancamentoCategoriaGrupo) {
-            LancamentoCategoriaGrupo grupo = (LancamentoCategoriaGrupo) parent;
+        if (parent instanceof FinanceiroCategoriaGrupo) {
+            FinanceiroCategoriaGrupo grupo = (FinanceiroCategoriaGrupo) parent;
             return grupo.getCategorias().get(index);
         }
         
@@ -79,8 +79,8 @@ public class LancamentoCategoriaTreeTableModel extends AbstractTreeTableModel im
 
     @Override
     public int getChildCount(Object parent) {
-        if (parent instanceof LancamentoCategoriaGrupo) {
-            LancamentoCategoriaGrupo grupo = (LancamentoCategoriaGrupo) parent;
+        if (parent instanceof FinanceiroCategoriaGrupo) {
+            FinanceiroCategoriaGrupo grupo = (FinanceiroCategoriaGrupo) parent;
             
             if(grupo.getCategorias() == null) {
                 return 0;
@@ -94,9 +94,9 @@ public class LancamentoCategoriaTreeTableModel extends AbstractTreeTableModel im
 
     @Override
     public int getIndexOfChild(Object parent, Object child) {
-        if(parent instanceof LancamentoCategoriaGrupo) {
-            LancamentoCategoriaGrupo grupo = (LancamentoCategoriaGrupo) parent;
-            LancamentoCategoria categoria = (LancamentoCategoria) child;
+        if(parent instanceof FinanceiroCategoriaGrupo) {
+            FinanceiroCategoriaGrupo grupo = (FinanceiroCategoriaGrupo) parent;
+            FinanceiroCategoria categoria = (FinanceiroCategoria) child;
             
             if(grupo.getCategorias() == null) {
                 return 0;
@@ -110,7 +110,7 @@ public class LancamentoCategoriaTreeTableModel extends AbstractTreeTableModel im
 
     @Override
     public boolean isLeaf(Object node) {
-        return node instanceof LancamentoCategoria;
+        return node instanceof FinanceiroCategoria;
     }
 
     @Override
@@ -123,16 +123,16 @@ public class LancamentoCategoriaTreeTableModel extends AbstractTreeTableModel im
 
     @Override
     public void addItem(Object item) {
-        if(item instanceof LancamentoCategoriaGrupo) {
+        if(item instanceof FinanceiroCategoriaGrupo) {
             this.grupos.add(item);
-            //this.grupos.sort(Comparator.comparing(g -> ((LancamentoCategoriaGrupo) g).getNome()));
+            //this.grupos.sort(Comparator.comparing(g -> ((FinanceiroCategoriaGrupo) g).getNome()));
         }
         
-        if(item instanceof LancamentoCategoria) {
-            LancamentoCategoria categoria = (LancamentoCategoria) item;
+        if(item instanceof FinanceiroCategoria) {
+            FinanceiroCategoria categoria = (FinanceiroCategoria) item;
             
             this.grupos.forEach(g -> {
-                LancamentoCategoriaGrupo grupo = (LancamentoCategoriaGrupo) g;
+                FinanceiroCategoriaGrupo grupo = (FinanceiroCategoriaGrupo) g;
                 
                 if(grupo.getUUID().equals(categoria.getGrupoCategoriaUUID())) {
                     grupo.getCategorias().add(categoria);

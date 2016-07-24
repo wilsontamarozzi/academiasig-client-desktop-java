@@ -1,19 +1,19 @@
 package br.com.tamarozzi.dao;
 
-import br.com.tamarozzi.model.LancamentoCategoria;
+import br.com.tamarozzi.model.FinanceiroCategoria;
 import java.util.List;
 
 import org.json.JSONObject;
 
-public interface LancamentoCategoriaDao {
+public interface FinanceiroCategoriaDao {
 
-    public JSONObject add(LancamentoCategoria categoria);
+    public JSONObject add(FinanceiroCategoria categoria);
 
-    public JSONObject edit(LancamentoCategoria categoria);
+    public JSONObject edit(FinanceiroCategoria categoria);
 
     public void delete(String grupoUUID);
     
-    public LancamentoCategoria get(LancamentoCategoria grupo);
+    public FinanceiroCategoria get(FinanceiroCategoria grupo);
 
-    public List<LancamentoCategoria> getAll(String campo, String valor);
+    public List<FinanceiroCategoria> getAll(String campo, String valor);
 }

@@ -5,40 +5,40 @@
  */
 package br.com.tamarozzi.controller;
 
-import br.com.tamarozzi.dao.LancamentoCategoriaDao;
-import br.com.tamarozzi.dao.impl.LancamentoCategoriaGrupoDaoImpl;
-import br.com.tamarozzi.model.LancamentoCategoriaGrupo;
+import br.com.tamarozzi.dao.impl.FinanceiroCategoriaGrupoDaoImpl;
+import br.com.tamarozzi.model.FinanceiroCategoriaGrupo;
 import java.util.List;
 import javax.swing.JOptionPane;
 import org.json.JSONObject;
-import br.com.tamarozzi.dao.LancamentoCategoriaGrupoDao;
-import br.com.tamarozzi.dao.impl.LancamentoCategoriaDaoImpl;
-import br.com.tamarozzi.model.LancamentoCategoria;
+import br.com.tamarozzi.dao.impl.FinanceiroCategoriaDaoImpl;
+import br.com.tamarozzi.model.FinanceiroCategoria;
+import br.com.tamarozzi.dao.FinanceiroCategoriaDao;
+import br.com.tamarozzi.dao.FinanceiroCategoriaGrupoDao;
 
 /**
  *
  * @author Panda
  */
-public class LancamentoCategoriaController {
+public class FinanceiroCategoriaController {
     
-    private final LancamentoCategoriaGrupoDao lancamentoCategoriaGrupoDao;
-    private final LancamentoCategoriaDao lancamentoCategoriaDao;
+    private final FinanceiroCategoriaGrupoDao lancamentoCategoriaGrupoDao;
+    private final FinanceiroCategoriaDao lancamentoCategoriaDao;
 
-    public LancamentoCategoriaController() {
-        this.lancamentoCategoriaGrupoDao = new LancamentoCategoriaGrupoDaoImpl();
-        this.lancamentoCategoriaDao = new LancamentoCategoriaDaoImpl();
+    public FinanceiroCategoriaController() {
+        this.lancamentoCategoriaGrupoDao = new FinanceiroCategoriaGrupoDaoImpl();
+        this.lancamentoCategoriaDao = new FinanceiroCategoriaDaoImpl();
     }
 
     /* PARTE DOS GRUPOS DE CATEGORIA*/
-    public List<LancamentoCategoriaGrupo> getAllGrupoCategoria(String campo, String valor) {
+    public List<FinanceiroCategoriaGrupo> getAllGrupoCategoria(String campo, String valor) {
         return this.lancamentoCategoriaGrupoDao.getAllGrupoCategoria(campo, valor);
     }
     
-    public LancamentoCategoriaGrupo getGrupoCategoria(LancamentoCategoriaGrupo g) {
+    public FinanceiroCategoriaGrupo getGrupoCategoria(FinanceiroCategoriaGrupo g) {
         return this.lancamentoCategoriaGrupoDao.getGrupoCategoria(g);
     }
 
-    public JSONObject editGrupoCategoria(LancamentoCategoriaGrupo g) {
+    public JSONObject editGrupoCategoria(FinanceiroCategoriaGrupo g) {
         if (g.getUUID() != null) {
             return this.lancamentoCategoriaGrupoDao.edit(g);
         } else {
@@ -56,12 +56,12 @@ public class LancamentoCategoriaController {
 
         if (opcao == 0) {
             categorias.stream().forEach((c) -> {
-                if(c instanceof LancamentoCategoriaGrupo) {
-                    this.lancamentoCategoriaGrupoDao.delete(((LancamentoCategoriaGrupo) c).getUUID());
+                if(c instanceof FinanceiroCategoriaGrupo) {
+                    this.lancamentoCategoriaGrupoDao.delete(((FinanceiroCategoriaGrupo) c).getUUID());
                 }
 
-                if(c instanceof LancamentoCategoria) {
-                    this.lancamentoCategoriaDao.delete(((LancamentoCategoria) c).getUUID());
+                if(c instanceof FinanceiroCategoria) {
+                    this.lancamentoCategoriaDao.delete(((FinanceiroCategoria) c).getUUID());
                 }
             });
             
@@ -72,15 +72,15 @@ public class LancamentoCategoriaController {
     }
     
     /* PARTE DAS CATEGORIAS */
-    public List<LancamentoCategoria> getAllCategoria(String campo, String valor) {
+    public List<FinanceiroCategoria> getAllCategoria(String campo, String valor) {
         return this.lancamentoCategoriaDao.getAll(campo, valor);
     }
     
-    public LancamentoCategoria getCategoria(LancamentoCategoria c) {
+    public FinanceiroCategoria getCategoria(FinanceiroCategoria c) {
         return this.lancamentoCategoriaDao.get(c);
     }
 
-    public JSONObject editCategoria(LancamentoCategoria c) {
+    public JSONObject editCategoria(FinanceiroCategoria c) {
         if (c.getUUID() != null) {
             return this.lancamentoCategoriaDao.edit(c);
         } else {

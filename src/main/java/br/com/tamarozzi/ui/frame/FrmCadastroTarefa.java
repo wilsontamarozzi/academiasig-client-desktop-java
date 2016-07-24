@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.tamarozzi.ui;
+package br.com.tamarozzi.ui.frame;
 
 import br.com.tamarozzi.controller.TarefaCategoriaController;
 import br.com.tamarozzi.controller.TarefaController;
@@ -32,7 +32,7 @@ import org.json.JSONObject;
  *
  * @author Wilson
  */
-public class FrmCadastroTarefa extends javax.swing.JFrame implements  Observable {
+public class FrmCadastroTarefa extends javax.swing.JFrame implements Observable {
 
     private List<Observer> observers;
     

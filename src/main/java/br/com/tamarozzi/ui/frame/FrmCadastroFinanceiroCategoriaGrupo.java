@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.tamarozzi.ui;
+package br.com.tamarozzi.ui.frame;
 
-import br.com.tamarozzi.controller.LancamentoCategoriaController;
+import br.com.tamarozzi.controller.FinanceiroCategoriaController;
 import br.com.tamarozzi.interfaces.Observable;
 import br.com.tamarozzi.interfaces.Observer;
-import br.com.tamarozzi.model.LancamentoCategoriaGrupo;
+import br.com.tamarozzi.model.FinanceiroCategoriaGrupo;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComponent;
@@ -20,23 +20,23 @@ import org.json.JSONObject;
  *
  * @author Wilson
  */
-public class FrmCadastroLancamentoCategoriaGrupo extends javax.swing.JDialog implements Observable {
+public class FrmCadastroFinanceiroCategoriaGrupo extends javax.swing.JDialog implements Observable {
 
     private List<Observer> observers;
     
-    private LancamentoCategoriaController lancamentoCategoriaController;
+    private FinanceiroCategoriaController lancamentoCategoriaController;
     
-    private LancamentoCategoriaGrupo categoriaGrupo;
+    private FinanceiroCategoriaGrupo categoriaGrupo;
     
     private BalloonTip balloonTip;
     
-    public FrmCadastroLancamentoCategoriaGrupo() {
+    public FrmCadastroFinanceiroCategoriaGrupo() {
         preInitComponents("Cadastro de Grupo de Categoria");
         initComponents();
         setComponents();
     }    
     
-    public FrmCadastroLancamentoCategoriaGrupo(LancamentoCategoriaGrupo categoriaGrupo) {
+    public FrmCadastroFinanceiroCategoriaGrupo(FinanceiroCategoriaGrupo categoriaGrupo) {
         this.categoriaGrupo = categoriaGrupo;
         
         preInitComponents("Alterar Grupo de Categoria");
@@ -49,7 +49,7 @@ public class FrmCadastroLancamentoCategoriaGrupo extends javax.swing.JDialog imp
         this.setTitle(title);
         
         this.observers = new ArrayList<>(0);
-        this.lancamentoCategoriaController = new LancamentoCategoriaController();
+        this.lancamentoCategoriaController = new FinanceiroCategoriaController();
     }
     
     private void setComponents() {
@@ -57,7 +57,7 @@ public class FrmCadastroLancamentoCategoriaGrupo extends javax.swing.JDialog imp
         this.setModal(true);
     }
     
-    private void setView(LancamentoCategoriaGrupo g) {
+    private void setView(FinanceiroCategoriaGrupo g) {
         this.txtDescricao.setText(g.getNome());
         this.cbxTipo.setSelectedItem(g.getTipo());
     }
@@ -180,10 +180,10 @@ public class FrmCadastroLancamentoCategoriaGrupo extends javax.swing.JDialog imp
         }
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
-    public LancamentoCategoriaGrupo loadCategoria() {
+    public FinanceiroCategoriaGrupo loadCategoria() {
         
         if(this.categoriaGrupo == null) {
-            this.categoriaGrupo = new LancamentoCategoriaGrupo();
+            this.categoriaGrupo = new FinanceiroCategoriaGrupo();
         }
         
         this.categoriaGrupo.setNome(this.txtDescricao.getText());

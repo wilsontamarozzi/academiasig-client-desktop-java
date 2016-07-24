@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.tamarozzi.ui;
+package br.com.tamarozzi.ui.frame;
 
 import br.com.tamarozzi.controller.UsuarioController;
 import java.awt.event.KeyEvent;
@@ -45,9 +45,11 @@ public class FrmAcessoRestrito extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Academia-SIG");
         setResizable(false);
         setSize(new java.awt.Dimension(400, 140));
 
+        pnlPrincipal.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         pnlPrincipal.setPreferredSize(new java.awt.Dimension(0, 0));
 
         lblUsuario.setText("Usuário:");
@@ -93,11 +95,11 @@ public class FrmAcessoRestrito extends javax.swing.JFrame {
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlPrincipalLayout.createSequentialGroup()
                             .addComponent(lblSenha)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(txtSenha, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))
+                            .addComponent(txtSenha))
                         .addGroup(pnlPrincipalLayout.createSequentialGroup()
                             .addComponent(lblUsuario)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtUsuario))))
+                            .addComponent(txtUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlPrincipalLayout.setVerticalGroup(
@@ -115,7 +117,7 @@ public class FrmAcessoRestrito extends javax.swing.JFrame {
                 .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEntrar)
                     .addComponent(btnCancelar))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btnEntrar.getAccessibleContext().setAccessibleDescription("btnEntrar");
@@ -124,11 +126,17 @@ public class FrmAcessoRestrito extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(pnlPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(pnlPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();

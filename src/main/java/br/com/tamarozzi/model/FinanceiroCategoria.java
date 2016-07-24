@@ -9,7 +9,7 @@ package br.com.tamarozzi.model;
  *
  * @author Wilson
  */
-public class LancamentoCategoria {
+public class FinanceiroCategoria {
 
     private String UUID;
     
@@ -19,7 +19,7 @@ public class LancamentoCategoria {
     
     private String grupoCategoriaUUID;
 
-    public LancamentoCategoria() {
+    public FinanceiroCategoria() {
         
     }
     

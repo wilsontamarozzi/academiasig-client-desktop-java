@@ -53,22 +53,17 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="toolBar" alignment="0" max="32767" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="lblPesquisa" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="txtPesquisa" min="-2" pref="250" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lblEm" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="cbxEm" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="280" max="32767" attributes="0"/>
-                  </Group>
-              </Group>
+              <Component id="lblPesquisa" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
+              <Component id="txtPesquisa" min="-2" pref="250" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="lblEm" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="cbxEm" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="290" max="32767" attributes="0"/>
           </Group>
           <Component id="spTable" alignment="0" max="32767" attributes="0"/>
+          <Component id="toolBar" alignment="1" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -199,7 +194,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="br.com.tamarozzi.ui.treeTable.LancamentoCategoriaTreeTable" name="tableLancamentoCategoria">
+        <Component class="br.com.tamarozzi.ui.treeTable.FinanceiroCategoriaTreeTable" name="tableLancamentoCategoria">
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tableLancamentoCategoriaMouseClicked"/>
             <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tableLancamentoCategoriaMousePressed"/>

@@ -13,7 +13,7 @@ import br.com.tamarozzi.interfaces.Observer;
 import br.com.tamarozzi.model.Tarefa;
 import br.com.tamarozzi.model.TarefaCategoria;
 import br.com.tamarozzi.model.UsuarioLogado;
-import br.com.tamarozzi.ui.FrmCadastroTarefa;
+import br.com.tamarozzi.ui.frame.FrmCadastroTarefa;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -69,13 +69,13 @@ public class PanelTarefa extends javax.swing.JPanel implements MyAbstractPanelMo
         this.listCategoriasFiltro = new ArrayList<>(0);
         this.listCategoriasFiltro.add(new TarefaCategoria("Todos"));
         
-        this.listCategoriasFiltro.addAll(tarefaCategoriaController.getAllTarefaCategoria("search", ""));
+        //this.listCategoriasFiltro.addAll(tarefaCategoriaController.getAllTarefaCategoria("search", ""));
         
         if(this.listCategoriasFiltro != null) {
             for(TarefaCategoria c : this.listCategoriasFiltro) {
                 this.cbxCategoria.addItem(c.getDescricao());
             }
-        }        
+        }       
     }
 
     /**

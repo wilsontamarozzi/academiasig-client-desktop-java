@@ -9,15 +9,14 @@ package br.com.tamarozzi.ui.frame;
  *
  * @author Wilson
  */
-public class FrmPesquisaBanco extends javax.swing.JFrame {
+public class FrmPesquisaConta extends javax.swing.JFrame {
 
     /**
-     * Creates new form FrmPesquisaBanco
+     * Creates new form FrmPesquisaConta
      */
-    public FrmPesquisaBanco() {
+    public FrmPesquisaConta() {
         initComponents();
         setComponents();
-        
     }
     
     private void setComponents() {
@@ -33,26 +32,36 @@ public class FrmPesquisaBanco extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelPesquisaBanco = new br.com.tamarozzi.ui.panel.PanelBanco();
+        panelPesquisaConta = new br.com.tamarozzi.ui.panel.PanelConta();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Pesquisa de Banco");
+        setTitle("Pesquisa Contas");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelPesquisaBanco, javax.swing.GroupLayout.DEFAULT_SIZE, 771, Short.MAX_VALUE)
+            .addGap(0, 751, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, 0)
+                    .addComponent(panelPesquisaConta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGap(0, 0, 0)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelPesquisaBanco, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
+            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, 0)
+                    .addComponent(panelPesquisaConta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGap(0, 0, 0)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public br.com.tamarozzi.ui.panel.PanelBanco panelPesquisaBanco;
+    public br.com.tamarozzi.ui.panel.PanelConta panelPesquisaConta;
     // End of variables declaration//GEN-END:variables
 }

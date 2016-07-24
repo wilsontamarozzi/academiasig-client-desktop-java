@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.tamarozzi.ui;
+package br.com.tamarozzi.ui.frame;
 
 import br.com.tamarozzi.controller.BancoController;
 import br.com.tamarozzi.interfaces.Observable;
@@ -96,7 +96,6 @@ public class FrmCadastroBanco extends javax.swing.JDialog implements Observable 
         });
 
         btnCancelar.setText("Cancelar");
-        btnCancelar.setPreferredSize(new java.awt.Dimension(75, 23));
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
@@ -122,7 +121,7 @@ public class FrmCadastroBanco extends javax.swing.JDialog implements Observable 
                         .addGap(0, 113, Short.MAX_VALUE)
                         .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnCancelar)))
                 .addContainerGap())
         );
         pnlGeralLayout.setVerticalGroup(
@@ -139,7 +138,7 @@ public class FrmCadastroBanco extends javax.swing.JDialog implements Observable 
                 .addGap(18, 18, 18)
                 .addGroup(pnlGeralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnCancelar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 

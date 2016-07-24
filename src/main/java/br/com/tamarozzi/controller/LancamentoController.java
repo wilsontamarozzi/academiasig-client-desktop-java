@@ -5,10 +5,9 @@
  */
 package br.com.tamarozzi.controller;
 
-import br.com.tamarozzi.dao.TarefaDao;
-import br.com.tamarozzi.dao.impl.TarefaDaoImpl;
-import br.com.tamarozzi.model.Tarefa;
-import java.util.Date;
+import br.com.tamarozzi.dao.LancamentoDao;
+import br.com.tamarozzi.dao.impl.LancamentoDaoImpl;
+import br.com.tamarozzi.model.Lancamento;
 import java.util.List;
 import javax.swing.JOptionPane;
 import org.json.JSONObject;
@@ -17,31 +16,31 @@ import org.json.JSONObject;
  *
  * @author Panda
  */
-public class TarefaController {
+public class LancamentoController {
     
-    private final TarefaDao tarefaDao;
+    private final LancamentoDao lancamentoDao;
 
-    public TarefaController() {
-        this.tarefaDao = new TarefaDaoImpl();
+    public LancamentoController() {
+        this.lancamentoDao = new LancamentoDaoImpl();
     }
 
-    public List<Tarefa> getAllTarefa(String campo, String valor, String situacao, String responsavelUUID, String categoriaUUID, String tipoData, Date dataInicio, Date dataFim) {
-        return this.tarefaDao.getAllTarefa(campo, valor, situacao, responsavelUUID, categoriaUUID, tipoData, dataInicio, dataFim);
+    public List<Lancamento> getAll(String campo, String valor) {
+        return this.lancamentoDao.getAll(campo, valor);
     }
     
-    public Tarefa getTarefa(Tarefa p) {
-        return this.tarefaDao.getTarefa(p);
+    public Lancamento get(Lancamento p) {
+        return this.lancamentoDao.get(p);
     }
 
-    public JSONObject editTarefa(Tarefa p) {
+    public JSONObject edit(Lancamento p) {
         if (p.getUUID() != null) {
-            return this.tarefaDao.edit(p);
+            return this.lancamentoDao.edit(p);
         } else {
-            return this.tarefaDao.add(p);
+            return this.lancamentoDao.add(p);
         }
     }
 
-    public boolean deleteTarefa(List<Tarefa> tarefas) {
+    public boolean delete(List<Lancamento> lancamentos) {
 
         int opcao = JOptionPane.showConfirmDialog(null,
                 "Confirma a exclusão deste(s) registro(s)?",
@@ -50,8 +49,8 @@ public class TarefaController {
                 JOptionPane.INFORMATION_MESSAGE);
 
         if (opcao == 0) {
-            tarefas.stream().forEach((p) -> {
-                this.tarefaDao.delete(p.getUUID());
+            lancamentos.stream().forEach((p) -> {
+                this.lancamentoDao.delete(p.getUUID());
             });
             
             return true;

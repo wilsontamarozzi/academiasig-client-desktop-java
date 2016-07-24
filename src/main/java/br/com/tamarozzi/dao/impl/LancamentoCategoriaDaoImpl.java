@@ -1,8 +1,8 @@
 package br.com.tamarozzi.dao.impl;
 
-import br.com.tamarozzi.dao.BancoDao;
+import br.com.tamarozzi.dao.LancamentoCategoriaDao;
 import br.com.tamarozzi.http.HttpClientAPI;
-import br.com.tamarozzi.model.Banco;
+import br.com.tamarozzi.model.LancamentoCategoria;
 import br.com.tamarozzi.util.ClassMergeUtil;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -21,21 +21,23 @@ import org.json.JSONObject;
  *
  * @author Panda
  */
-public class BancoDaoImpl implements BancoDao {
+public class LancamentoCategoriaDaoImpl implements LancamentoCategoriaDao {
 
+    private final static String QUERY = "api/v1/lancamento-categorias";
+    
     private final Gson gson;
     
-    public BancoDaoImpl() {
+    public LancamentoCategoriaDaoImpl() {
         this.gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).setPrettyPrinting().create();
     }
     
     @Override
-    public JSONObject add(Banco banco) {
-        String bancoJson = gson.toJson(banco);
-        String response = HttpClientAPI.sendPost("api/v1/bancos", bancoJson);
+    public JSONObject add(LancamentoCategoria lancamentoCategoria) {
+        String lancamentoCategoriaJson = gson.toJson(lancamentoCategoria);
+        String response = HttpClientAPI.sendPost(QUERY, lancamentoCategoriaJson);
         
-        Banco bancoNew = this.gson.fromJson(response, Banco.class);
-        banco.setUUID(bancoNew.getUUID());
+        LancamentoCategoria lancamentoCategoriaNew = this.gson.fromJson(response, LancamentoCategoria.class);
+        lancamentoCategoria.setUUID(lancamentoCategoriaNew.getUUID());
         
         JSONObject errors = new JSONObject(response);
         
@@ -43,10 +45,10 @@ public class BancoDaoImpl implements BancoDao {
     }
 
     @Override
-    public JSONObject edit(Banco banco) {
+    public JSONObject edit(LancamentoCategoria lancamentoCategoria) {
        
-        String bancoJson = gson.toJson(banco);
-        String response = HttpClientAPI.sendPut("api/v1/bancos/" + banco.getUUID(), bancoJson);
+        String lancamentoCategoriaJson = gson.toJson(lancamentoCategoria);
+        String response = HttpClientAPI.sendPut(QUERY + "/" + lancamentoCategoria.getUUID(), lancamentoCategoriaJson);
         
         JSONObject errors = new JSONObject(response);
         
@@ -54,9 +56,9 @@ public class BancoDaoImpl implements BancoDao {
     }
 
     @Override
-    public void delete(String bancoUUID) {
+    public void delete(String lancamentoCategoriaUUID) {
         
-        String response = HttpClientAPI.sendDelete("api/v1/bancos/" + bancoUUID);
+        String response = HttpClientAPI.sendDelete(QUERY + "/" + lancamentoCategoriaUUID);
         
         if(response != null) {
             JOptionPane.showMessageDialog(null, "Houve um erro ao excluir o(s) registro(s)");
@@ -64,37 +66,37 @@ public class BancoDaoImpl implements BancoDao {
     }
 
     @Override
-    public Banco getBanco(Banco banco) {
+    public LancamentoCategoria getLancamentoCategoria(LancamentoCategoria lancamentoCategoria) {
         
-        String response = HttpClientAPI.sendGet("api/v1/bancos/" + banco.getUUID());
+        String response = HttpClientAPI.sendGet(QUERY + "/" + lancamentoCategoria.getUUID());
         
-        Banco bancoNew = this.gson.fromJson(response, Banco.class);
+        LancamentoCategoria lancamentoCategoriaNew = this.gson.fromJson(response, LancamentoCategoria.class);
         
-        if(bancoNew != null) {
-            ClassMergeUtil.merge(banco, bancoNew);
+        if(lancamentoCategoriaNew != null) {
+            ClassMergeUtil.merge(lancamentoCategoria, lancamentoCategoriaNew);
         }
         
-        return banco;
+        return lancamentoCategoria;
     }
 
     @Override
-    public List<Banco> getAllBanco(String campo, String valor) {
+    public List<LancamentoCategoria> getAllLancamentoCategoria(String campo, String valor) {
 
-        List<Banco> bancos = new ArrayList<>(0);
+        List<LancamentoCategoria> lancamentoCategorias = new ArrayList<>(0);
         
         try {
-            URIBuilder builder = new URIBuilder("api/v1/bancos");
+            URIBuilder builder = new URIBuilder(QUERY);
             
             builder.addParameter(campo, valor);
             
             String response = HttpClientAPI.sendGet(builder.toString());
             
             if(response != null)
-                bancos = Arrays.asList(this.gson.fromJson(response, Banco[].class));
+                lancamentoCategorias = Arrays.asList(this.gson.fromJson(response, LancamentoCategoria[].class));
         } catch (URISyntaxException ex) {
-            Logger.getLogger(BancoDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LancamentoCategoriaDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        return bancos;
+        return lancamentoCategorias;
     }
 }

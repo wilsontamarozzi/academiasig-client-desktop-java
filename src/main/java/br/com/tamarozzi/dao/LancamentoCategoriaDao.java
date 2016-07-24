@@ -2,18 +2,18 @@ package br.com.tamarozzi.dao;
 
 import java.util.List;
 
-import br.com.tamarozzi.model.Banco;
+import br.com.tamarozzi.model.LancamentoCategoria;
 import org.json.JSONObject;
 
-public interface BancoDao {
+public interface LancamentoCategoriaDao {
 
-    public JSONObject add(Banco banco);
+    public JSONObject add(LancamentoCategoria lancamentoCategoria);
 
-    public JSONObject edit(Banco banco);
+    public JSONObject edit(LancamentoCategoria lancamentoCategoria);
 
-    public void delete(String bancoUUID);
+    public void delete(String lancamentoCategoriaUUID);
     
-    public Banco getBanco(Banco banco);
+    public LancamentoCategoria getLancamentoCategoria(LancamentoCategoria lancamentoCategoria);
 
-    public List<Banco> getAllBanco(String campo, String valor);
+    public List<LancamentoCategoria> getAllLancamentoCategoria(String campo, String valor);
 }

@@ -5,8 +5,8 @@
  */
 package br.com.tamarozzi.ui.table;
 
-import br.com.tamarozzi.model.Banco;
-import br.com.tamarozzi.ui.table.model.BancoTableModel;
+import br.com.tamarozzi.model.LancamentoMovimentacao;
+import br.com.tamarozzi.ui.table.model.LancamentoMovimentacaoTableModel;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JTable;
@@ -15,12 +15,12 @@ import javax.swing.JTable;
  *
  * @author Wilson
  */
-public class TableBanco extends JTable {
+public class TableLancamentoMovimentacao extends JTable {
     	
-    private final BancoTableModel modelo;
+    private final LancamentoMovimentacaoTableModel modelo;
 
-    public TableBanco() {
-        this.modelo = new BancoTableModel();
+    public TableLancamentoMovimentacao() {
+        this.modelo = new LancamentoMovimentacaoTableModel();
         
         initComponents();
     }
@@ -34,34 +34,34 @@ public class TableBanco extends JTable {
         this.getColumnModel().getColumn(0).setMaxWidth(20);
     }
 
-    public Banco getBancoSelected() {
+    public LancamentoMovimentacao getLancamentoMovimentacaoSelected() {
         int i = this.getSelectedRow();
 
         if(i < 0) {
             return null;
         }
 
-        return (Banco) this.modelo.getItemAt(i);
+        return (LancamentoMovimentacao) this.modelo.getItemAt(i);
     }
 
-    public List<Banco> getBancosSelected() {
+    public List<LancamentoMovimentacao> getLancamentoMovimentacaosSelected() {
         int[] index = this.getSelectedRows();
 
         if(index.length <= 0) {
             return null;
         }
 
-        List<Banco> bancos = new ArrayList<>(0);
+        List<LancamentoMovimentacao> lancamentoMovimentacaos = new ArrayList<>(0);
 
         for(int i : index) {
-            bancos.add((Banco) this.modelo.getItemAt(i));
+            lancamentoMovimentacaos.add((LancamentoMovimentacao) this.modelo.getItemAt(i));
         }
 
-        return bancos;
+        return lancamentoMovimentacaos;
     }
 
-    public void reload(List<Banco> bancos) {
-        this.modelo.reload((List<Object>) (Object) bancos);
+    public void reload(List<LancamentoMovimentacao> lancamentoMovimentacaos) {
+        this.modelo.reload((List<Object>) (Object) lancamentoMovimentacaos);
     }
     
     public void addItem(Object obj) {

@@ -5,9 +5,9 @@
  */
 package br.com.tamarozzi.ui.table;
 
-import br.com.tamarozzi.model.Tarefa;
-import br.com.tamarozzi.ui.table.model.TarefaTableModel;
-import br.com.tamarozzi.ui.table.renderer.TarefaTableCellRenderer;
+import br.com.tamarozzi.model.LancamentoCategoria;
+import br.com.tamarozzi.ui.table.model.LancamentoCategoriaTableModel;
+import br.com.tamarozzi.ui.table.renderer.LancamentoCategoriaTableCellRenderer;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JTable;
@@ -16,14 +16,14 @@ import javax.swing.JTable;
  *
  * @author Wilson
  */
-public class TableTarefa extends JTable {
+public class TableLancamentoCategoria extends JTable {
     	
-    private final TarefaTableModel modelo;
-    private final TarefaTableCellRenderer renderer;
+    private final LancamentoCategoriaTableModel modelo;
+    private final LancamentoCategoriaTableCellRenderer renderer;
 
-    public TableTarefa() {
-        this.modelo = new TarefaTableModel();
-        this.renderer = new TarefaTableCellRenderer();
+    public TableLancamentoCategoria() {
+        this.modelo = new LancamentoCategoriaTableModel();
+        this.renderer = new LancamentoCategoriaTableCellRenderer();
         
         initComponents();
     }
@@ -38,34 +38,34 @@ public class TableTarefa extends JTable {
         this.getColumnModel().getColumn(0).setMaxWidth(20);
     }
 
-    public Tarefa getTarefaSelected() {
+    public LancamentoCategoria getLancamentoCategoriaSelected() {
         int i = this.getSelectedRow();
 
         if(i < 0) {
             return null;
         }
 
-        return (Tarefa) this.modelo.getItemAt(i);
+        return (LancamentoCategoria) this.modelo.getItemAt(i);
     }
 
-    public List<Tarefa> getTarefasSelected() {
+    public List<LancamentoCategoria> getLancamentoCategoriasSelected() {
         int[] index = this.getSelectedRows();
 
         if(index.length <= 0) {
             return null;
         }
 
-        List<Tarefa> tarefas = new ArrayList<>(0);
+        List<LancamentoCategoria> lancamentoCategorias = new ArrayList<>(0);
 
         for(int i : index) {
-            tarefas.add((Tarefa) this.modelo.getItemAt(i));
+            lancamentoCategorias.add((LancamentoCategoria) this.modelo.getItemAt(i));
         }
 
-        return tarefas;
+        return lancamentoCategorias;
     }
 
-    public void reload(List<Tarefa> tarefas) {
-        this.modelo.reload((List<Object>) (Object) tarefas);
+    public void reload(List<LancamentoCategoria> lancamentoCategorias) {
+        this.modelo.reload((List<Object>) (Object) lancamentoCategorias);
     }
     
     public void addItem(Object obj) {

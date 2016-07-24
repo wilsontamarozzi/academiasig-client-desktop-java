@@ -1,8 +1,7 @@
 package br.com.tamarozzi.dao.impl;
 
-import br.com.tamarozzi.dao.LancamentoCategoriaDao;
 import br.com.tamarozzi.http.HttpClientAPI;
-import br.com.tamarozzi.model.LancamentoCategoria;
+import br.com.tamarozzi.model.FinanceiroCategoria;
 import br.com.tamarozzi.util.ClassMergeUtil;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -16,18 +15,19 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import org.apache.http.client.utils.URIBuilder;
 import org.json.JSONObject;
+import br.com.tamarozzi.dao.FinanceiroCategoriaDao;
 
 /**
  *
  * @author Panda
  */
-public class LancamentoCategoriaDaoImpl implements LancamentoCategoriaDao {
+public class FinanceiroCategoriaDaoImpl implements FinanceiroCategoriaDao {
 
-    private final static String QUERY = "api/v1/lancamento-categorias";
+    private final static String QUERY = "api/v1/financeiro-categorias";
     
     private final Gson gson;
     
-    public LancamentoCategoriaDaoImpl() {
+    public FinanceiroCategoriaDaoImpl() {
         this.gson = new GsonBuilder().
             setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").
             setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).
@@ -36,12 +36,12 @@ public class LancamentoCategoriaDaoImpl implements LancamentoCategoriaDao {
     }
     
     @Override
-    public JSONObject add(LancamentoCategoria categoria) {
+    public JSONObject add(FinanceiroCategoria categoria) {
         
         String categoriaJson = gson.toJson(categoria);
         String response = HttpClientAPI.sendPost(QUERY, categoriaJson);
         
-        LancamentoCategoria categoriaNew = this.gson.fromJson(response, LancamentoCategoria.class);
+        FinanceiroCategoria categoriaNew = this.gson.fromJson(response, FinanceiroCategoria.class);
         categoria.setUUID(categoriaNew.getUUID());
         
         JSONObject errors = new JSONObject(response);
@@ -50,7 +50,7 @@ public class LancamentoCategoriaDaoImpl implements LancamentoCategoriaDao {
     }
 
     @Override
-    public JSONObject edit(LancamentoCategoria categoria) {
+    public JSONObject edit(FinanceiroCategoria categoria) {
        
         String categoriaJson = gson.toJson(categoria);
         String response = HttpClientAPI.sendPut(QUERY + "/" + categoria.getUUID(), categoriaJson);
@@ -71,11 +71,11 @@ public class LancamentoCategoriaDaoImpl implements LancamentoCategoriaDao {
     }
 
     @Override
-    public LancamentoCategoria get(LancamentoCategoria categoria) {
+    public FinanceiroCategoria get(FinanceiroCategoria categoria) {
         
         String response = HttpClientAPI.sendGet(QUERY + "/" + categoria.getUUID());
         
-        LancamentoCategoria categoriaNew = this.gson.fromJson(response, LancamentoCategoria.class);
+        FinanceiroCategoria categoriaNew = this.gson.fromJson(response, FinanceiroCategoria.class);
         
         if(categoriaNew != null) {
             ClassMergeUtil.merge(categoria, categoriaNew);
@@ -85,9 +85,9 @@ public class LancamentoCategoriaDaoImpl implements LancamentoCategoriaDao {
     }
 
     @Override
-    public List<LancamentoCategoria> getAll(String campo, String valor) {
+    public List<FinanceiroCategoria> getAll(String campo, String valor) {
 
-        List<LancamentoCategoria> categorias = new ArrayList<>(0);
+        List<FinanceiroCategoria> categorias = new ArrayList<>(0);
 
         try {
             URIBuilder builder = new URIBuilder(QUERY);
@@ -97,9 +97,9 @@ public class LancamentoCategoriaDaoImpl implements LancamentoCategoriaDao {
             String response = HttpClientAPI.sendGet(builder.toString());
             
             if(response != null)
-                categorias = Arrays.asList(this.gson.fromJson(response, LancamentoCategoria[].class));
+                categorias = Arrays.asList(this.gson.fromJson(response, FinanceiroCategoria[].class));
         } catch (URISyntaxException ex) {
-            Logger.getLogger(LancamentoCategoriaDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FinanceiroCategoriaDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return categorias;

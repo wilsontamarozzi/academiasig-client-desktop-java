@@ -133,7 +133,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <Component id="toolBarGeral" min="-2" pref="25" max="-2" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="tabMenuGeral" max="32767" attributes="0"/>
+                  <Component id="tabMenuGeral" pref="358" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Component id="bothBar" min="-2" max="-2" attributes="0"/>
               </Group>
@@ -217,20 +217,35 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
           <SubComponents>
+            <Component class="br.com.tamarozzi.ui.panel.PanelTarefa" name="tabTarefa">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="Tarefas" noResource="true"/>
+              </Properties>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+                  <JTabbedPaneConstraints tabName="Tarefas">
+                    <Property name="tabTitle" type="java.lang.String" value="Tarefas"/>
+                  </JTabbedPaneConstraints>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="br.com.tamarozzi.ui.panel.PanelLancamento" name="tabLancamento">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="Lan&#xe7;amentos" noResource="true"/>
+              </Properties>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+                  <JTabbedPaneConstraints tabName="Lan&#xe7;amentos">
+                    <Property name="tabTitle" type="java.lang.String" value="Lan&#xe7;amentos"/>
+                  </JTabbedPaneConstraints>
+                </Constraint>
+              </Constraints>
+            </Component>
             <Component class="br.com.tamarozzi.ui.panel.PanelPessoa" name="tabPessoa">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                   <JTabbedPaneConstraints tabName="Pessoas">
                     <Property name="tabTitle" type="java.lang.String" value="Pessoas"/>
-                  </JTabbedPaneConstraints>
-                </Constraint>
-              </Constraints>
-            </Component>
-            <Component class="br.com.tamarozzi.ui.panel.PanelBanco" name="tabBanco">
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="Bancos">
-                    <Property name="tabTitle" type="java.lang.String" value="Bancos"/>
                   </JTabbedPaneConstraints>
                 </Constraint>
               </Constraints>
@@ -247,11 +262,20 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="br.com.tamarozzi.ui.panel.PanelLancamentoCategoria" name="tabLancamentoCategoria">
+            <Component class="br.com.tamarozzi.ui.panel.PanelFinanceiroCategoria" name="tabFinanceiroCategoria">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                   <JTabbedPaneConstraints tabName="Categorias">
                     <Property name="tabTitle" type="java.lang.String" value="Categorias"/>
+                  </JTabbedPaneConstraints>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="br.com.tamarozzi.ui.panel.PanelBanco" name="tabBanco">
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+                  <JTabbedPaneConstraints tabName="Bancos">
+                    <Property name="tabTitle" type="java.lang.String" value="Bancos"/>
                   </JTabbedPaneConstraints>
                 </Constraint>
               </Constraints>

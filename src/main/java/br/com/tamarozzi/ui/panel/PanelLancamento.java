@@ -5,11 +5,13 @@
  */
 package br.com.tamarozzi.ui.panel;
 
-import br.com.tamarozzi.controller.BancoController;
+import br.com.tamarozzi.controller.LancamentoController;
+import br.com.tamarozzi.interfaces.MyAbstractPanelModel;
 import br.com.tamarozzi.interfaces.Observable;
 import br.com.tamarozzi.interfaces.Observer;
-import br.com.tamarozzi.model.Banco;
-import br.com.tamarozzi.ui.FrmCadastroBanco;
+import br.com.tamarozzi.model.Lancamento;
+import br.com.tamarozzi.typeEnum.EnumTipoLancamento;
+import br.com.tamarozzi.ui.frame.FrmCadastroLancamento;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,20 +20,17 @@ import java.util.List;
  *
  * @author Panda
  */
-public class PanelBanco extends javax.swing.JPanel implements Observable, Observer {
+public class PanelLancamento extends javax.swing.JPanel implements MyAbstractPanelModel, Observable, Observer {
 
     private List<Observer> observers;
     
-    private BancoController bancoController;
+    private LancamentoController lancamentoController;
     
     private List<String> listCampoFiltro;
     
-    private FrmCadastroBanco frmCadastroBanco;
-    
-    /**
-     * Creates new form PanelBanco
-     */
-    public PanelBanco() {
+    private FrmCadastroLancamento frmCadastroLancamento;
+ 
+    public PanelLancamento() {
         preInitComponents();
         initComponents();
     }
@@ -40,10 +39,10 @@ public class PanelBanco extends javax.swing.JPanel implements Observable, Observ
         this.observers = new ArrayList<>();
         
         //Filters
-        this.listCampoFiltro = Arrays.asList("search", "nome", "numero");
+        this.listCampoFiltro = Arrays.asList("search", "descricao");
         
         //Controllers
-        this.bancoController = new BancoController();
+        this.lancamentoController = new LancamentoController();
     }
 
     /**
@@ -55,6 +54,9 @@ public class PanelBanco extends javax.swing.JPanel implements Observable, Observ
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        popupMenu = new javax.swing.JPopupMenu();
+        mnuItemLancamentoPagar = new javax.swing.JMenuItem();
+        mnuItemLancamentoReceber = new javax.swing.JMenuItem();
         lblPesquisa = new javax.swing.JLabel();
         txtPesquisa = new javax.swing.JTextField();
         toolBar = new javax.swing.JToolBar();
@@ -67,8 +69,26 @@ public class PanelBanco extends javax.swing.JPanel implements Observable, Observ
         btnPesquisar = new javax.swing.JButton();
         lblEm = new javax.swing.JLabel();
         cbxEm = new javax.swing.JComboBox<>();
-        spTableBanco = new javax.swing.JScrollPane();
-        tableBanco = new br.com.tamarozzi.ui.table.TableBanco();
+        spTable = new javax.swing.JScrollPane();
+        tableLancamento = new br.com.tamarozzi.ui.table.TableLancamento();
+
+        mnuItemLancamentoPagar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/novo-icon.png"))); // NOI18N
+        mnuItemLancamentoPagar.setText("Conta a Pagar");
+        mnuItemLancamentoPagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItemLancamentoPagarActionPerformed(evt);
+            }
+        });
+        popupMenu.add(mnuItemLancamentoPagar);
+
+        mnuItemLancamentoReceber.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/novo-icon.png"))); // NOI18N
+        mnuItemLancamentoReceber.setText("Conta a Receber");
+        mnuItemLancamentoReceber.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItemLancamentoReceberActionPerformed(evt);
+            }
+        });
+        popupMenu.add(mnuItemLancamentoReceber);
 
         setName("Bancos"); // NOI18N
 
@@ -82,9 +102,9 @@ public class PanelBanco extends javax.swing.JPanel implements Observable, Observ
         btnNovo.setFocusable(false);
         btnNovo.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnNovo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnNovo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNovoActionPerformed(evt);
+        btnNovo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnNovoMousePressed(evt);
             }
         });
         toolBar.add(btnNovo);
@@ -136,15 +156,15 @@ public class PanelBanco extends javax.swing.JPanel implements Observable, Observ
         cbxEm.setMinimumSize(new java.awt.Dimension(125, 20));
         cbxEm.setPreferredSize(new java.awt.Dimension(125, 20));
 
-        tableBanco.addMouseListener(new java.awt.event.MouseAdapter() {
+        tableLancamento.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tableBancoMouseClicked(evt);
+                tableLancamentoMouseClicked(evt);
             }
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                tableBancoMousePressed(evt);
+                tableLancamentoMousePressed(evt);
             }
         });
-        spTableBanco.setViewportView(tableBanco);
+        spTable.setViewportView(tableLancamento);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -152,19 +172,16 @@ public class PanelBanco extends javax.swing.JPanel implements Observable, Observ
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblPesquisa)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblEm)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbxEm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 280, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addComponent(spTableBanco)
+                .addComponent(lblPesquisa)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblEm)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbxEm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(290, Short.MAX_VALUE))
+            .addComponent(spTable)
+            .addComponent(toolBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,69 +195,52 @@ public class PanelBanco extends javax.swing.JPanel implements Observable, Observ
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spTableBanco, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE))
+                .addComponent(spTable, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        this.editBanco();
+        this.editItem();
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        this.deleteBanco();
+        this.deleteItem();
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
-        this.tableBanco.reload(
-            this.bancoController.getAllBanco(
+        this.tableLancamento.reload(
+            this.lancamentoController.getAll(
                 this.listCampoFiltro.get(this.cbxEm.getSelectedIndex()),
                 this.txtPesquisa.getText()
             )
         );
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
-    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        this.addBanco();
-    }//GEN-LAST:event_btnNovoActionPerformed
-
-    private void tableBancoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableBancoMouseClicked
-        if(evt.getClickCount() == 2) {
-            notifyObservers();
-        }
-    }//GEN-LAST:event_tableBancoMouseClicked
-
-    private void tableBancoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableBancoMousePressed
+    private void tableLancamentoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableLancamentoMousePressed
         if(!this.btnEditar.isEnabled()) {
             this.btnEditar.setEnabled(true);
             this.btnExcluir.setEnabled(true);
         }
-    }//GEN-LAST:event_tableBancoMousePressed
+    }//GEN-LAST:event_tableLancamentoMousePressed
 
-    private void addBanco() {
-        this.frmCadastroBanco = new FrmCadastroBanco();
-        this.frmCadastroBanco.registerObserver(this);
-        this.frmCadastroBanco.setVisible(true);
-    }
-    
-    private void deleteBanco() {
-        List<Banco> bancos = this.tableBanco.getBancosSelected();
-        
-        if(bancos != null) {
-            if(this.bancoController.deleteBanco(bancos)) {
-                this.tableBanco.removeItens((List<Object>) (Object) bancos);
-            }
+    private void tableLancamentoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableLancamentoMouseClicked
+        if(evt.getClickCount() == 2) {
+            notifyObservers();
         }
-    }
-    
-    public void editBanco() {
-        Banco bancoSelected = this.tableBanco.getBancoSelected();
-        
-        if(bancoSelected != null) {
-            Banco b = this.bancoController.getBanco(bancoSelected);
-            new FrmCadastroBanco(b).setVisible(true);
-        }
-    }
+    }//GEN-LAST:event_tableLancamentoMouseClicked
 
+    private void mnuItemLancamentoPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItemLancamentoPagarActionPerformed
+        this.addItem(EnumTipoLancamento.CONTA_PAGAR);
+    }//GEN-LAST:event_mnuItemLancamentoPagarActionPerformed
+
+    private void btnNovoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNovoMousePressed
+        this.popupMenu.show(this.btnNovo, evt.getX(), evt.getY());
+    }//GEN-LAST:event_btnNovoMousePressed
+
+    private void mnuItemLancamentoReceberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItemLancamentoReceberActionPerformed
+        this.addItem(EnumTipoLancamento.CONTA_RECEBER);
+    }//GEN-LAST:event_mnuItemLancamentoReceberActionPerformed
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnExcluir;
@@ -252,8 +252,11 @@ public class PanelBanco extends javax.swing.JPanel implements Observable, Observ
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JLabel lblEm;
     private javax.swing.JLabel lblPesquisa;
-    private javax.swing.JScrollPane spTableBanco;
-    private br.com.tamarozzi.ui.table.TableBanco tableBanco;
+    private javax.swing.JMenuItem mnuItemLancamentoPagar;
+    private javax.swing.JMenuItem mnuItemLancamentoReceber;
+    private javax.swing.JPopupMenu popupMenu;
+    private javax.swing.JScrollPane spTable;
+    private br.com.tamarozzi.ui.table.TableLancamento tableLancamento;
     private javax.swing.JToolBar toolBar;
     private javax.swing.JTextField txtPesquisa;
     // End of variables declaration//GEN-END:variables
@@ -273,12 +276,40 @@ public class PanelBanco extends javax.swing.JPanel implements Observable, Observ
     @Override
     public void notifyObservers() {
         for(Observer ob : this.observers) {
-            ob.update(this.tableBanco.getBancoSelected());
+            ob.update(this.tableLancamento.getLancamentoSelected());
         }
     }
 
     @Override
     public void update(Object obj) {
-        this.tableBanco.addItem(obj);
+        this.tableLancamento.addItem(obj);
+    }
+
+    @Override
+    public void addItem(String typeItem) {
+        this.frmCadastroLancamento = new FrmCadastroLancamento(typeItem);
+        this.frmCadastroLancamento.registerObserver(this);
+        this.frmCadastroLancamento.setVisible(true);
+    }
+
+    @Override
+    public void editItem() {
+        Lancamento lancamentoSelected = this.tableLancamento.getLancamentoSelected();
+        
+        if(lancamentoSelected != null) {
+            Lancamento b = this.lancamentoController.get(lancamentoSelected);
+            new FrmCadastroLancamento(b).setVisible(true);
+        }
+    }
+
+    @Override
+    public void deleteItem() {
+        List<Lancamento> lancamentos = this.tableLancamento.getLancamentosSelected();
+        
+        if(lancamentos != null) {
+            if(this.lancamentoController.delete(lancamentos)) {
+                this.tableLancamento.removeItens((List<Object>) (Object) lancamentos);
+            }
+        }
     }
 }

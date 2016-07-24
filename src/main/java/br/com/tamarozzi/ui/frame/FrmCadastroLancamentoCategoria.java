@@ -5,84 +5,53 @@
  */
 package br.com.tamarozzi.ui.frame;
 
-import br.com.tamarozzi.controller.FinanceiroCategoriaController;
 import br.com.tamarozzi.interfaces.Observable;
 import br.com.tamarozzi.interfaces.Observer;
-import br.com.tamarozzi.model.FinanceiroCategoria;
-import br.com.tamarozzi.model.FinanceiroCategoriaGrupo;
-import br.com.tamarozzi.model.TarefaCategoria;
+import br.com.tamarozzi.model.LancamentoCategoria;
+import br.com.tamarozzi.typeEnum.EnumTipoCategoria;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JComponent;
-import net.java.balloontip.BalloonTip;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 /**
  *
  * @author Wilson
  */
-public class FrmCadastroFinanceiroCategoria extends javax.swing.JDialog implements Observable {
+public class FrmCadastroLancamentoCategoria extends javax.swing.JDialog implements Observable {
 
     private List<Observer> observers;
     
-    private FinanceiroCategoriaController lancamentoCategoriaController;
+    private LancamentoCategoria lancamentoCategoria;
     
-    private FinanceiroCategoria categoria;
-    
-    private List<FinanceiroCategoriaGrupo> gruposCategoria;
-    
-    private BalloonTip balloonTip;
-    
-    public FrmCadastroFinanceiroCategoria() {
-        preInitComponents("Cadastro de Categoria");
+    public FrmCadastroLancamentoCategoria() {
+        preInitComponents("Cadastro Categoria");
         initComponents();
         setComponents();
-    }    
+    }
     
-    public FrmCadastroFinanceiroCategoria(FinanceiroCategoria categoria) {
-        this.categoria = categoria;
+    public FrmCadastroLancamentoCategoria(LancamentoCategoria lancamentoCategoria) {
+        this.lancamentoCategoria = lancamentoCategoria;
         
-        preInitComponents("Alterar Categoria");
+        preInitComponents("Cadastro Categoria");
         initComponents();
         setComponents();
-        setView(categoria);
+        setView(lancamentoCategoria);
     }
     
     private void preInitComponents(String title) {
         this.setTitle(title);
         
         this.observers = new ArrayList<>(0);
-        this.lancamentoCategoriaController = new FinanceiroCategoriaController();
     }
     
     private void setComponents() {
         this.setLocationRelativeTo(null);
-        this.setModal(true);
-        
-        this.setLancamentoCategoriaGrupos();
+        this.txtValor.requestFocus();
     }
     
-    private void setView(FinanceiroCategoria c) {
-        this.txtDescricao.setText(c.getNome());
-        
-        this.gruposCategoria.forEach(g -> {
-            if(g.getUUID().equals(c.getGrupoCategoriaUUID())) {
-                this.cbxGrupo.setSelectedItem(g.getNome());
-            }
-        });
-    }
-    
-    private void setLancamentoCategoriaGrupos() {
-        this.gruposCategoria = this.lancamentoCategoriaController.getAllGrupoCategoria("search", "");
-        
-        if(this.gruposCategoria != null) {
-            for(FinanceiroCategoriaGrupo g : this.gruposCategoria) {
-                this.cbxGrupo.addItem(g.getNome());
-            }
-        }
-        
-        this.cbxGrupo.setSelectedIndex(-1);
+    private void setView(LancamentoCategoria c) {
+        this.txtCategoria.setText(c.getCategoria().getNome());
+        this.txtValor.setValue(c.getValor());
     }
 
     /**
@@ -95,21 +64,23 @@ public class FrmCadastroFinanceiroCategoria extends javax.swing.JDialog implemen
     private void initComponents() {
 
         pnlGeral = new javax.swing.JPanel();
-        lblGrupo = new javax.swing.JLabel();
-        cbxGrupo = new javax.swing.JComboBox<>();
-        lblDescricao = new javax.swing.JLabel();
-        txtDescricao = new javax.swing.JTextField();
+        lblCategoria = new javax.swing.JLabel();
+        txtCategoria = new javax.swing.JTextField();
+        lblValor = new javax.swing.JLabel();
+        txtValor = new br.com.tamarozzi.util.JNumberFormatFieldUtil();
         btnCancelar = new javax.swing.JButton();
         btnCadastrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Categoria");
+        setTitle("Categoria Lançamento");
 
         pnlGeral.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        lblGrupo.setText("Grupo:");
+        lblCategoria.setText("Categoria:");
 
-        lblDescricao.setText("Descrição:");
+        txtCategoria.setEditable(false);
+
+        lblValor.setText("Valor:");
 
         javax.swing.GroupLayout pnlGeralLayout = new javax.swing.GroupLayout(pnlGeral);
         pnlGeral.setLayout(pnlGeralLayout);
@@ -118,12 +89,12 @@ public class FrmCadastroFinanceiroCategoria extends javax.swing.JDialog implemen
             .addGroup(pnlGeralLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlGeralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblDescricao)
-                    .addComponent(lblGrupo))
+                    .addComponent(lblCategoria)
+                    .addComponent(lblValor))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlGeralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbxGrupo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtDescricao))
+                    .addComponent(txtCategoria, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
+                    .addComponent(txtValor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlGeralLayout.setVerticalGroup(
@@ -131,13 +102,13 @@ public class FrmCadastroFinanceiroCategoria extends javax.swing.JDialog implemen
             .addGroup(pnlGeralLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlGeralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblGrupo)
-                    .addComponent(cbxGrupo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblCategoria)
+                    .addComponent(txtCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlGeralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblDescricao)
-                    .addComponent(txtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblValor)
+                    .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         btnCancelar.setText("Cancelar");
@@ -164,7 +135,7 @@ public class FrmCadastroFinanceiroCategoria extends javax.swing.JDialog implemen
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnlGeral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 120, Short.MAX_VALUE)
+                        .addGap(0, 90, Short.MAX_VALUE)
                         .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCancelar)))
@@ -174,12 +145,12 @@ public class FrmCadastroFinanceiroCategoria extends javax.swing.JDialog implemen
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(pnlGeral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pnlGeral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
                     .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -190,61 +161,37 @@ public class FrmCadastroFinanceiroCategoria extends javax.swing.JDialog implemen
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        JSONObject errors = this.lancamentoCategoriaController.editCategoria(this.loadCategoria());
-        
-        if(errors != null) {
-            this.parseErrors(errors);
-        } else {
-            this.notifyObservers();
-            this.dispose();
-        }
+        this.loadCategoria();
+        this.notifyObservers();
+        this.dispose();
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
-    public FinanceiroCategoria loadCategoria() {
+    private LancamentoCategoria loadCategoria() {
         
-        if(this.categoria == null) {
-            this.categoria = new FinanceiroCategoria();
+        if(this.lancamentoCategoria == null) {
+            this.lancamentoCategoria = new LancamentoCategoria();
         }
         
-        FinanceiroCategoriaGrupo grupo = this.gruposCategoria.get(this.cbxGrupo.getSelectedIndex());
+        switch(this.lancamentoCategoria.getCategoria().getTipo()) {
+            case EnumTipoCategoria.DESPESA:
+                this.lancamentoCategoria.setValor(this.txtValor.getValue().negate());
+            break;
+            case EnumTipoCategoria.RECEITA:
+                this.lancamentoCategoria.setValor(this.txtValor.getValue());
+            break;
+        }
         
-        this.categoria.setNome(this.txtDescricao.getText());
-        this.categoria.setGrupoCategoriaUUID(grupo.getUUID());
-        this.categoria.setTipo(grupo.getTipo());
-        
-        return this.categoria;
-    }
-    
-    private void parseErrors(JSONObject errors) {
-        
-        errors.keys().forEachRemaining((String key) -> {
-            
-            JSONArray obj = errors.getJSONArray(key);
-
-            JComponent comp = null;
-            
-            switch(key) {
-                case "descricao":
-                    comp = this.txtDescricao;
-                break;
-            }
-            
-            if(this.balloonTip == null && comp != null) {
-                this.balloonTip = new BalloonTip(comp, obj.getString(0));
-            } else if(comp != null && !this.balloonTip.isVisible()) {
-                this.balloonTip = new BalloonTip(comp, obj.getString(0));
-            }
-        });
+        return this.lancamentoCategoria;
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JComboBox<String> cbxGrupo;
-    private javax.swing.JLabel lblDescricao;
-    private javax.swing.JLabel lblGrupo;
+    private javax.swing.JLabel lblCategoria;
+    private javax.swing.JLabel lblValor;
     private javax.swing.JPanel pnlGeral;
-    private javax.swing.JTextField txtDescricao;
+    private javax.swing.JTextField txtCategoria;
+    private br.com.tamarozzi.util.JNumberFormatFieldUtil txtValor;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -262,7 +209,7 @@ public class FrmCadastroFinanceiroCategoria extends javax.swing.JDialog implemen
     @Override
     public void notifyObservers() {
         for(Observer ob : this.observers) {
-            ob.update(this.categoria);
+            ob.update(this.lancamentoCategoria);
         }
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author Wilson
  */
-public class LancamentoCategoriaGrupo {
+public class FinanceiroCategoriaGrupo {
     
     private String UUID;
     
@@ -20,9 +20,9 @@ public class LancamentoCategoriaGrupo {
     
     private String tipo;
     
-    private List<LancamentoCategoria> categorias = new ArrayList<>(0);
+    private List<FinanceiroCategoria> categorias = new ArrayList<>(0);
     
-    public LancamentoCategoriaGrupo() {
+    public FinanceiroCategoriaGrupo() {
         this.categorias = new ArrayList<>(0);
     }
 
@@ -50,7 +50,7 @@ public class LancamentoCategoriaGrupo {
         this.tipo = tipo;
     }
 
-    public List<LancamentoCategoria> getCategorias() {
+    public List<FinanceiroCategoria> getCategorias() {
         if(this.categorias == null) {
             this.categorias = new ArrayList<>(0);
         }
@@ -58,7 +58,7 @@ public class LancamentoCategoriaGrupo {
         return categorias;
     }
 
-    public void setCategorias(List<LancamentoCategoria> categorias) {
+    public void setCategorias(List<FinanceiroCategoria> categorias) {
         if(this.categorias == null) {
             this.categorias = new ArrayList<>(0);
         }

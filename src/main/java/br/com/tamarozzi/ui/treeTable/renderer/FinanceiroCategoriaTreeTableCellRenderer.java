@@ -15,7 +15,7 @@ import org.jdesktop.swingx.renderer.DefaultTableRenderer;
  *
  * @author Wilson
  */
-public class LancamentoCategoriaTreeTableCellRenderer extends DefaultTableRenderer {
+public class FinanceiroCategoriaTreeTableCellRenderer extends DefaultTableRenderer {
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {

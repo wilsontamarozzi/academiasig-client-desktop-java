@@ -5,7 +5,7 @@
  */
 package br.com.tamarozzi.ui.table.renderer;
 
-import br.com.tamarozzi.ui.table.model.TarefaTableModel;
+import br.com.tamarozzi.ui.table.model.LancamentoCategoriaTableModel;
 import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -14,17 +14,14 @@ import javax.swing.table.DefaultTableCellRenderer;
  *
  * @author Wilson
  */
-public class TarefaTableCellRenderer extends DefaultTableCellRenderer {
+public class LancamentoCategoriaTableCellRenderer extends DefaultTableCellRenderer {
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         
-        TarefaTableModel model = (TarefaTableModel) table.getModel();
+        LancamentoCategoriaTableModel model = (LancamentoCategoriaTableModel) table.getModel();
         Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         c.setForeground(model.getRowColour(row));
-        
-        //Seta fundo da tabela
-        //c.setBackground(model.getRowColour(row));
                
         return c;
     }   

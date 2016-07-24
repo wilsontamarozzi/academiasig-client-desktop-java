@@ -5,57 +5,44 @@
  */
 package br.com.tamarozzi.controller;
 
-import br.com.tamarozzi.dao.BancoDao;
-import br.com.tamarozzi.dao.impl.BancoDaoImpl;
-import br.com.tamarozzi.model.Banco;
+import br.com.tamarozzi.dao.LancamentoMovimentacaoDao;
+import br.com.tamarozzi.dao.impl.LancamentoMovimentacaoDaoImpl;
+import br.com.tamarozzi.model.LancamentoMovimentacao;
 import java.util.List;
-import javax.swing.JOptionPane;
 import org.json.JSONObject;
 
 /**
  *
  * @author Panda
  */
-public class BancoController {
+public class LancamentoMovimentacaoController {
     
-    private final BancoDao bancoDao;
+    private final LancamentoMovimentacaoDao lancamentoMovimentacaoDao;
 
-    public BancoController() {
-        this.bancoDao = new BancoDaoImpl();
+    public LancamentoMovimentacaoController() {
+        this.lancamentoMovimentacaoDao = new LancamentoMovimentacaoDaoImpl();
     }
 
-    public List<Banco> getAllBanco(String campo, String valor) {
-        return this.bancoDao.getAllBanco(campo, valor);
+    public List<LancamentoMovimentacao> getAllLancamentoMovimentacao(String campo, String valor) {
+        return this.lancamentoMovimentacaoDao.getAll(campo, valor);
     }
     
-    public Banco getBanco(Banco p) {
-        return this.bancoDao.getBanco(p);
+    public LancamentoMovimentacao getLancamentoMovimentacao(LancamentoMovimentacao p) {
+        return this.lancamentoMovimentacaoDao.get(p);
     }
 
-    public JSONObject editBanco(Banco p) {
+    public JSONObject editLancamentoMovimentacao(LancamentoMovimentacao p) {
         if (p.getUUID() != null) {
-            return this.bancoDao.edit(p);
+            return this.lancamentoMovimentacaoDao.edit(p);
         } else {
-            return this.bancoDao.add(p);
+            return this.lancamentoMovimentacaoDao.add(p);
         }
     }
 
-    public boolean deleteBanco(List<Banco> bancos) {
+    public void deleteLancamentoMovimentacao(List<LancamentoMovimentacao> lancamentoMovimentacaos) {
 
-        int opcao = JOptionPane.showConfirmDialog(null,
-                "Confirma a exclusão deste(s) registro(s)?",
-                "Atenção",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.INFORMATION_MESSAGE);
-
-        if (opcao == 0) {
-            bancos.stream().forEach((p) -> {
-                this.bancoDao.delete(p.getUUID());
-            });
-            
-            return true;
-        }
-        
-        return false;
+        lancamentoMovimentacaos.stream().forEach((p) -> {
+            this.lancamentoMovimentacaoDao.delete(p.getUUID());
+        });
     }
 }

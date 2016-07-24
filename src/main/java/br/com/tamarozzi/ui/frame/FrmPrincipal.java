@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.tamarozzi.ui;
+package br.com.tamarozzi.ui.frame;
 
 import br.com.tamarozzi.interfaces.Observer;
 import br.com.tamarozzi.model.UsuarioLogado;
@@ -58,10 +58,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
         
-        this.tabLancamentoCategoria.registerObserver(new Observer() {
+        this.tabFinanceiroCategoria.registerObserver(new Observer() {
             @Override
             public void update(Object obj) {
-                tabLancamentoCategoria.editItem();
+                tabFinanceiroCategoria.editItem();
+            }
+        });
+        
+        this.tabLancamento.registerObserver(new Observer() {
+            @Override
+            public void update(Object obj) {
+                tabLancamento.editItem();
             }
         });
     }
@@ -89,11 +96,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JToolBar.Separator();
         btnTarefas = new javax.swing.JButton();
         tabMenuGeral = new javax.swing.JTabbedPane();
-        tabPessoa = new br.com.tamarozzi.ui.panel.PanelPessoa();
-        tabBanco = new br.com.tamarozzi.ui.panel.PanelBanco();
-        tabConta = new br.com.tamarozzi.ui.panel.PanelConta();
         tabTarefa = new br.com.tamarozzi.ui.panel.PanelTarefa();
-        tabLancamentoCategoria = new br.com.tamarozzi.ui.panel.PanelLancamentoCategoria();
+        tabLancamento = new br.com.tamarozzi.ui.panel.PanelLancamento();
+        tabPessoa = new br.com.tamarozzi.ui.panel.PanelPessoa();
+        tabConta = new br.com.tamarozzi.ui.panel.PanelConta();
+        tabFinanceiroCategoria = new br.com.tamarozzi.ui.panel.PanelFinanceiroCategoria();
+        tabBanco = new br.com.tamarozzi.ui.panel.PanelBanco();
         bothBar = new javax.swing.JSplitPane();
         lblVersao = new javax.swing.JLabel();
         lblUsuario = new javax.swing.JLabel();
@@ -161,13 +169,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         toolBarGeral.add(btnTarefas);
 
+        tabTarefa.setName("Tarefas"); // NOI18N
+        tabMenuGeral.addTab("Tarefas", tabTarefa);
+
+        tabLancamento.setName("Lançamentos"); // NOI18N
+        tabMenuGeral.addTab("Lançamentos", tabLancamento);
         tabMenuGeral.addTab("Pessoas", tabPessoa);
-        tabMenuGeral.addTab("Bancos", tabBanco);
 
         tabConta.setName("Contas"); // NOI18N
         tabMenuGeral.addTab("Contas", tabConta);
-        tabMenuGeral.addTab("Tarefas", tabTarefa);
-        tabMenuGeral.addTab("Categorias", tabLancamentoCategoria);
+        tabMenuGeral.addTab("Categorias", tabFinanceiroCategoria);
+        tabMenuGeral.addTab("Bancos", tabBanco);
 
         bothBar.setDividerSize(3);
         bothBar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -192,7 +204,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             .addGroup(pnlGeralLayout.createSequentialGroup()
                 .addComponent(toolBarGeral, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tabMenuGeral)
+                .addComponent(tabMenuGeral, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bothBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -308,11 +320,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_itemTarefaCadastroActionPerformed
 
     private void btnLancamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLancamentoActionPerformed
-        
+        this.addTabMenuGeral(this.tabLancamento);
     }//GEN-LAST:event_btnLancamentoActionPerformed
 
     private void itemLancamentoCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemLancamentoCategoriaActionPerformed
-        this.addTabMenuGeral(this.tabLancamentoCategoria);
+        this.addTabMenuGeral(this.tabFinanceiroCategoria);
     }//GEN-LAST:event_itemLancamentoCategoriaActionPerformed
         
     public void addTabMenuGeral(JPanel p) {
@@ -351,7 +363,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel pnlGeral;
     private br.com.tamarozzi.ui.panel.PanelBanco tabBanco;
     private br.com.tamarozzi.ui.panel.PanelConta tabConta;
-    private br.com.tamarozzi.ui.panel.PanelLancamentoCategoria tabLancamentoCategoria;
+    private br.com.tamarozzi.ui.panel.PanelFinanceiroCategoria tabFinanceiroCategoria;
+    private br.com.tamarozzi.ui.panel.PanelLancamento tabLancamento;
     private javax.swing.JTabbedPane tabMenuGeral;
     private br.com.tamarozzi.ui.panel.PanelPessoa tabPessoa;
     private br.com.tamarozzi.ui.panel.PanelTarefa tabTarefa;

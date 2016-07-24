@@ -104,11 +104,7 @@ public final class HttpClientAPI {
         postRequest.addHeader(HTTP.CONTENT_TYPE, "application/json");
         postRequest.setEntity(new StringEntity(content, StandardCharsets.UTF_8));
 
-        String resp = executeRequest(postRequest);
-        
-        System.out.println(resp);
-        
-        return resp;
+        return executeRequest(postRequest);
     }
 
     public static String sendPut(String urlString, String content) {
@@ -172,6 +168,7 @@ public final class HttpClientAPI {
             ((HttpRequestBase) request).releaseConnection();
         }
 
+        System.out.println(data);
         return data;
     }
 

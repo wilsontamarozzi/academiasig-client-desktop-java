@@ -9,15 +9,14 @@ package br.com.tamarozzi.ui.frame;
  *
  * @author Wilson
  */
-public class FrmPesquisaBanco extends javax.swing.JFrame {
+public class FrmPesquisaFinanceiroCategoria extends javax.swing.JFrame {
 
     /**
-     * Creates new form FrmPesquisaBanco
+     * Creates new form FrmPesquisaFinanceiroCategoria
      */
-    public FrmPesquisaBanco() {
+    public FrmPesquisaFinanceiroCategoria() {
         initComponents();
         setComponents();
-        
     }
     
     private void setComponents() {
@@ -33,26 +32,26 @@ public class FrmPesquisaBanco extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelPesquisaBanco = new br.com.tamarozzi.ui.panel.PanelBanco();
+        panelPesquisaFinanceiroCategoria = new br.com.tamarozzi.ui.panel.PanelFinanceiroCategoria();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Pesquisa de Banco");
+        setTitle("Pesquisa Categoria");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelPesquisaBanco, javax.swing.GroupLayout.DEFAULT_SIZE, 771, Short.MAX_VALUE)
+            .addComponent(panelPesquisaFinanceiroCategoria, javax.swing.GroupLayout.DEFAULT_SIZE, 771, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelPesquisaBanco, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
+            .addComponent(panelPesquisaFinanceiroCategoria, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public br.com.tamarozzi.ui.panel.PanelBanco panelPesquisaBanco;
+    public br.com.tamarozzi.ui.panel.PanelFinanceiroCategoria panelPesquisaFinanceiroCategoria;
     // End of variables declaration//GEN-END:variables
 }

@@ -5,7 +5,7 @@
  */
 package br.com.tamarozzi.app;
 
-import br.com.tamarozzi.ui.FrmAcessoRestrito;
+import br.com.tamarozzi.ui.frame.FrmAcessoRestrito;
 import de.javasoft.plaf.synthetica.SyntheticaStandardLookAndFeel;
 import java.text.ParseException;
 import java.util.logging.Level;

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package br.com.tamarozzi.ui;
+package br.com.tamarozzi.ui.frame;
 
 import br.com.tamarozzi.controller.LogradouroController;
 import br.com.tamarozzi.controller.PessoaController;

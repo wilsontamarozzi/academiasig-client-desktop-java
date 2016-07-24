@@ -6,29 +6,32 @@
 package br.com.tamarozzi.model;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  *
  * @author Wilson
  */
-public class LancamentoCategoria {
+public class LancamentoMovimentacao {
     
     private String UUID;
     private String lancamentoUUID;
-    private String financeiroCategoriaUUID;
+    private String contaUUID;
     private BigDecimal valor;
+    private Date dataMovimentacao;
     
-    private FinanceiroCategoria categoria;
-    
-    public LancamentoCategoria() {
-        
+    private Conta conta;
+
+    public LancamentoMovimentacao() {
+        this.dataMovimentacao = new Date();
     }
     
-    public LancamentoCategoria(FinanceiroCategoria categoria, BigDecimal valor) {
-        this.setCategoria(categoria);
+    public LancamentoMovimentacao(Conta conta, Date dataMovimentacao, BigDecimal valor) {
+        this.setDataMovimentacao(dataMovimentacao);
+        this.setConta(conta);
         this.setValor(valor);
     }
-
+    
     public String getUUID() {
         return UUID;
     }
@@ -45,12 +48,12 @@ public class LancamentoCategoria {
         this.lancamentoUUID = lancamentoUUID;
     }
 
-    public String getFinanceiroCategoriaUUID() {
-        return financeiroCategoriaUUID;
+    public String getContaUUID() {
+        return contaUUID;
     }
 
-    public void setFinanceiroCategoriaUUID(String financeiroCategoriaUUID) {
-        this.financeiroCategoriaUUID = financeiroCategoriaUUID;
+    public void setContaUUID(String contaUUID) {
+        this.contaUUID = contaUUID;
     }
 
     public BigDecimal getValor() {
@@ -61,12 +64,19 @@ public class LancamentoCategoria {
         this.valor = valor;
     }
 
-    public FinanceiroCategoria getCategoria() {
-        return categoria;
+    public Conta getConta() {
+        return conta;
     }
 
-    public void setCategoria(FinanceiroCategoria categoria) {
-        this.categoria = categoria;
-        this.setFinanceiroCategoriaUUID(categoria.getUUID());
+    public void setConta(Conta conta) {
+        this.conta = conta;
+    }
+
+    public Date getDataMovimentacao() {
+        return dataMovimentacao;
+    }
+
+    public void setDataMovimentacao(Date dataMovimentacao) {
+        this.dataMovimentacao = dataMovimentacao;
     }
 }

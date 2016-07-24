@@ -5,14 +5,14 @@
  */
 package br.com.tamarozzi.ui.panel;
 
-import br.com.tamarozzi.controller.LancamentoCategoriaController;
+import br.com.tamarozzi.controller.FinanceiroCategoriaController;
 import br.com.tamarozzi.interfaces.MyAbstractPanelModel;
 import br.com.tamarozzi.interfaces.Observable;
 import br.com.tamarozzi.interfaces.Observer;
-import br.com.tamarozzi.model.LancamentoCategoria;
-import br.com.tamarozzi.model.LancamentoCategoriaGrupo;
-import br.com.tamarozzi.ui.FrmCadastroLancamentoCategoria;
-import br.com.tamarozzi.ui.FrmCadastroLancamentoCategoriaGrupo;
+import br.com.tamarozzi.model.FinanceiroCategoria;
+import br.com.tamarozzi.model.FinanceiroCategoriaGrupo;
+import br.com.tamarozzi.ui.frame.FrmCadastroFinanceiroCategoria;
+import br.com.tamarozzi.ui.frame.FrmCadastroFinanceiroCategoriaGrupo;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,22 +21,22 @@ import java.util.List;
  *
  * @author Panda
  */
-public class PanelLancamentoCategoria extends javax.swing.JPanel implements MyAbstractPanelModel, Observable, Observer {
+public class PanelFinanceiroCategoria extends javax.swing.JPanel implements MyAbstractPanelModel, Observable, Observer {
 
     private List<Observer> observers;
     
-    private LancamentoCategoriaController lancamentoCategoriaController;
+    private FinanceiroCategoriaController lancamentoCategoriaController;
     
     private List<String> listCampoFiltro;
     
-    private FrmCadastroLancamentoCategoriaGrupo frmCadastroLancamentoCategoriaGrupo;
+    private FrmCadastroFinanceiroCategoriaGrupo frmCadastroLancamentoCategoriaGrupo;
     
-    private FrmCadastroLancamentoCategoria frmCadastroLancamentoCategoria;
+    private FrmCadastroFinanceiroCategoria frmCadastroLancamentoCategoria;
     
     /**
      * Creates new form PanelLancamentoCategoria
      */
-    public PanelLancamentoCategoria() {
+    public PanelFinanceiroCategoria() {
         preInitComponents();
         initComponents();
     }
@@ -48,7 +48,7 @@ public class PanelLancamentoCategoria extends javax.swing.JPanel implements MyAb
         this.listCampoFiltro = Arrays.asList("search", "nome");
         
         //Controllers
-        this.lancamentoCategoriaController = new LancamentoCategoriaController();
+        this.lancamentoCategoriaController = new FinanceiroCategoriaController();
     }
 
     /**
@@ -76,7 +76,7 @@ public class PanelLancamentoCategoria extends javax.swing.JPanel implements MyAb
         lblEm = new javax.swing.JLabel();
         cbxEm = new javax.swing.JComboBox<>();
         spTable = new javax.swing.JScrollPane();
-        tableLancamentoCategoria = new br.com.tamarozzi.ui.treeTable.LancamentoCategoriaTreeTable();
+        tableLancamentoCategoria = new br.com.tamarozzi.ui.treeTable.FinanceiroCategoriaTreeTable();
 
         mnuItemCategoriaGrupo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/novo-icon.png"))); // NOI18N
         mnuItemCategoriaGrupo.setText("Grupo de Categoria");
@@ -178,19 +178,16 @@ public class PanelLancamentoCategoria extends javax.swing.JPanel implements MyAb
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblPesquisa)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblEm)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbxEm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 280, Short.MAX_VALUE)))
-                .addContainerGap())
+                .addComponent(lblPesquisa)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblEm)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbxEm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(290, Short.MAX_VALUE))
             .addComponent(spTable)
+            .addComponent(toolBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -269,7 +266,7 @@ public class PanelLancamentoCategoria extends javax.swing.JPanel implements MyAb
     private javax.swing.JMenuItem mnuItemCategoriaGrupo;
     private javax.swing.JPopupMenu popMenu;
     private javax.swing.JScrollPane spTable;
-    private br.com.tamarozzi.ui.treeTable.LancamentoCategoriaTreeTable tableLancamentoCategoria;
+    private br.com.tamarozzi.ui.treeTable.FinanceiroCategoriaTreeTable tableLancamentoCategoria;
     private javax.swing.JToolBar toolBar;
     private javax.swing.JTextField txtPesquisa;
     // End of variables declaration//GEN-END:variables
@@ -302,12 +299,12 @@ public class PanelLancamentoCategoria extends javax.swing.JPanel implements MyAb
     public void addItem(String typeItem) {
         switch(typeItem) {
             case "categoriaGrupo": 
-                this.frmCadastroLancamentoCategoriaGrupo = new FrmCadastroLancamentoCategoriaGrupo();
+                this.frmCadastroLancamentoCategoriaGrupo = new FrmCadastroFinanceiroCategoriaGrupo();
                 this.frmCadastroLancamentoCategoriaGrupo.registerObserver(this);
                 this.frmCadastroLancamentoCategoriaGrupo.setVisible(true);
             break;
             case "categoria":
-                this.frmCadastroLancamentoCategoria = new FrmCadastroLancamentoCategoria();
+                this.frmCadastroLancamentoCategoria = new FrmCadastroFinanceiroCategoria();
                 this.frmCadastroLancamentoCategoria.registerObserver(this);
                 this.frmCadastroLancamentoCategoria.setVisible(true);
             break;
@@ -320,14 +317,14 @@ public class PanelLancamentoCategoria extends javax.swing.JPanel implements MyAb
         
         if(categoriaSelected != null) {
             
-            if(categoriaSelected instanceof LancamentoCategoriaGrupo) {
-                LancamentoCategoriaGrupo g = this.lancamentoCategoriaController.getGrupoCategoria((LancamentoCategoriaGrupo) categoriaSelected);
-                new FrmCadastroLancamentoCategoriaGrupo(g).setVisible(true);
+            if(categoriaSelected instanceof FinanceiroCategoriaGrupo) {
+                FinanceiroCategoriaGrupo g = this.lancamentoCategoriaController.getGrupoCategoria((FinanceiroCategoriaGrupo) categoriaSelected);
+                new FrmCadastroFinanceiroCategoriaGrupo(g).setVisible(true);
             }
             
-            if(categoriaSelected instanceof LancamentoCategoria) {
-                LancamentoCategoria c = this.lancamentoCategoriaController.getCategoria((LancamentoCategoria) categoriaSelected);
-                new FrmCadastroLancamentoCategoria(c).setVisible(true);
+            if(categoriaSelected instanceof FinanceiroCategoria) {
+                FinanceiroCategoria c = this.lancamentoCategoriaController.getCategoria((FinanceiroCategoria) categoriaSelected);
+                new FrmCadastroFinanceiroCategoria(c).setVisible(true);
             }
         }
     }
